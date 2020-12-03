@@ -51,7 +51,7 @@ function SignInScreen() {
 
 const Stack = createStackNavigator();
 
-export default function App({navigation}) {
+export default function AuthenticationFlow({navigation}) {
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
