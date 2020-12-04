@@ -1,50 +1,95 @@
-import * as React from 'react';
-import {Button, Text, TextInput, View} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect} from 'react';
+import {
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
-const AuthContext = React.createContext();
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  changeIsLoading,
+  changeLoginField,
+  clearUserToken,
+  requestLogin,
+  setUserToken,
+} from '../actions';
+import {loadItem} from '../utils/asyncStorage';
 
 function SplashScreen() {
   return (
-    <View>
-      <Text>Loading...</Text>
+    <View style={styles.container}>
+      <Text style={styles.loading}>Loading...</Text>
     </View>
   );
 }
 
 function HomeScreen() {
-  const {signOut} = React.useContext(AuthContext);
+  const dispatch = useDispatch();
+
+  const userToken = useSelector((state) => state.userToken);
+
+  function handlePressSignOut() {
+    dispatch(clearUserToken());
+  }
+
+  useEffect(() => {
+    console.log('homescreen effect', userToken);
+  }, [userToken]);
 
   return (
-    <View>
-      <Text>Signed in!</Text>
-      <Button title="Sign out" onPress={signOut} />
+    <View style={styles.container}>
+      <Text>Signed in! {userToken}</Text>
+      <Button title="Sign out" onPress={() => handlePressSignOut()} />
     </View>
   );
 }
 
 function SignInScreen() {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const dispatch = useDispatch();
 
-  const {signIn} = React.useContext(AuthContext);
+  const username = useSelector((state) => state.loginFields.username);
+  const password = useSelector((state) => state.loginFields.password);
+
+  function handleChangeLoginField(name, value) {
+    dispatch(changeLoginField(name, value));
+  }
+
+  function handlePressSignIn() {
+    if (!username || !password) {
+      return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
+    }
+    dispatch(requestLogin(username, password));
+  }
+
+  useEffect(() => {}, [username, password]);
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
+        style={styles.loginField}
         placeholder="Username"
         value={username}
-        onChangeText={setUsername}
+        onChangeText={(value) => handleChangeLoginField('username', value)}
       />
       <TextInput
+        style={styles.loginField}
         placeholder="Password"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(value) => handleChangeLoginField('password', value)}
         secureTextEntry
       />
-      <Button title="Sign in" onPress={() => signIn({username, password})} />
+      <TouchableOpacity style={styles.loginButton}>
+        <Button
+          color="white"
+          title="Sign in"
+          onPress={() => handlePressSignIn()}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -52,104 +97,68 @@ function SignInScreen() {
 const Stack = createStackNavigator();
 
 export default function AuthenticationFlow({navigation}) {
-  const [state, dispatch] = React.useReducer(
-    (prevState, action) => {
-      switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            isSignout: false,
-            userToken: action.token,
-          };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            isSignout: true,
-            userToken: null,
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isSignout: false,
-      userToken: null,
-    },
-  );
+  const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
-    const bootstrapAsync = async () => {
-      let userToken;
+  const isLoading = useSelector((state) => state.isLoading);
+  const accessToken = useSelector((state) => state.userToken);
 
-      try {
-        userToken = await AsyncStorage.getItem('userToken');
-      } catch (e) {
-        // Restoring token failed
+  useEffect(() => {
+    async function getToken() {
+      const userToken = await loadItem('userToken');
+      console.log(userToken);
+
+      if (userToken) {
+        dispatch(setUserToken(userToken));
       }
 
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
-      dispatch({type: 'RESTORE_TOKEN', token: userToken});
-    };
-
-    bootstrapAsync();
-  }, []);
-
-  const authContext = React.useMemo(
-    () => ({
-      signIn: async (data) => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
-      },
-      signOut: () => dispatch({type: 'SIGN_OUT'}),
-      signUp: async (data) => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
-      },
-    }),
-    [],
-  );
+      dispatch(changeIsLoading(false));
+    }
+    getToken();
+  }, [dispatch]);
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {state.isLoading ? (
-            // We haven't finished checking for the token yet
-            <Stack.Screen name="Splash" component={SplashScreen} />
-          ) : state.userToken == null ? (
-            // No token found, user isn't signed in
-            <Stack.Screen
-              name="SignIn"
-              component={SignInScreen}
-              options={{
-                title: 'Sign in',
-                // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? 'pop' : 'push',
-              }}
-            />
-          ) : (
-            // User is signed in
-            <Stack.Screen name="Home" component={HomeScreen} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <NavigationContainer>
+      <Stack.Navigator>
+        {isLoading ? (
+          <Stack.Screen name="Splash" component={SplashScreen} />
+        ) : accessToken == null ? (
+          <Stack.Screen
+            name="SignIn"
+            component={SignInScreen}
+            options={{
+              title: 'Sign in',
+              animationTypeForReplace: !accessToken ? 'pop' : 'push',
+            }}
+          />
+        ) : (
+          <Stack.Screen name="Home" component={HomeScreen} />
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginField: {
+    width: '80%',
+    backgroundColor: 'white',
+    height: '5%',
+    fontSize: 16,
+    marginBottom: '1%',
+  },
+  loginButton: {
+    marginTop: '2%',
+    borderWidth: 1,
+    borderColor: 'green',
+    backgroundColor: 'teal',
+  },
+  loading: {
+    fontSize: 24,
+    fontWeight: '800',
+  },
+});
