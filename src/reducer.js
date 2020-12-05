@@ -3,11 +3,20 @@ const initialLoginFields = {
   password: '',
 };
 
+const initialUser = {
+  uid: '',
+  photoURL: '',
+  displayName: '',
+};
+
 const initialState = {
   isLoading: true,
   userToken: null,
   loginFields: {
     ...initialLoginFields,
+  },
+  user: {
+    ...initialUser,
   },
 };
 
@@ -19,13 +28,6 @@ const reducers = {
         ...state.loginFields,
         [name]: value,
       },
-    };
-  },
-
-  requestLogin: (state, {payload: {userToken}}) => {
-    return {
-      ...state,
-      userToken,
     };
   },
 
@@ -47,6 +49,20 @@ const reducers = {
     return {
       ...state,
       isLoading,
+    };
+  },
+
+  setUser: (state, {payload: {user}}) => {
+    return {
+      ...state,
+      user,
+    };
+  },
+
+  clearUser: (state) => {
+    return {
+      ...state,
+      user: initialUser,
     };
   },
 };

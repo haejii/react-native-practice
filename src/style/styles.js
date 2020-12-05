@@ -13,6 +13,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: '1%',
   },
+  loginButtonContainer: {
+    marginTop: '3%',
+    flexDirection: 'row',
+    width: '60%',
+    justifyContent: 'space-evenly',
+  },
   loginButton: {
     marginTop: '2%',
     borderWidth: 1,

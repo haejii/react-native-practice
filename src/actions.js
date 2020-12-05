@@ -1,4 +1,5 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
+import auth from '@react-native-firebase/auth';
 
 export function changeLoginField(name, value) {
   return {
@@ -7,15 +8,21 @@ export function changeLoginField(name, value) {
   };
 }
 
-export function requestLogin(id, pw) {
-  const userToken = id + pw;
+export function requestLoginWithFirebase(id, pw) {
+  return async () => {
+    await auth()
+      .signInWithEmailAndPassword(id, pw)
+      .then(() => console.log('SignIn Success!'))
+      .catch((err) => console.log(err));
+  };
+}
 
-  saveItem('userToken', userToken);
-  // .then(() => console.log('토큰 저장 성공'));
-
-  return {
-    type: 'requestLogin',
-    payload: {userToken},
+export function requestJoinWithFirebase(id, pw) {
+  return async () => {
+    await auth()
+      .createUserWithEmailAndPassword(id, pw)
+      .then(() => console.log('SignUp Success!'))
+      .catch((err) => console.log(err));
   };
 }
 
@@ -39,5 +46,18 @@ export function changeIsLoading(value) {
   return {
     type: 'changeIsLoading',
     payload: {isLoading: value},
+  };
+}
+
+export function setUser(user) {
+  return {
+    type: 'setUser',
+    payload: {user},
+  };
+}
+
+export function clearUser() {
+  return {
+    type: 'clearUser',
   };
 }
