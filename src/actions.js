@@ -1,5 +1,6 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
 import auth from '@react-native-firebase/auth';
+import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 
 export function changeLoginField(name, value) {
   return {
@@ -9,11 +10,70 @@ export function changeLoginField(name, value) {
 }
 
 export function requestLoginWithFirebase(id, pw) {
-  return async () => {
-    await auth()
-      .signInWithEmailAndPassword(id, pw)
-      .then(() => console.log('SignIn Success!'))
-      .catch((err) => console.log(err));
+  return async (dispatch) => {
+    try {
+      const response = await auth().signInWithEmailAndPassword(id, pw);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+      dispatch(changeIsLoading(false));
+    }
+  };
+}
+
+export function requestLoginWithKakao() {
+  return async (dispatch) => {
+    try {
+      const result = await KakaoLogins.login([
+        KAKAO_AUTH_TYPES.Talk,
+        KAKAO_AUTH_TYPES.Account,
+      ]);
+
+      dispatch(setUserToken(result.accessToken));
+      saveItem('userToken', result.accessToken);
+      console.log(`Login Finished:${JSON.stringify(result)}`);
+
+      const profileResult = await KakaoLogins.getProfile();
+
+      const {nickname, profile_image_url, email, id} = profileResult;
+
+      dispatch(
+        setUser({
+          uid: id,
+          photoURL: profile_image_url,
+          displayName: nickname,
+          type: 'kakao',
+        }),
+      );
+      console.log(`Get Profile Finished:${JSON.stringify(profileResult)}`);
+
+      dispatch(changeIsLoading(false));
+    } catch (err) {
+      if (err.code === 'E_CANCELLED_OPERATION') {
+        console.log(`Login Cancelled:${err.message}`);
+      } else {
+        console.log(`Login Failed:${err.code} ${err.message}`);
+      }
+      dispatch(changeIsLoading(false));
+    }
+  };
+}
+
+export function logout() {
+  return async (dispatch, getState) => {
+    const {
+      user: {type},
+    } = getState();
+
+    if (type === 'kakao') {
+      await KakaoLogins.logout();
+    } else if (type === 'firebase') {
+      await auth().signOut();
+    }
+
+    dispatch(clearUserToken());
+    dispatch(clearUser());
+    await removeItem('userToken');
   };
 }
 

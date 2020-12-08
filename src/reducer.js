@@ -7,6 +7,7 @@ const initialUser = {
   uid: '',
   photoURL: '',
   displayName: '',
+  type: '',
 };
 
 const initialState = {

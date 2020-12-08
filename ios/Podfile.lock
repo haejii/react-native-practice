@@ -16,6 +16,9 @@ PODS:
     - FirebaseAuth (~> 7.1.0)
   - Firebase/CoreOnly (7.1.0):
     - FirebaseCore (= 7.1.0)
+  - Firebase/Database (7.1.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 7.1.0)
   - FirebaseAuth (7.1.0):
     - FirebaseCore (~> 7.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
@@ -30,6 +33,9 @@ PODS:
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
     - nanopb (~> 2.30906.0)
+  - FirebaseDatabase (7.1.0):
+    - FirebaseCore (~> 7.0)
+    - leveldb-library (~> 1.22)
   - Flipper (0.54.0):
     - Flipper-Folly (~> 2.2)
     - Flipper-RSocket (~> 1.1)
@@ -123,6 +129,7 @@ PODS:
   - KakaoOpenSDK/KakaoOpenSDK (1.21.1)
   - KakaoOpenSDK/KakaoPlusFriend (1.21.1):
     - KakaoOpenSDK/KakaoCommon
+  - leveldb-library (1.22)
   - nanopb (2.30906.0):
     - nanopb/decode (= 2.30906.0)
     - nanopb/encode (= 2.30906.0)
@@ -371,12 +378,18 @@ PODS:
     - Firebase/Auth (~> 7.1.0)
     - React-Core
     - RNFBApp
+  - RNFBDatabase (10.1.1):
+    - Firebase/Database (~> 7.1.0)
+    - React-Core
+    - RNFBApp
   - RNGestureHandler (1.9.0):
     - React-Core
   - RNReanimated (1.13.2):
     - React-Core
   - RNScreens (2.15.0):
     - React-Core
+  - RNVectorIcons (7.1.0):
+    - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -434,9 +447,11 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
+  - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -448,6 +463,7 @@ SPEC REPOS:
     - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseDatabase
     - Flipper
     - Flipper-DoubleConversion
     - Flipper-Folly
@@ -459,6 +475,7 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMSessionFetcher
     - KakaoOpenSDK
+    - leveldb-library
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
@@ -527,12 +544,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
+  RNFBDatabase:
+    :path: "../node_modules/@react-native-firebase/database"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -547,6 +568,7 @@ SPEC CHECKSUMS:
   FirebaseAuth: f82c2cfcc1c107bb0a97735cdbce4eb2a601f710
   FirebaseCore: 20046127eef0fcb8fa25df7fc12f7b97d4e48611
   FirebaseCoreDiagnostics: 2d508e12e77e9691ca67d1669b91ee80f0985b29
+  FirebaseDatabase: bf02ea57590aaab4e72b9b12b412a4c881ee81e2
   Flipper: be611d4b742d8c87fbae2ca5f44603a02539e365
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
@@ -561,6 +583,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   kakao-login: 8d60f757a69784b797395cc2e284a18c85852d7a
   KakaoOpenSDK: 7a7b728491fc199bf2186fec5bbf2c70ba14f474
+  leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
   PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
@@ -589,9 +612,11 @@ SPEC CHECKSUMS:
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNFBApp: 2b4e07dfca4cf780b9e2d61bcc21e34d890cd654
   RNFBAuth: 349a8d96d6ecc91d690c65ec0425cbb21b5831ed
+  RNFBDatabase: f3ea0bd70bf54204599ec0e655408308ac1c6dd8
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
+  RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

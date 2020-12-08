@@ -7,7 +7,7 @@ import {changeIsLoading, setUser, setUserToken} from '../actions';
 import {loadItem, saveItem} from '../utils/asyncStorage';
 import SplashScreen from '../screen/SplashScreen';
 import SignInScreen from '../screen/SignInScreen';
-import HomeScreen from '../screen/HomeScreen';
+import Main from '../screen/HomeScreen';
 import auth from '@react-native-firebase/auth';
 import {convertUserData} from '../utils/convertData';
 
@@ -64,12 +64,12 @@ export default function AuthenticationFlow({navigation}) {
             name="SignIn"
             component={SignInScreen}
             options={{
-              title: 'Sign in',
+              title: '로그인',
               animationTypeForReplace: !accessToken ? 'pop' : 'push',
             }}
           />
         ) : (
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="메인화면" component={Main} />
         )}
       </Stack.Navigator>
     </NavigationContainer>
