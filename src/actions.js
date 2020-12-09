@@ -29,8 +29,24 @@ export function requestLoginWithKakao() {
         KAKAO_AUTH_TYPES.Account,
       ]);
 
+      const tokenResponse = await fetch('http://localhost:3000/kakao', {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify(result),
+      });
+
+      // const {customToken} = await tokenResponse.json();
+
+      // console.log('server_resp', customToken);
+
+      // const signInResult = await auth().signInWithCustomToken(customToken);
+      // console.log('custom fb signIn Success!!!', signInResult);
+
       dispatch(setUserToken(result.accessToken));
-      saveItem('userToken', result.accessToken);
+      await saveItem('userToken', result.accessToken);
       console.log(`Login Finished:${JSON.stringify(result)}`);
 
       const profileResult = await KakaoLogins.getProfile();
