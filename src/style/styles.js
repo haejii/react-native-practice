@@ -55,6 +55,21 @@ const styles = StyleSheet.create({
     color: '#000000',
     opacity: 0.8,
   },
+  mealButtonContainer: {
+    width: '100%',
+    height: '50%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  mealButton: {
+    width: '35%',
+    height: '70%',
+    borderRadius: 12,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default styles;

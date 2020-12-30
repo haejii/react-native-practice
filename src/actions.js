@@ -38,16 +38,17 @@ export function requestLoginWithKakao() {
         body: JSON.stringify(result),
       });
 
-      // const {customToken} = await tokenResponse.json();
+      const {customToken} = await tokenResponse.json();
 
-      // console.log('server_resp', customToken);
+      console.log('server_resp', customToken);
 
-      // const signInResult = await auth().signInWithCustomToken(customToken);
-      // console.log('custom fb signIn Success!!!', signInResult);
+      const signInResult = await auth().signInWithCustomToken(customToken);
+      console.log('custom fb signIn Success!!!', signInResult);
 
-      dispatch(setUserToken(result.accessToken));
-      await saveItem('userToken', result.accessToken);
-      console.log(`Login Finished:${JSON.stringify(result)}`);
+      dispatch(setUserToken(customToken));
+      await saveItem('userToken', customToken);
+
+      console.log(`Login Finished:${JSON.stringify(auth().currentUser)}`);
 
       const profileResult = await KakaoLogins.getProfile();
 
@@ -81,12 +82,14 @@ export function logout() {
       user: {type},
     } = getState();
 
+    console.log('before logout currentUser', auth().currentUser);
+
     if (type === 'kakao') {
       await KakaoLogins.logout();
-    } else if (type === 'firebase') {
-      await auth().signOut();
     }
+    await auth().signOut();
 
+    console.log('after logout currentUser', auth().currentUser);
     dispatch(clearUserToken());
     dispatch(clearUser());
     await removeItem('userToken');

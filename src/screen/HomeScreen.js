@@ -1,142 +1,68 @@
-import React, {useEffect} from 'react';
-import {Button, Text, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import database from '@react-native-firebase/database';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {BarChart, Grid} from 'react-native-svg-charts';
+import {Text as SVGText} from 'react-native-svg';
 
-import {logout} from '../actions';
 import styles from '../style/styles';
-import SplashScreen from './SplashScreen';
 
-const Tab = createBottomTabNavigator();
+export default function HomeScreen() {
+  const data = [50, 10, 40, 95, 85];
 
-function HomeScreen() {
-  const dispatch = useDispatch();
+  const CUT_OFF = 50;
+  const Labels = ({x, y, bandwidth, d}) =>
+    d.map((value, index) => (
+      <>
+        <SVGText
+          key={index}
+          x={value > CUT_OFF ? x(0) + 10 : x(value) + 10}
+          y={y(index) + bandwidth / 2}
+          fontSize={20}
+          fill={value > CUT_OFF ? 'white' : 'black'}
+          alignmentBaseline={'middle'}>
+          {value}
+        </SVGText>
+      </>
+    ));
 
-  const user = useSelector((state) => state.user);
-
-  async function handlePressSignOut() {
-    dispatch(logout());
-  }
-
-  useEffect(() => {
-    database()
-      .ref('/users/123')
-      .once('value')
-      .then((snapshot) => {
-        if (!snapshot) {
-        } else {
-          console.log(snapshot);
-        }
-      });
-  }, [user]);
-
-  if (!user) {
-    return <SplashScreen />;
-  }
+  const handlePressBreakfast = () => {
+    console.log('아침');
+  };
 
   return (
     <View style={styles.container}>
-      <Text>Signed in! {user.displayName}</Text>
-      <Button title="Sign out" onPress={() => handlePressSignOut()} />
-      {user ? <Text>Welcome {user.email}</Text> : <></>}
-      <Text>{JSON.stringify(user)}</Text>
+      <View style={{flexDirection: 'row', height: 300, paddingVertical: 16}}>
+        {/* <BarChart
+          style={{flex: 1, marginLeft: 8, width: '80%'}}
+          data={data}
+          horizontal={true}
+          svg={{fill: 'rgba(134, 165, 244, 0.9)'}}
+          contentInset={{top: 10, bottom: 10}}
+          spacing={0.2}
+          gridMin={0}>
+          <Grid direction={Grid.Direction.VERTICAL} />
+          <Labels d={data} />
+        </BarChart> */}
+      </View>
+      <View style={{flex: 3, width: '100%', height: '100%'}}>
+        <View style={styles.mealButtonContainer}>
+          <TouchableOpacity
+            style={styles.mealButton}
+            onPress={() => handlePressBreakfast()}>
+            <Text style={{fontSize: 24}}>아침</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.mealButton}>
+            <Text style={{fontSize: 24}}>점심</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.mealButtonContainer}>
+          <TouchableOpacity style={styles.mealButton}>
+            <Text style={{fontSize: 24}}>저녁</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.mealButton}>
+            <Text style={{fontSize: 24}}>간식</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
-  );
-}
-
-function CommunityContainer() {
-  return (
-    <View>
-      <Text>CommunityContainer</Text>
-    </View>
-  );
-}
-
-function SearchContainer() {
-  return (
-    <View>
-      <Text>SearchContainer</Text>
-    </View>
-  );
-}
-
-function ContentContainer() {
-  return (
-    <View>
-      <Text>ContentContainer</Text>
-    </View>
-  );
-}
-
-function MypageContainer() {
-  return (
-    <View>
-      <Text>MypageContainer</Text>
-    </View>
-  );
-}
-
-export default function Main() {
-  return (
-    <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          if (route.name === '홈') {
-            return (
-              <Icon
-                name={focused ? 'ios-home' : 'ios-home-outline'}
-                size={size}
-                color={color}
-              />
-            );
-          } else if (route.name === '커뮤니티') {
-            return (
-              <Icon
-                name={focused ? 'ios-reader' : 'ios-reader-outline'}
-                size={size}
-                color={color}
-              />
-            );
-          } else if (route.name === '검색') {
-            return (
-              <Icon
-                name={focused ? 'ios-search' : 'ios-search-outline'}
-                size={size}
-                color={color}
-              />
-            );
-          } else if (route.name === '컨텐츠') {
-            return (
-              <Icon
-                name={focused ? 'ios-book' : 'ios-book-outline'}
-                size={size}
-                color={color}
-              />
-            );
-          } else if (route.name === '마이페이지') {
-            return (
-              <Icon
-                name={
-                  focused ? 'ios-person-circle' : 'ios-person-circle-outline'
-                }
-                size={size}
-                color={color}
-              />
-            );
-          }
-        },
-      })}
-      tabBarOptions={{
-        activeTintColor: 'teal', // tomato
-        inactiveTintColor: 'gray',
-      }}>
-      <Tab.Screen name="홈" component={HomeScreen} />
-      <Tab.Screen name="커뮤니티" component={CommunityContainer} />
-      <Tab.Screen name="검색" component={SearchContainer} />
-      <Tab.Screen name="컨텐츠" component={ContentContainer} />
-      <Tab.Screen name="마이페이지" component={MypageContainer} />
-    </Tab.Navigator>
   );
 }

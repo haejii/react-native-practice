@@ -7,9 +7,9 @@ import {changeIsLoading, setUser, setUserToken} from '../actions';
 import {loadItem, saveItem} from '../utils/asyncStorage';
 import SplashScreen from '../screen/SplashScreen';
 import SignInScreen from '../screen/SignInScreen';
-import Main from '../screen/HomeScreen';
 import auth from '@react-native-firebase/auth';
 import {convertUserData} from '../utils/convertData';
+import Main from '../screen/MainContainer';
 
 const Stack = createStackNavigator();
 
