@@ -69,7 +69,7 @@ export default function AuthenticationFlow({navigation}) {
             }}
           />
         ) : (
-          <Stack.Screen name="메인화면" component={Main} />
+          <Stack.Screen name="Kidneys" component={Main} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

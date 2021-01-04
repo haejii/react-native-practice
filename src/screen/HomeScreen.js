@@ -24,8 +24,8 @@ export default function HomeScreen() {
       </>
     ));
 
-  const handlePressBreakfast = () => {
-    console.log('아침');
+  const handlePressMealButton = (num) => {
+    console.log(num);
   };
 
   return (
@@ -47,18 +47,24 @@ export default function HomeScreen() {
         <View style={styles.mealButtonContainer}>
           <TouchableOpacity
             style={styles.mealButton}
-            onPress={() => handlePressBreakfast()}>
+            onPress={() => handlePressMealButton(1)}>
             <Text style={{fontSize: 24}}>아침</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.mealButton}>
+          <TouchableOpacity
+            style={styles.mealButton}
+            onPress={() => handlePressMealButton(2)}>
             <Text style={{fontSize: 24}}>점심</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.mealButtonContainer}>
-          <TouchableOpacity style={styles.mealButton}>
+          <TouchableOpacity
+            style={styles.mealButton}
+            onPress={() => handlePressMealButton(3)}>
             <Text style={{fontSize: 24}}>저녁</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.mealButton}>
+          <TouchableOpacity
+            style={styles.mealButton}
+            onPress={() => handlePressMealButton(0)}>
             <Text style={{fontSize: 24}}>간식</Text>
           </TouchableOpacity>
         </View>
