@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "967871637357",
+    "firebase_url": "https://rn-practice-a5618.firebaseio.com",
+    "project_id": "rn-practice-a5618",
+    "storage_bucket": "rn-practice-a5618.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967871637357:android:7de466cf0c015adb729c64",
+        "android_client_info": {
+          "package_name": "com.kakaologin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "967871637357-7o1v2af87fq1hkkigov8tqe0cooktehf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kakaologin",
+            "certificate_hash": "4ac5f6ebbf24ca2540fb53e4080b3a90aa63848b"
+          }
+        },
+        {
+          "client_id": "967871637357-77tjpheja6vii9dvfavtigt2t0g9h6ag.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGo93B_Pc6cfaVcT0dtrgrn0BS1WFoTLk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "967871637357-77tjpheja6vii9dvfavtigt2t0g9h6ag.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "967871637357-42di86qni2u0jngdepcribjt04bpne7i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.fbAuthRN"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

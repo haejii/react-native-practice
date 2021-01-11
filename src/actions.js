@@ -1,6 +1,7 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
 import auth from '@react-native-firebase/auth';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
+import {getPixelSizeForLayoutSize} from 'react-native/Libraries/Utilities/PixelRatio';
 
 export function changeLoginField(name, value) {
   return {
@@ -14,6 +15,7 @@ export function requestLoginWithFirebase(id, pw) {
     try {
       const response = await auth().signInWithEmailAndPassword(id, pw);
       console.log(response);
+      dispatch(changeIsLoading(false));
     } catch (err) {
       console.log(err);
       dispatch(changeIsLoading(false));

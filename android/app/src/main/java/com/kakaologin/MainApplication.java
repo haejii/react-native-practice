@@ -11,6 +11,9 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.dooboolab.kakaologins.RNKakaoLoginsPackage;
+import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -26,6 +29,11 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+          
+          // rn 0.60 이상부터 자동 링크가 되므로 안해줘도 된다
+          // packages.add(new RNKakaoLoginsPackage());
+          // packages.add(new ReactNativeFirebaseAuthPackage());
+
           return packages;
         }
 
