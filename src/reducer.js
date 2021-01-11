@@ -19,6 +19,23 @@ const initialState = {
   user: {
     ...initialUser,
   },
+  nuturition: {
+    calorie: 0,
+    carbohydrate: 0,
+    protein: 0,
+    fat: 0,
+    sodium: 0,
+    calcium: 0,
+    potassium: 0,
+    iron: 0,
+    phosphorus: 0,
+  },
+  meal: {
+    breakfast: [],
+    lunch: [],
+    dinner: [],
+    snack: [],
+  },
 };
 
 const reducers = {
@@ -64,6 +81,54 @@ const reducers = {
     return {
       ...state,
       user: initialUser,
+    };
+  },
+
+  addMeal: (state, {payload: {time, id}}) => {
+    const {meal} = state;
+
+    console.log({
+      meal: {
+        ...meal,
+        [time]: [...meal[time], id],
+      },
+    });
+
+    return {
+      ...state,
+      meal: {
+        ...meal,
+        [time]: [...meal[time], id],
+      },
+    };
+  },
+
+  addNuturition: (state, {payload: {food}}) => {
+    const {
+      calorie,
+      carbohydrate,
+      protein,
+      fat,
+      sodium,
+      calcium,
+      potassium,
+      iron,
+      phosphorus,
+    } = state.nuturition;
+
+    return {
+      ...state,
+      nuturition: {
+        calorie: calorie + food.calorie,
+        carbohydrate: carbohydrate + food.carbohydrate,
+        protein: protein + food.protein,
+        fat: fat + food.fat,
+        sodium: sodium + food.sodium,
+        calcium: calcium + food.calcium,
+        potassium: potassium + food.potassium,
+        iron: iron + food.iron,
+        phosphorus: phosphorus + food.phosphorus,
+      },
     };
   },
 };

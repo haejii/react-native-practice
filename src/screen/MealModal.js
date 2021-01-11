@@ -1,76 +1,13 @@
 import React, {useState} from 'react';
-import {
-  Modal,
-  Text,
-  View,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import {Modal, Text, View, Button, TouchableOpacity} from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
-import {addFood, addMeal, addNuturition} from '../actions';
 
-export default function FoodInformationModal({food, onPress}) {
-  const dispatch = useDispatch();
-
+export default function MealModal({food, onPress}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
-  };
-
-  const handlePressAdd = () => {
-    Alert.alert(
-      '식사 시기를 선택해주세요.',
-      '',
-      [
-        {
-          text: '아침',
-          onPress: () => {
-            dispatch(addMeal('breakfast', food.id));
-            dispatch(addNuturition(food));
-            handlePressModal();
-          },
-        },
-        {
-          text: '점심',
-          onPress: () => {
-            dispatch(addMeal('lunch', food.id));
-            dispatch(addNuturition(food));
-            handlePressModal();
-          },
-        },
-        {
-          text: '저녁',
-          onPress: () => {
-            dispatch(addMeal('dinner', food.id));
-            dispatch(addNuturition(food));
-            handlePressModal();
-          },
-        },
-        {
-          text: '간식',
-          onPress: () => {
-            dispatch(addMeal('snack', food.id));
-            dispatch(addNuturition(food));
-            handlePressModal();
-          },
-        },
-        {
-          text: '취소',
-          onPress: () => {
-            return false;
-          },
-          style: 'cancel',
-        },
-      ],
-      {cancelable: false},
-    );
-
-    // dispatch(addFood(food.id));
-    // dispatch(addNuturition(food));
   };
 
   return (
@@ -96,8 +33,6 @@ export default function FoodInformationModal({food, onPress}) {
           alignItems: 'center',
         }}>
         <Text style={{fontSize: 22, color: 'white'}}>{food.name}</Text>
-
-        {/* <Button title="Open Modal" onPress={() => handlePressModal()} /> */}
 
         <Modal
           visible={isOpen}
@@ -176,79 +111,4 @@ export default function FoodInformationModal({food, onPress}) {
       </View>
     </TouchableOpacity>
   );
-
-  // const [modalVisible, setModalVisible] = useState(false);
-
-  // return (
-  //   <View style={styles.centeredView}>
-  //     <Modal
-  //       animationType="slide"
-  //       transparent={true}
-  //       visible={modalVisible}
-  //       onRequestClose={() => {
-  //         alert('Modal has been closed.');
-  //       }}>
-  //       <View style={styles.centeredView}>
-  //         <View style={styles.modalView}>
-  //           <Text style={styles.modalText}>Hello World!</Text>
-
-  //           <TouchableHighlight
-  //             style={{...styles.openButton, backgroundColor: '#2196F3'}}
-  //             onPress={() => {
-  //               setModalVisible(!modalVisible);
-  //             }}>
-  //             <Text style={styles.textStyle}>Hide Modal</Text>
-  //           </TouchableHighlight>
-  //         </View>
-  //       </View>
-  //     </Modal>
-
-  //     <TouchableHighlight
-  //       style={styles.openButton}
-  //       onPress={() => {
-  //         setModalVisible(true);
-  //       }}>
-  //       <Text style={styles.textStyle}>Show Modal</Text>
-  //     </TouchableHighlight>
-  //   </View>
-  // );
 }
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  openButton: {
-    backgroundColor: '#F194FF',
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-});

@@ -140,3 +140,19 @@ export function clearUser() {
     type: 'clearUser',
   };
 }
+
+export function addMeal(time, id) {
+  return {
+    type: 'addMeal',
+    payload: {time, id},
+  };
+}
+
+export function addNuturition(food) {
+  return {
+    type: 'addNuturition',
+    payload: {
+      food,
+    },
+  };
+}

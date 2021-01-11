@@ -4,6 +4,7 @@ import {BarChart, Grid} from 'react-native-svg-charts';
 import {Text as SVGText} from 'react-native-svg';
 
 import styles from '../style/styles';
+import {useSelector} from 'react-redux';
 
 export default function HomeScreen() {
   const data = [50, 10, 40, 95, 85];
@@ -28,9 +29,20 @@ export default function HomeScreen() {
     console.log(num);
   };
 
+  const nuturition = useSelector((state) => state.nuturition);
+
   return (
     <View style={styles.container}>
-      <View style={{flexDirection: 'row', height: 300, paddingVertical: 16}}>
+      <View
+        style={{
+          flexDirection: 'column',
+          height: 300,
+          paddingVertical: 30,
+          flex: 2,
+          // width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         {/* <BarChart
           style={{flex: 1, marginLeft: 8, width: '80%'}}
           data={data}
@@ -42,6 +54,21 @@ export default function HomeScreen() {
           <Grid direction={Grid.Direction.VERTICAL} />
           <Labels d={data} />
         </BarChart> */}
+        <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 20}}>
+          오늘의 목표
+        </Text>
+
+        <Text style={{fontSize: 20}}>
+          칼로리: {nuturition.calorie} / 2000 kcal
+        </Text>
+        <Text style={{fontSize: 20}}>단백질: {nuturition.protein} / 85 g</Text>
+        <Text style={{fontSize: 20}}>
+          나트륨: {nuturition.sodium} / 2000 mg
+        </Text>
+        <Text style={{fontSize: 20}}>인: {nuturition.phosphorus} / 800 mg</Text>
+        <Text style={{fontSize: 20}}>
+          칼륨: {nuturition.potassium} / 2000 mg
+        </Text>
       </View>
       <View style={{flex: 3, width: '100%', height: '100%'}}>
         <View style={styles.mealButtonContainer}>

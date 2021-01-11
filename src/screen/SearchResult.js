@@ -13,7 +13,7 @@ export default function SearchResult({result}) {
         alignItems: 'center',
       }}>
       {result.map((food, idx) => (
-        <FoodInformationModal food={food} />
+        <FoodInformationModal food={food} key={idx} />
       ))}
     </View>
   );
