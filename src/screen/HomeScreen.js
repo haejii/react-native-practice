@@ -1,10 +1,12 @@
-import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {Text, TouchableOpacity, View, Modal, Button} from 'react-native';
 import {BarChart, Grid} from 'react-native-svg-charts';
 import {Text as SVGText} from 'react-native-svg';
 
 import styles from '../style/styles';
 import {useSelector} from 'react-redux';
+import FoodController from '../controller/FoodController';
+import MealTimeSum from './MealTimeSum';
 
 export default function HomeScreen() {
   const data = [50, 10, 40, 95, 85];
@@ -25,11 +27,33 @@ export default function HomeScreen() {
       </>
     ));
 
-  const handlePressMealButton = (num) => {
-    console.log(num);
+  const nuturition = useSelector((state) => state.nuturition);
+  const meal = useSelector((state) => state.meal);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [current, setCurrent] = useState(null);
+
+  const handlePressModal = () => {
+    setIsOpen(!isOpen);
   };
 
-  const nuturition = useSelector((state) => state.nuturition);
+  const handlePressMealButton = (num) => {
+    console.log(num);
+    let time = '';
+
+    if (num === 0) {
+      time = 'snack';
+    } else if (num === 1) {
+      time = 'breakfast';
+    } else if (num === 2) {
+      time = 'lunch';
+    } else {
+      time = 'dinner';
+    }
+
+    setCurrent(time);
+    handlePressModal();
+  };
 
   return (
     <View style={styles.container}>
@@ -96,6 +120,102 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       </View>
+
+      <Modal
+        visible={isOpen}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handlePressModal}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              flex: 0,
+              backgroundColor: 'white',
+              borderRadius: 20,
+              borderWidth: 1,
+              width: '80%',
+              height: '60%',
+              justifyContent: 'center',
+              alignItems: 'center',
+
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5,
+            }}>
+            <View
+              style={{
+                flex: 6,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={{fontSize: 30}}>{current}</Text>
+
+              {meal[current]
+                ? meal[current].map((foodId, idx) => {
+                    const food = FoodController.findByFoodId(foodId);
+
+                    return (
+                      <View
+                        style={{
+                          top: 20,
+                          width: '80%',
+                          height: 30,
+                          marginBottom: 5,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: 'skyblue',
+                          paddingHorizontal: 10,
+                          borderRadius: 8,
+                        }}
+                        key={idx}>
+                        <View
+                          style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}>
+                          <Text style={{fontSize: 20, color: 'white'}}>
+                            {food.name}
+                          </Text>
+                        </View>
+                      </View>
+                    );
+                  })
+                : null}
+
+              <MealTimeSum
+                sum={
+                  meal[current]
+                    ? FoodController.calculateNuturitionFoods(meal[current])
+                    : null
+                }
+              />
+            </View>
+
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                width: '80%',
+              }}>
+              <Button title="추가" onPress={() => {}} />
+              <Button title="닫기" onPress={() => handlePressModal()} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

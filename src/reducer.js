@@ -36,6 +36,7 @@ const initialState = {
     dinner: [],
     snack: [],
   },
+  storedFood: [],
 };
 
 const reducers = {
@@ -129,6 +130,13 @@ const reducers = {
         iron: iron + food.iron,
         phosphorus: phosphorus + food.phosphorus,
       },
+    };
+  },
+
+  saveFood: (state, {payload: {foodId}}) => {
+    return {
+      ...state,
+      storedFood: [...state.storedFood, foodId],
     };
   },
 };

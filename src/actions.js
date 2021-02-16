@@ -14,8 +14,7 @@ export function requestLoginWithFirebase(id, pw) {
   return async (dispatch) => {
     try {
       const response = await auth().signInWithEmailAndPassword(id, pw);
-      console.log(response);
-      dispatch(changeIsLoading(false));
+      console.log('requestLoginWithFirebase', response);
     } catch (err) {
       console.log(err);
       dispatch(changeIsLoading(false));
@@ -30,6 +29,8 @@ export function requestLoginWithKakao() {
         KAKAO_AUTH_TYPES.Talk,
         KAKAO_AUTH_TYPES.Account,
       ]);
+
+      console.log('kakao api login request success', result);
 
       const tokenResponse = await fetch('http://localhost:3000/kakao', {
         headers: {
@@ -155,6 +156,15 @@ export function addNuturition(food) {
     type: 'addNuturition',
     payload: {
       food,
+    },
+  };
+}
+
+export function saveFood(foodId) {
+  return {
+    type: 'saveFood',
+    payload: {
+      foodId,
     },
   };
 }

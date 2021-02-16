@@ -24,7 +24,7 @@ export default function AuthenticationFlow({navigation}) {
     (user) => {
       if (user !== null) {
         const {_user} = user;
-        // console.log('onAuthStateChanged', _user.uid);
+        console.log('onAuthStateChanged', _user.uid, _user);
 
         const [refreshToken, userData] = convertUserData(_user);
         dispatch(setUserToken(refreshToken));

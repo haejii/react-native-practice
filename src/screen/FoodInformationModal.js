@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
-import {addFood, addMeal, addNuturition} from '../actions';
+import {addFood, addMeal, addNuturition, saveFood} from '../actions';
 
 export default function FoodInformationModal({food, onPress}) {
   const dispatch = useDispatch();
@@ -71,6 +71,10 @@ export default function FoodInformationModal({food, onPress}) {
 
     // dispatch(addFood(food.id));
     // dispatch(addNuturition(food));
+  };
+
+  const handlePressSave = () => {
+    dispatch(saveFood(food.id));
   };
 
   return (
@@ -166,8 +170,9 @@ export default function FoodInformationModal({food, onPress}) {
                   style={styles.openButton}
                   onPress={() => {
                     handlePressModal();
+                    handlePressSave();
                   }}>
-                  <Text style={styles.textStyle}>Show Modal</Text>
+                  <Text style={styles.textStyle}>찜하기</Text>
                 </TouchableHighlight>
               </View>
             </View>
@@ -246,6 +251,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+    fontSize: 16,
   },
   modalText: {
     marginBottom: 15,
