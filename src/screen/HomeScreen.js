@@ -7,26 +7,10 @@ import styles from '../style/styles';
 import {useSelector} from 'react-redux';
 import FoodController from '../controller/FoodController';
 import MealTimeSum from './MealTimeSum';
+import {convertMealTime} from '../utils/functions';
+import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
 
 export default function HomeScreen() {
-  const data = [50, 10, 40, 95, 85];
-
-  const CUT_OFF = 50;
-  const Labels = ({x, y, bandwidth, d}) =>
-    d.map((value, index) => (
-      <>
-        <SVGText
-          key={index}
-          x={value > CUT_OFF ? x(0) + 10 : x(value) + 10}
-          y={y(index) + bandwidth / 2}
-          fontSize={20}
-          fill={value > CUT_OFF ? 'white' : 'black'}
-          alignmentBaseline={'middle'}>
-          {value}
-        </SVGText>
-      </>
-    ));
-
   const nuturition = useSelector((state) => state.nuturition);
   const meal = useSelector((state) => state.meal);
 
@@ -63,36 +47,39 @@ export default function HomeScreen() {
           height: 300,
           paddingVertical: 30,
           flex: 2,
-          // width: '100%',
-          alignItems: 'center',
+          width: '100%',
+          // alignItems: 'center',
+          paddingHorizontal: 20,
           justifyContent: 'center',
         }}>
-        {/* <BarChart
-          style={{flex: 1, marginLeft: 8, width: '80%'}}
-          data={data}
-          horizontal={true}
-          svg={{fill: 'rgba(134, 165, 244, 0.9)'}}
-          contentInset={{top: 10, bottom: 10}}
-          spacing={0.2}
-          gridMin={0}>
-          <Grid direction={Grid.Direction.VERTICAL} />
-          <Labels d={data} />
-        </BarChart> */}
-        <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 20}}>
+        <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 10}}>
           오늘의 목표
         </Text>
 
         <Text style={{fontSize: 20}}>
-          칼로리: {nuturition.calorie} / 2000 kcal
+          칼로리 ({nuturition.calorie} kcal / 2000 kcal)
         </Text>
-        <Text style={{fontSize: 20}}>단백질: {nuturition.protein} / 85 g</Text>
-        <Text style={{fontSize: 20}}>
-          나트륨: {nuturition.sodium} / 2000 mg
+        <NuturitionBarChart nuturition={nuturition.calorie} />
+
+        <Text style={{fontSize: 20, marginTop: 5}}>
+          단백질 ({nuturition.protein} g/ 85 g)
         </Text>
-        <Text style={{fontSize: 20}}>인: {nuturition.phosphorus} / 800 mg</Text>
-        <Text style={{fontSize: 20}}>
-          칼륨: {nuturition.potassium} / 2000 mg
+        <NuturitionBarChart nuturition={nuturition.calorie} />
+
+        <Text style={{fontSize: 20, marginTop: 5}}>
+          나트륨 ({nuturition.sodium} mg / 2000 mg)
         </Text>
+        <NuturitionBarChart nuturition={nuturition.sodium} />
+
+        <Text style={{fontSize: 20, marginTop: 5}}>
+          인 ({nuturition.phosphorus} mg / 800 mg)
+        </Text>
+        <NuturitionBarChart nuturition={nuturition.phosphorus} />
+
+        <Text style={{fontSize: 20, marginTop: 5}}>
+          칼륨 ({nuturition.potassium} mg / 2000 mg)
+        </Text>
+        <NuturitionBarChart nuturition={nuturition.potassium} />
       </View>
       <View style={{flex: 3, width: '100%', height: '100%'}}>
         <View style={styles.mealButtonContainer}>
@@ -158,7 +145,7 @@ export default function HomeScreen() {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Text style={{fontSize: 30}}>{current}</Text>
+              <Text style={{fontSize: 30}}>{convertMealTime(current)}</Text>
 
               {meal[current]
                 ? meal[current].map((foodId, idx) => {

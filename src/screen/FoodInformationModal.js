@@ -12,7 +12,7 @@ import {TouchableHighlight} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
 import {addFood, addMeal, addNuturition, saveFood} from '../actions';
 
-export default function FoodInformationModal({food, onPress}) {
+export default function FoodInformationModal({food, onPress, type}) {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -101,8 +101,6 @@ export default function FoodInformationModal({food, onPress}) {
         }}>
         <Text style={{fontSize: 22, color: 'white'}}>{food.name}</Text>
 
-        {/* <Button title="Open Modal" onPress={() => handlePressModal()} /> */}
-
         <Modal
           visible={isOpen}
           animationType="slide"
@@ -166,14 +164,18 @@ export default function FoodInformationModal({food, onPress}) {
                 }}>
                 <Button title="추가" onPress={() => handlePressAdd()} />
                 <Button title="닫기" onPress={() => handlePressModal()} />
-                <TouchableHighlight
-                  style={styles.openButton}
-                  onPress={() => {
-                    handlePressModal();
-                    handlePressSave();
-                  }}>
-                  <Text style={styles.textStyle}>찜하기</Text>
-                </TouchableHighlight>
+                {type === 'stored' ? (
+                  <Button title="삭제" onPress={() => handlePressModal()} />
+                ) : (
+                  <TouchableHighlight
+                    style={styles.openButton}
+                    onPress={() => {
+                      handlePressModal();
+                      handlePressSave();
+                    }}>
+                    <Text style={styles.textStyle}>찜하기</Text>
+                  </TouchableHighlight>
+                )}
               </View>
             </View>
           </View>
@@ -181,42 +183,6 @@ export default function FoodInformationModal({food, onPress}) {
       </View>
     </TouchableOpacity>
   );
-
-  // const [modalVisible, setModalVisible] = useState(false);
-
-  // return (
-  //   <View style={styles.centeredView}>
-  //     <Modal
-  //       animationType="slide"
-  //       transparent={true}
-  //       visible={modalVisible}
-  //       onRequestClose={() => {
-  //         alert('Modal has been closed.');
-  //       }}>
-  //       <View style={styles.centeredView}>
-  //         <View style={styles.modalView}>
-  //           <Text style={styles.modalText}>Hello World!</Text>
-
-  //           <TouchableHighlight
-  //             style={{...styles.openButton, backgroundColor: '#2196F3'}}
-  //             onPress={() => {
-  //               setModalVisible(!modalVisible);
-  //             }}>
-  //             <Text style={styles.textStyle}>Hide Modal</Text>
-  //           </TouchableHighlight>
-  //         </View>
-  //       </View>
-  //     </Modal>
-
-  //     <TouchableHighlight
-  //       style={styles.openButton}
-  //       onPress={() => {
-  //         setModalVisible(true);
-  //       }}>
-  //       <Text style={styles.textStyle}>Show Modal</Text>
-  //     </TouchableHighlight>
-  //   </View>
-  // );
 }
 
 const styles = StyleSheet.create({
