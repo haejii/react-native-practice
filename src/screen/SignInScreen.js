@@ -15,7 +15,7 @@ import {
   setUser,
   requestLoginWithKakao,
 } from '../actions';
-import styles from '../style/styles';
+import {ScreenStyles, SignInScreenStyles} from '../style/styles';
 
 export default function SignInScreen() {
   const dispatch = useDispatch();
@@ -122,38 +122,38 @@ export default function SignInScreen() {
   useEffect(() => {}, [username, password]);
 
   return (
-    <View style={styles.container}>
+    <View style={ScreenStyles.container}>
       <View style={{flex: 2, justifyContent: 'center'}}>
-        <Text style={styles.loginTitle}>신장 환자를 위한 앱</Text>
+        <Text style={SignInScreenStyles.loginTitle}>신장 환자를 위한 앱</Text>
       </View>
       <View style={{flex: 3, alignItems: 'center', width: '100%'}}>
         <TextInput
-          style={styles.loginField}
+          style={SignInScreenStyles.loginField}
           placeholder="Email"
           autoCapitalize="none"
           value={username}
           onChangeText={(value) => handleChangeLoginField('username', value)}
         />
         <TextInput
-          style={styles.loginField}
+          style={SignInScreenStyles.loginField}
           placeholder="Password"
           value={password}
           onChangeText={(value) => handleChangeLoginField('password', value)}
           secureTextEntry
         />
-        <View style={styles.loginButtonContainer}>
+        <View style={SignInScreenStyles.loginButtonContainer}>
           <NativeButton
             isLoading={isLoading}
-            style={styles.loginButton}
-            textStyle={styles.loginButtonText}
+            style={SignInScreenStyles.loginButton}
+            textStyle={SignInScreenStyles.loginButtonText}
             activeOpacity={0.5}
             onPress={() => handlePressSignInWithEmail()}>
             로그인
           </NativeButton>
           <NativeButton
             isLoading={isLoading}
-            style={styles.loginButton}
-            textStyle={styles.loginButtonText}
+            style={SignInScreenStyles.loginButton}
+            textStyle={SignInScreenStyles.loginButtonText}
             activeOpacity={0.5}
             onPress={() => handlePressSignUpWithEmail()}>
             회원가입
@@ -163,8 +163,8 @@ export default function SignInScreen() {
           isLoading={isLoading}
           onPress={handlePressSignInWithKakao}
           activeOpacity={0.5}
-          style={styles.btnKakaoLogin}
-          textStyle={styles.txtKakaoLogin}>
+          style={SignInScreenStyles.btnKakaoLogin}
+          textStyle={SignInScreenStyles.txtKakaoLogin}>
           카카오 로그인
         </NativeButton>
       </View>

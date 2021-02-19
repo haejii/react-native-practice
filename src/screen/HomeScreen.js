@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View, Modal, Button} from 'react-native';
-import {BarChart, Grid} from 'react-native-svg-charts';
-import {Text as SVGText} from 'react-native-svg';
 
-import styles from '../style/styles';
+import {HomeScreenStyles, ScreenStyles} from '../style/styles';
 import {useSelector} from 'react-redux';
 import FoodController from '../controller/FoodController';
 import MealTimeSum from './MealTimeSum';
@@ -40,69 +38,74 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'column',
-          height: 300,
-          paddingVertical: 30,
-          flex: 2,
-          width: '100%',
-          paddingHorizontal: 20,
-          justifyContent: 'center',
-        }}>
-        <Text style={{fontSize: 24, fontWeight: 'bold', marginBottom: 10}}>
-          오늘의 목표
-        </Text>
+    <View style={ScreenStyles.container}>
+      <View style={HomeScreenStyles.textViewContainer}>
+        <Text style={HomeScreenStyles.textTitle}>오늘의 목표</Text>
 
-        <Text style={{fontSize: 20}}>
+        <Text style={HomeScreenStyles.textDetail}>
           열량 ({nuturition.calorie} kcal / 2000 kcal)
         </Text>
         <NuturitionBarChart nuturition={nuturition.calorie} />
 
-        <Text style={{fontSize: 20, marginTop: 5}}>
+        <Text
+          style={{
+            ...HomeScreenStyles.textDetail,
+            ...HomeScreenStyles.textInterval,
+          }}>
           단백질 ({nuturition.protein} g/ 85 g)
         </Text>
         <NuturitionBarChart nuturition={nuturition.calorie} />
 
-        <Text style={{fontSize: 20, marginTop: 5}}>
+        <Text
+          style={{
+            ...HomeScreenStyles.textDetail,
+            ...HomeScreenStyles.textInterval,
+          }}>
           인 ({nuturition.phosphorus} mg / 800 mg)
         </Text>
         <NuturitionBarChart nuturition={nuturition.phosphorus} />
 
-        <Text style={{fontSize: 20, marginTop: 5}}>
+        <Text
+          style={{
+            ...HomeScreenStyles.textDetail,
+            ...HomeScreenStyles.textInterval,
+          }}>
           칼륨 ({nuturition.potassium} mg / 2000 mg)
         </Text>
         <NuturitionBarChart nuturition={nuturition.potassium} />
 
-        <Text style={{fontSize: 20, marginTop: 5}}>
+        <Text
+          style={{
+            ...HomeScreenStyles.textDetail,
+            ...HomeScreenStyles.textInterval,
+          }}>
           나트륨 ({nuturition.sodium} mg / 2000 mg)
         </Text>
         <NuturitionBarChart nuturition={nuturition.sodium} />
       </View>
-      <View style={{flex: 3, width: '100%', height: '100%'}}>
-        <View style={styles.mealButtonContainer}>
+      <View style={HomeScreenStyles.mealButtonView}>
+        <View style={HomeScreenStyles.mealButtonContainer}>
           <TouchableOpacity
-            style={styles.mealButton}
+            style={HomeScreenStyles.mealButton}
             onPress={() => handlePressMealButton(1)}>
-            <Text style={{fontSize: 24}}>아침</Text>
+            <Text style={HomeScreenStyles.mealButtonText}>아침</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.mealButton}
+            style={HomeScreenStyles.mealButton}
             onPress={() => handlePressMealButton(2)}>
-            <Text style={{fontSize: 24}}>점심</Text>
+            <Text style={HomeScreenStyles.mealButtonText}>점심</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.mealButtonContainer}>
+        <View style={HomeScreenStyles.mealButtonContainer}>
           <TouchableOpacity
-            style={styles.mealButton}
+            style={HomeScreenStyles.mealButton}
             onPress={() => handlePressMealButton(3)}>
-            <Text style={{fontSize: 24}}>저녁</Text>
+            <Text style={HomeScreenStyles.mealButtonText}>저녁</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.mealButton}
+            style={HomeScreenStyles.mealButton}
             onPress={() => handlePressMealButton(0)}>
-            <Text style={{fontSize: 24}}>간식</Text>
+            <Text style={HomeScreenStyles.mealButtonText}>간식</Text>
           </TouchableOpacity>
         </View>
       </View>

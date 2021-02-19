@@ -5,7 +5,7 @@ import database from '@react-native-firebase/database';
 
 import SplashScreen from './SplashScreen';
 import {logout} from '../actions';
-import styles from '../style/styles';
+import {ScreenStyles} from '../style/styles';
 
 export default function MyPageScreen() {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ export default function MyPageScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={ScreenStyles.container}>
       <Text>Signed in! {user.displayName}</Text>
       <Button title="Sign out" onPress={() => handlePressSignOut()} />
       {user ? <Text>Welcome {user.email}</Text> : <></>}

@@ -3,6 +3,7 @@ import {Platform, StyleSheet, Text, View, Image, LogBox} from 'react-native';
 
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 import NativeButton from 'apsl-react-native-button';
+import {ScreenStyles} from '../style/styles';
 
 if (!KakaoLogins) {
   console.error('Module is Not Linked');
@@ -108,7 +109,7 @@ export default function KakaoLogin() {
   const {id, email, profile_image_url: photo} = profile;
 
   return (
-    <View style={styles.container}>
+    <View style={ScreenStyles.container}>
       <View style={styles.profile}>
         <Image style={styles.profilePhoto} source={{uri: photo}} />
         <Text>{`id : ${id}`}</Text>

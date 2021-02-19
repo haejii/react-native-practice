@@ -1,11 +1,14 @@
 import {StyleSheet} from 'react-native';
 
-const styles = StyleSheet.create({
+const ScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+});
+
+const SignInScreenStyles = StyleSheet.create({
   loginTitle: {
     fontSize: 44,
     fontWeight: '900',
@@ -35,10 +38,57 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color: 'white',
   },
+});
+
+const SplashScreenStyles = StyleSheet.create({
   loading: {
     fontSize: 24,
     fontWeight: '800',
   },
+
+  indicator: {
+    paddingTop: '10%',
+  },
+});
+
+const HomeScreenStyles = StyleSheet.create({
+  textViewContainer: {
+    flexDirection: 'column',
+    height: 300,
+    paddingVertical: 30,
+    flex: 2,
+    width: '100%',
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  textTitle: {
+    marginTop: 20,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  textDetail: {fontSize: 20},
+  textInterval: {marginTop: 5},
+  mealButtonView: {flex: 3, width: '100%', height: '100%', marginTop: 20},
+  mealButtonContainer: {
+    width: '100%',
+    height: '50%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  mealButton: {
+    width: '35%',
+    height: '70%',
+    borderRadius: 12,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  mealButtonText: {fontSize: 24},
+});
+
+const KakaoLoginStyles = StyleSheet.create({
   btnKakaoLogin: {
     marginTop: 10,
     height: 48,
@@ -55,21 +105,98 @@ const styles = StyleSheet.create({
     color: '#000000',
     opacity: 0.8,
   },
-  mealButtonContainer: {
-    width: '100%',
-    height: '50%',
+});
+
+const FoodInformationModalStyles = StyleSheet.create({
+  itemContainer: {
+    width: '90%',
+    height: 40,
+    marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
+    backgroundColor: 'skyblue',
+    paddingHorizontal: 10,
+    borderRadius: 8,
   },
-  mealButton: {
-    width: '35%',
-    height: '70%',
-    borderRadius: 12,
+  itemView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  foodName: {
+    fontSize: 22,
+    color: 'white',
+  },
+  modalViewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    flex: 0,
+    backgroundColor: 'white',
+    borderRadius: 20,
     borderWidth: 1,
+    width: '80%',
+    height: '60%',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  textContainer: {
+    flex: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  foodTitle: {fontWeight: 'bold', fontSize: 24, marginBottom: 20},
+  nuturitionText: {fontSize: 20},
+  modalButtonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '80%',
+  },
+
+  openButton: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+
+  openButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+});
+
+const SearchResultStyles = StyleSheet.create({
+  searchResultContainer: {
+    flex: 1,
+    width: '100%',
+    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
 });
 
-export default styles;
+export {
+  ScreenStyles,
+  SignInScreenStyles,
+  SplashScreenStyles,
+  HomeScreenStyles,
+  KakaoLoginStyles,
+  FoodInformationModalStyles,
+  SearchResultStyles,
+};
