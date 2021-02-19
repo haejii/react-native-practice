@@ -10,6 +10,7 @@ import SignInScreen from '../screen/SignInScreen';
 import auth from '@react-native-firebase/auth';
 import {convertUserData} from '../utils/convertData';
 import Main from '../screen/MainContainer';
+import {Button} from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -69,7 +70,16 @@ export default function AuthenticationFlow({navigation}) {
             }}
           />
         ) : (
-          <Stack.Screen name="Kidneys" component={Main} />
+          <Stack.Screen
+            name="Kidneys"
+            component={Main}
+            options={{
+              headerLeft: (props) => {
+                console.log(props);
+                return <Button title="달력" />;
+              },
+            }}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>

@@ -168,3 +168,12 @@ export function saveFood(foodId) {
     },
   };
 }
+
+export function deleteFood(foodId) {
+  return {
+    type: 'deleteFood',
+    payload: {
+      foodId,
+    },
+  };
+}

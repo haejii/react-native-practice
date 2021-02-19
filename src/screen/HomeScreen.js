@@ -48,7 +48,6 @@ export default function HomeScreen() {
           paddingVertical: 30,
           flex: 2,
           width: '100%',
-          // alignItems: 'center',
           paddingHorizontal: 20,
           justifyContent: 'center',
         }}>
@@ -57,7 +56,7 @@ export default function HomeScreen() {
         </Text>
 
         <Text style={{fontSize: 20}}>
-          칼로리 ({nuturition.calorie} kcal / 2000 kcal)
+          열량 ({nuturition.calorie} kcal / 2000 kcal)
         </Text>
         <NuturitionBarChart nuturition={nuturition.calorie} />
 
@@ -65,11 +64,6 @@ export default function HomeScreen() {
           단백질 ({nuturition.protein} g/ 85 g)
         </Text>
         <NuturitionBarChart nuturition={nuturition.calorie} />
-
-        <Text style={{fontSize: 20, marginTop: 5}}>
-          나트륨 ({nuturition.sodium} mg / 2000 mg)
-        </Text>
-        <NuturitionBarChart nuturition={nuturition.sodium} />
 
         <Text style={{fontSize: 20, marginTop: 5}}>
           인 ({nuturition.phosphorus} mg / 800 mg)
@@ -80,6 +74,11 @@ export default function HomeScreen() {
           칼륨 ({nuturition.potassium} mg / 2000 mg)
         </Text>
         <NuturitionBarChart nuturition={nuturition.potassium} />
+
+        <Text style={{fontSize: 20, marginTop: 5}}>
+          나트륨 ({nuturition.sodium} mg / 2000 mg)
+        </Text>
+        <NuturitionBarChart nuturition={nuturition.sodium} />
       </View>
       <View style={{flex: 3, width: '100%', height: '100%'}}>
         <View style={styles.mealButtonContainer}>

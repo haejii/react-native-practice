@@ -10,7 +10,13 @@ import {
 } from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
-import {addFood, addMeal, addNuturition, saveFood} from '../actions';
+import {
+  addFood,
+  addMeal,
+  addNuturition,
+  deleteFood,
+  saveFood,
+} from '../actions';
 
 export default function FoodInformationModal({food, onPress, type}) {
   const dispatch = useDispatch();
@@ -75,6 +81,12 @@ export default function FoodInformationModal({food, onPress, type}) {
 
   const handlePressSave = () => {
     dispatch(saveFood(food.id));
+    handlePressModal();
+  };
+
+  const handlePressDelete = () => {
+    dispatch(deleteFood(food.id));
+    handlePressModal();
   };
 
   return (
@@ -165,12 +177,11 @@ export default function FoodInformationModal({food, onPress, type}) {
                 <Button title="추가" onPress={() => handlePressAdd()} />
                 <Button title="닫기" onPress={() => handlePressModal()} />
                 {type === 'stored' ? (
-                  <Button title="삭제" onPress={() => handlePressModal()} />
+                  <Button title="삭제" onPress={() => handlePressDelete()} />
                 ) : (
                   <TouchableHighlight
                     style={styles.openButton}
                     onPress={() => {
-                      handlePressModal();
                       handlePressSave();
                     }}>
                     <Text style={styles.textStyle}>찜하기</Text>

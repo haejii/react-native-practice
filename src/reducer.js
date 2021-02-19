@@ -134,9 +134,20 @@ const reducers = {
   },
 
   saveFood: (state, {payload: {foodId}}) => {
+    const {storedFood} = state;
+
     return {
       ...state,
-      storedFood: [...state.storedFood, foodId],
+      storedFood: [...storedFood, foodId],
+    };
+  },
+
+  deleteFood: (state, {payload: {foodId}}) => {
+    const {storedFood} = state;
+
+    return {
+      ...state,
+      storedFood: storedFood.filter((id) => id !== foodId),
     };
   },
 };

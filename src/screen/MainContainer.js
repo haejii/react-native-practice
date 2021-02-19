@@ -41,7 +41,7 @@ export default function Main() {
                 color={color}
               />
             );
-          } else if (route.name === '컨텐츠') {
+          } else if (route.name === '식단') {
             return (
               <Icon
                 name={focused ? 'ios-book' : 'ios-book-outline'}
@@ -49,7 +49,7 @@ export default function Main() {
                 color={color}
               />
             );
-          } else if (route.name === '마이페이지') {
+          } else if (route.name === '내 정보') {
             return (
               <Icon
                 name={
@@ -66,11 +66,15 @@ export default function Main() {
         activeTintColor: 'teal', // tomato
         inactiveTintColor: 'gray',
       }}>
-      <Tab.Screen name="홈" component={HomeScreen} />
+      <Tab.Screen
+        name="홈"
+        component={HomeScreen}
+        options={{headerShown: false}}
+      />
       <Tab.Screen name="커뮤니티" component={RecipeScreen} />
       <Tab.Screen name="검색" component={SearchScreen} />
-      <Tab.Screen name="컨텐츠" component={ContentScreen} />
-      <Tab.Screen name="마이페이지" component={MyPageScreen} />
+      <Tab.Screen name="식단" component={ContentScreen} />
+      <Tab.Screen name="내 정보" component={MyPageScreen} />
     </Tab.Navigator>
   );
 }
