@@ -8,6 +8,13 @@ const initialUser = {
   photoURL: '',
   displayName: '',
   type: '',
+  goal: {
+    calorie: 2000,
+    protein: 85,
+    phosphorus: 800,
+    potassium: 2000,
+    sodium: 2000,
+  },
 };
 
 const initialState = {
@@ -72,9 +79,10 @@ const reducers = {
   },
 
   setUser: (state, {payload: {user}}) => {
+    const {user: previousUser} = state;
     return {
       ...state,
-      user,
+      user: {...previousUser, user},
     };
   },
 
@@ -148,6 +156,16 @@ const reducers = {
     return {
       ...state,
       storedFood: storedFood.filter((id) => id !== foodId),
+    };
+  },
+
+  changeNuturitionGoal: (state, {payload: {goal}}) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        goal,
+      },
     };
   },
 };

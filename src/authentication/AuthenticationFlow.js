@@ -75,7 +75,7 @@ export default function AuthenticationFlow({navigation}) {
             component={Main}
             options={{
               headerLeft: (props) => {
-                console.log(props);
+                // console.log(props);
                 return <Button title="달력" />;
               },
             }}

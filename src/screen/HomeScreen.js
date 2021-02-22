@@ -1,19 +1,36 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View, Modal, Button} from 'react-native';
 
-import {HomeScreenStyles, ScreenStyles} from '../style/styles';
-import {useSelector} from 'react-redux';
+import {
+  FoodInformationModalStyles,
+  HomeScreenStyles,
+  ScreenStyles,
+} from '../style/styles';
+import {useSelector, useDispatch} from 'react-redux';
 import FoodController from '../controller/FoodController';
 import MealTimeSum from './MealTimeSum';
 import {convertMealTime} from '../utils/functions';
 import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
+import {TextInput} from 'react-native-gesture-handler';
+import {changeNuturitionGoal} from '../actions';
 
 export default function HomeScreen() {
+  const dispatch = useDispatch();
+
   const nuturition = useSelector((state) => state.nuturition);
+  const {goal} = useSelector((state) => state.user);
   const meal = useSelector((state) => state.meal);
 
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState(null);
+
+  const [nuturitionInput, setNuturitionInput] = useState({
+    calorie: goal.calorie,
+    protein: goal.protein,
+    phosphorus: goal.phosphorus,
+    potassium: goal.potassium,
+    sodium: goal.sodium,
+  });
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
@@ -34,16 +51,26 @@ export default function HomeScreen() {
     }
 
     setCurrent(time);
+  };
+
+  const handleChangeNuturitionGoal = (name, value) => {
+    setNuturitionInput({...nuturitionInput, [name]: value});
+  };
+
+  const handlePressUpdateGoal = (nuturitionGoal) => {
+    dispatch(changeNuturitionGoal(nuturitionGoal));
     handlePressModal();
   };
 
   return (
     <View style={ScreenStyles.container}>
-      <View style={HomeScreenStyles.textViewContainer}>
+      <TouchableOpacity
+        style={HomeScreenStyles.textViewContainer}
+        onPress={() => handlePressModal()}>
         <Text style={HomeScreenStyles.textTitle}>오늘의 목표</Text>
 
         <Text style={HomeScreenStyles.textDetail}>
-          열량 ({nuturition.calorie} kcal / 2000 kcal)
+          열량 ({nuturition.calorie} kcal / {goal.calorie} kcal)
         </Text>
         <NuturitionBarChart nuturition={nuturition.calorie} />
 
@@ -52,16 +79,16 @@ export default function HomeScreen() {
             ...HomeScreenStyles.textDetail,
             ...HomeScreenStyles.textInterval,
           }}>
-          단백질 ({nuturition.protein} g/ 85 g)
+          단백질 ({nuturition.protein} g/ {goal.protein} g)
         </Text>
-        <NuturitionBarChart nuturition={nuturition.calorie} />
+        <NuturitionBarChart nuturition={nuturition.protein} />
 
         <Text
           style={{
             ...HomeScreenStyles.textDetail,
             ...HomeScreenStyles.textInterval,
           }}>
-          인 ({nuturition.phosphorus} mg / 800 mg)
+          인 ({nuturition.phosphorus} mg / {goal.phosphorus} mg)
         </Text>
         <NuturitionBarChart nuturition={nuturition.phosphorus} />
 
@@ -70,7 +97,7 @@ export default function HomeScreen() {
             ...HomeScreenStyles.textDetail,
             ...HomeScreenStyles.textInterval,
           }}>
-          칼륨 ({nuturition.potassium} mg / 2000 mg)
+          칼륨 ({nuturition.potassium} mg / {goal.potassium} mg)
         </Text>
         <NuturitionBarChart nuturition={nuturition.potassium} />
 
@@ -79,10 +106,10 @@ export default function HomeScreen() {
             ...HomeScreenStyles.textDetail,
             ...HomeScreenStyles.textInterval,
           }}>
-          나트륨 ({nuturition.sodium} mg / 2000 mg)
+          나트륨 ({nuturition.sodium} mg / {goal.sodium} mg)
         </Text>
         <NuturitionBarChart nuturition={nuturition.sodium} />
-      </View>
+      </TouchableOpacity>
       <View style={HomeScreenStyles.mealButtonView}>
         <View style={HomeScreenStyles.mealButtonContainer}>
           <TouchableOpacity
@@ -115,91 +142,64 @@ export default function HomeScreen() {
         animationType="slide"
         transparent={true}
         onRequestClose={handlePressModal}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              flex: 0,
-              backgroundColor: 'white',
-              borderRadius: 20,
-              borderWidth: 1,
-              width: '80%',
-              height: '60%',
-              justifyContent: 'center',
-              alignItems: 'center',
-
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3.84,
-              elevation: 5,
-            }}>
-            <View
-              style={{
-                flex: 6,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text style={{fontSize: 30}}>{convertMealTime(current)}</Text>
-
-              {meal[current]
-                ? meal[current].map((foodId, idx) => {
-                    const food = FoodController.findByFoodId(foodId);
-
-                    return (
-                      <View
-                        style={{
-                          top: 20,
-                          width: '80%',
-                          height: 30,
-                          marginBottom: 5,
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          backgroundColor: 'skyblue',
-                          paddingHorizontal: 10,
-                          borderRadius: 8,
-                        }}
-                        key={idx}>
-                        <View
-                          style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Text style={{fontSize: 20, color: 'white'}}>
-                            {food.name}
-                          </Text>
-                        </View>
-                      </View>
-                    );
-                  })
-                : null}
-
-              <MealTimeSum
-                sum={
-                  meal[current]
-                    ? FoodController.calculateNuturitionFoods(meal[current])
-                    : null
-                }
+        <View style={FoodInformationModalStyles.modalViewContainer}>
+          <View style={FoodInformationModalStyles.modalView}>
+            <View style={HomeScreenStyles.nuturitionInputContainer}>
+              <Text style={HomeScreenStyles.nuturitionInputSubject}>
+                목표 섭취량 조절하기
+              </Text>
+              <Text style={HomeScreenStyles.nuturitionTitle}>열량</Text>
+              <TextInput
+                style={HomeScreenStyles.nuturitionInput}
+                keyboardType="numeric"
+                value={String(nuturitionInput.calorie)}
+                onChangeText={(value) => {
+                  handleChangeNuturitionGoal('calorie', value);
+                }}
+              />
+              <Text style={HomeScreenStyles.nuturitionTitle}>단백질</Text>
+              <TextInput
+                style={HomeScreenStyles.nuturitionInput}
+                keyboardType="numeric"
+                value={String(nuturitionInput.protein)}
+                onChangeText={(value) => {
+                  handleChangeNuturitionGoal('protein', value);
+                }}
+              />
+              <Text style={HomeScreenStyles.nuturitionTitle}>인</Text>
+              <TextInput
+                style={HomeScreenStyles.nuturitionInput}
+                keyboardType="numeric"
+                value={String(nuturitionInput.phosphorus)}
+                onChangeText={(value) => {
+                  handleChangeNuturitionGoal('phosphorus', value);
+                }}
+              />
+              <Text style={HomeScreenStyles.nuturitionTitle}>칼륨</Text>
+              <TextInput
+                style={HomeScreenStyles.nuturitionInput}
+                keyboardType="numeric"
+                value={String(nuturitionInput.potassium)}
+                onChangeText={(value) => {
+                  handleChangeNuturitionGoal('potassium', value);
+                }}
+              />
+              <Text style={HomeScreenStyles.nuturitionTitle}>나트륨</Text>
+              <TextInput
+                style={HomeScreenStyles.nuturitionInput}
+                keyboardType="numeric"
+                value={String(nuturitionInput.sodium)}
+                onChangeText={(value) => {
+                  handleChangeNuturitionGoal('sodium', value);
+                }}
               />
             </View>
 
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                width: '80%',
-              }}>
-              <Button title="추가" onPress={() => {}} />
+            <View style={FoodInformationModalStyles.modalButtonContainer}>
+              <Button
+                title="수정"
+                onPress={() => handlePressUpdateGoal(nuturitionInput)}
+              />
               <Button title="닫기" onPress={() => handlePressModal()} />
             </View>
           </View>

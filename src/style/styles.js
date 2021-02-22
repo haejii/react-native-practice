@@ -86,6 +86,22 @@ const HomeScreenStyles = StyleSheet.create({
     alignItems: 'center',
   },
   mealButtonText: {fontSize: 24},
+  nuturitionInputContainer: {
+    flex: 6,
+    width: '80%',
+    justifyContent: 'center',
+  },
+  nuturitionInputSubject: {fontSize: 27, bottom: 10},
+  nuturitionInput: {
+    width: '100%',
+    backgroundColor: 'lightgrey',
+    height: '8%',
+    paddingHorizontal: 10,
+    fontSize: 16,
+    marginBottom: '4%',
+    marginRight: '5%',
+  },
+  nuturitionTitle: {fontSize: 16, marginBottom: 10},
 });
 
 const KakaoLoginStyles = StyleSheet.create({

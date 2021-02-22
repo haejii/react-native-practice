@@ -177,3 +177,13 @@ export function deleteFood(foodId) {
     },
   };
 }
+
+export function changeNuturitionGoal(goal) {
+  console.log(goal);
+  return {
+    type: 'changeNuturitionGoal',
+    payload: {
+      goal,
+    },
+  };
+}

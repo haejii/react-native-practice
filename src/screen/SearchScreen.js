@@ -45,7 +45,6 @@ function Search() {
           flexDirection: 'row',
         }}>
         <TextInput
-          // style={styles.loginField}
           style={{
             width: '60%',
             backgroundColor: 'white',
