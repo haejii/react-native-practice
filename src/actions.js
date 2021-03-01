@@ -90,7 +90,7 @@ export function logout() {
     if (type === 'kakao') {
       await KakaoLogins.logout();
     }
-    await auth().signOut();
+    // await auth().signOut();
 
     console.log('after logout currentUser', auth().currentUser);
     dispatch(clearUserToken());

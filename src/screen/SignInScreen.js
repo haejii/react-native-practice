@@ -16,6 +16,7 @@ import {
   requestLoginWithKakao,
 } from '../actions';
 import {ScreenStyles, SignInScreenStyles} from '../style/styles';
+import {saveItem} from '../utils/asyncStorage';
 
 export default function SignInScreen() {
   const dispatch = useDispatch();
@@ -57,6 +58,45 @@ export default function SignInScreen() {
         '아이디 또는 패스워드가 비어있습니다',
       );
     }
+
+    fetch('http://localhost:3000/user', {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify({
+        email: username,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => console.log(response));
+  }
+
+  function handlePressLogin() {
+    if (!username || !password) {
+      return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
+    }
+
+    fetch('http://localhost:3000/login', {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify({
+        email: username,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        const {jwt: accessToken, userInfo} = response;
+
+        console.log(accessToken, userInfo);
+
+        dispatch(setUserToken(accessToken));
+        dispatch(setUser(userInfo));
+        saveItem('userToken', accessToken);
+        dispatch(changeIsLoading(false));
+      });
   }
 
   const handlePressSignInWithKakao = () => {
@@ -156,7 +196,10 @@ export default function SignInScreen() {
             style={SignInScreenStyles.loginButton}
             textStyle={SignInScreenStyles.loginButtonText}
             activeOpacity={0.5}
-            onPress={() => handlePressSignInWithEmail()}>
+            onPress={() => {
+              // handlePressSignInWithEmail();
+              handlePressLogin();
+            }}>
             로그인
           </NativeButton>
           <NativeButton

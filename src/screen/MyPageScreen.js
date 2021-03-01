@@ -16,17 +16,17 @@ export default function MyPageScreen() {
     dispatch(logout());
   }
 
-  useEffect(() => {
-    database()
-      .ref('/users/123')
-      .once('value')
-      .then((snapshot) => {
-        if (!snapshot) {
-        } else {
-          console.log(snapshot);
-        }
-      });
-  }, [user]);
+  // useEffect(() => {
+  //   database()
+  //     .ref('/users/123')
+  //     .once('value')
+  //     .then((snapshot) => {
+  //       if (!snapshot) {
+  //       } else {
+  //         console.log(snapshot);
+  //       }
+  //     });
+  // }, [user]);
 
   if (!user) {
     return <SplashScreen />;
@@ -36,8 +36,8 @@ export default function MyPageScreen() {
     <View style={ScreenStyles.container}>
       <Text>Signed in! {user.displayName}</Text>
       <Button title="Sign out" onPress={() => handlePressSignOut()} />
-      {user ? <Text>Welcome {user.email}</Text> : <></>}
-      <Text>{JSON.stringify(user)}</Text>
+      {user ? <Text>Welcome {user.user.email}</Text> : <></>}
+      {/* <Text>{JSON.stringify(user)}</Text> */}
     </View>
   );
 }
