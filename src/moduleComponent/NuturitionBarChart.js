@@ -1,14 +1,14 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 
-export default function NuturitionBarChart({nuturition}) {
+export default function NuturitionBarChart({nuturition, goal}) {
   return (
     <View style={styles.chartContainer}>
       <View style={styles.chartOutline}>
-        <View style={styles.chartContent(nuturition)} />
+        <View style={styles.chartContent(nuturition, goal)} />
       </View>
       <Text style={styles.chartText}>
-        {((nuturition / 2000) * 100).toFixed(1)}%
+        {((nuturition / goal) * 100).toFixed(1)}%
       </Text>
     </View>
   );
@@ -26,11 +26,15 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 2,
   },
-  chartContent: (nuturition) => {
+  chartContent: (nuturition, goal) => {
     return {
-      width: `${nuturition === 0 ? 0 : (nuturition / 2000) * 100}%`,
+      width: `${
+        (nuturition === 0 ? 0 : (nuturition / goal) * 100 > 100)
+          ? 100
+          : (nuturition / goal) * 100
+      }%`,
       height: '100%',
-      backgroundColor: (nuturition / 2000) * 100 > 80 ? 'red' : 'skyblue',
+      backgroundColor: (nuturition / goal) * 100 > 80 ? 'red' : 'skyblue',
     };
   },
   chartText: {

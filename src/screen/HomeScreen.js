@@ -62,6 +62,17 @@ export default function HomeScreen() {
     handlePressModal();
   };
 
+  const handlePressNonUpdateGoal = () => {
+    setNuturitionInput({
+      calorie: goal.calorie,
+      protein: goal.protein,
+      phosphorus: goal.phosphorus,
+      potassium: goal.potassium,
+      sodium: goal.sodium,
+    });
+    handlePressModal();
+  };
+
   return (
     <View style={ScreenStyles.container}>
       <TouchableOpacity
@@ -72,7 +83,10 @@ export default function HomeScreen() {
         <Text style={HomeScreenStyles.textDetail}>
           열량 ({nuturition.calorie} kcal / {goal.calorie} kcal)
         </Text>
-        <NuturitionBarChart nuturition={nuturition.calorie} />
+        <NuturitionBarChart
+          nuturition={nuturition.calorie}
+          goal={goal.calorie}
+        />
 
         <Text
           style={{
@@ -81,7 +95,10 @@ export default function HomeScreen() {
           }}>
           단백질 ({nuturition.protein} g/ {goal.protein} g)
         </Text>
-        <NuturitionBarChart nuturition={nuturition.protein} />
+        <NuturitionBarChart
+          nuturition={nuturition.protein}
+          goal={goal.protein}
+        />
 
         <Text
           style={{
@@ -90,7 +107,10 @@ export default function HomeScreen() {
           }}>
           인 ({nuturition.phosphorus} mg / {goal.phosphorus} mg)
         </Text>
-        <NuturitionBarChart nuturition={nuturition.phosphorus} />
+        <NuturitionBarChart
+          nuturition={nuturition.phosphorus}
+          goal={goal.phosphorus}
+        />
 
         <Text
           style={{
@@ -99,7 +119,10 @@ export default function HomeScreen() {
           }}>
           칼륨 ({nuturition.potassium} mg / {goal.potassium} mg)
         </Text>
-        <NuturitionBarChart nuturition={nuturition.potassium} />
+        <NuturitionBarChart
+          nuturition={nuturition.potassium}
+          goal={goal.potassium}
+        />
 
         <Text
           style={{
@@ -108,7 +131,7 @@ export default function HomeScreen() {
           }}>
           나트륨 ({nuturition.sodium} mg / {goal.sodium} mg)
         </Text>
-        <NuturitionBarChart nuturition={nuturition.sodium} />
+        <NuturitionBarChart nuturition={nuturition.sodium} goal={goal.sodium} />
       </TouchableOpacity>
       <View style={HomeScreenStyles.mealButtonView}>
         <View style={HomeScreenStyles.mealButtonContainer}>
@@ -200,7 +223,7 @@ export default function HomeScreen() {
                 title="수정"
                 onPress={() => handlePressUpdateGoal(nuturitionInput)}
               />
-              <Button title="닫기" onPress={() => handlePressModal()} />
+              <Button title="취소" onPress={() => handlePressNonUpdateGoal()} />
             </View>
           </View>
         </View>
