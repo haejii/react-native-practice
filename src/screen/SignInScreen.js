@@ -40,7 +40,7 @@ export default function SignInScreen() {
 
   function handlePressSignUpWithEmail() {
     if (!username || !password) {
-      return alert.alert(
+      return Alert.alert(
         '회원가입 오류',
         '아이디 또는 패스워드가 비어있습니다',
       );
@@ -48,6 +48,15 @@ export default function SignInScreen() {
 
     dispatch(requestJoinWithFirebase(username, password));
     dispatch(changeIsLoading(true));
+  }
+
+  function handlePressJoin() {
+    if (!username || !password) {
+      return Alert.alert(
+        '회원가입 오류',
+        '아이디 또는 패스워드가 비어있습니다',
+      );
+    }
   }
 
   const handlePressSignInWithKakao = () => {
@@ -155,7 +164,10 @@ export default function SignInScreen() {
             style={SignInScreenStyles.loginButton}
             textStyle={SignInScreenStyles.loginButtonText}
             activeOpacity={0.5}
-            onPress={() => handlePressSignUpWithEmail()}>
+            onPress={() => {
+              // handlePressSignUpWithEmail();
+              handlePressJoin();
+            }}>
             회원가입
           </NativeButton>
         </View>

@@ -38,6 +38,22 @@ const SignInScreenStyles = StyleSheet.create({
   loginButtonText: {
     color: 'white',
   },
+  btnKakaoLogin: {
+    marginTop: 10,
+    height: 48,
+    width: 200,
+    alignSelf: 'center',
+    // backgroundColor: '#F8E71C',
+    backgroundColor: '#FEE500',
+    borderRadius: 12,
+    borderWidth: 0,
+  },
+  txtKakaoLogin: {
+    // fontSize: 16,
+    // #3d3d3d
+    color: '#000000',
+    opacity: 0.8,
+  },
 });
 
 const SplashScreenStyles = StyleSheet.create({
