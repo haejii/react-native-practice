@@ -6,15 +6,37 @@ import database from '@react-native-firebase/database';
 import SplashScreen from './SplashScreen';
 import {logout} from '../actions';
 import {ScreenStyles} from '../style/styles';
+import { SERVER_PATH } from '../service/apis';
 
 export default function MyPageScreen() {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
+  const userToken = useSelector((state)=>state.userToken);
 
   async function handlePressSignOut() {
     dispatch(logout());
   }
+
+  async function handlePressChangeUserName(){
+    fetch(SERVER_PATH,{
+      headers:{
+        'Content-Type': 'application/json',
+        'x-access-token' : userToken.accessToken,
+      },
+        method: 'patch',
+
+        body: JSON.stringify({
+          name:'드림찬',
+        }),
+    })
+    .then((res)=>res.json())
+    .then((response)=>console.log(res)); 
+      
+    
+  }
+
+
 
   // useEffect(() => {
   //   database()
@@ -36,7 +58,8 @@ export default function MyPageScreen() {
     <View style={ScreenStyles.container}>
       <Text>Signed in! {user.displayName}</Text>
       <Button title="Sign out" onPress={() => handlePressSignOut()} />
-      {user ? <Text>Welcome {user.user.email}</Text> : <></>}
+      {user ? <Text>Welcome {user?.user?.email}</Text> : <></>}
+      
       {/* <Text>{JSON.stringify(user)}</Text> */}
     </View>
   );

@@ -48,7 +48,7 @@ function Search() {
           style={{
             width: '60%',
             backgroundColor: 'white',
-            height: '20%',
+            height: 50,
             paddingHorizontal: 10,
             fontSize: 16,
             marginBottom: '1%',
