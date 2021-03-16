@@ -10,6 +10,14 @@ export function changeLoginField(name, value) {
   };
 }
 
+
+export function changeJoinField(name, value){
+  return{
+    type: 'changeJoinField',
+    payload: {name, value},
+  };
+}
+
 export function requestLoginWithFirebase(id, pw) {
   return async (dispatch) => {
     try {

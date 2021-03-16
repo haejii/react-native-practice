@@ -11,6 +11,7 @@ import auth from '@react-native-firebase/auth';
 import {convertUserData} from '../utils/convertData';
 import Main from '../screen/MainContainer';
 import {Button} from 'react-native';
+import JoinScreen from '../screen/JoinScreen';
 
 const Stack = createStackNavigator();
 
@@ -59,8 +60,10 @@ export default function AuthenticationFlow({navigation}) {
     <NavigationContainer>
       <Stack.Navigator>
         {isLoading ? (
+          
           <Stack.Screen name="Splash" component={SplashScreen} />
         ) : accessToken == null ? (
+          <>
           <Stack.Screen
             name="SignIn"
             component={SignInScreen}
@@ -68,7 +71,12 @@ export default function AuthenticationFlow({navigation}) {
               title: '로그인',
               animationTypeForReplace: !accessToken ? 'pop' : 'push',
             }}
-          />
+            />
+            <Stack.Screen
+              name="Join"
+              component={JoinScreen}
+            />
+            </>
         ) : (
           <Stack.Screen
             name="Kidneys"

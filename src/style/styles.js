@@ -223,6 +223,15 @@ const SearchResultStyles = StyleSheet.create({
   },
 });
 
+// const JoinStyle = StyleSheet.create({
+//   joinText:{
+//     flex : 1,
+//     width: '100%',
+//     paddingHorizontal: 20,
+//     jus
+//   }
+// })
+
 export {
   ScreenStyles,
   SignInScreenStyles,
