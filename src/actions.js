@@ -1,12 +1,12 @@
-import {removeItem, saveItem} from './utils/asyncStorage';
+import { removeItem, saveItem } from './utils/asyncStorage';
 import auth from '@react-native-firebase/auth';
-import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
-import {getPixelSizeForLayoutSize} from 'react-native/Libraries/Utilities/PixelRatio';
+import KakaoLogins, { KAKAO_AUTH_TYPES } from '@react-native-seoul/kakao-login';
+import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
 
 export function changeLoginField(name, value) {
   return {
     type: 'changeLoginField',
-    payload: {name, value},
+    payload: { name, value },
   };
 }
 
@@ -40,42 +40,51 @@ export function requestLoginWithKakao() {
 
       console.log('kakao api login request success', result);
 
-      const tokenResponse = await fetch('http://localhost:3000/kakao', {
+      await fetch('http://localhost:3000/kakao', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         method: 'POST',
-        body: JSON.stringify(result),
+        body: JSON.stringify({accessToken: result.accessToken}),
       });
 
-      const {customToken} = await tokenResponse.json();
+      // const tokenResponse = await fetch('http://localhost:3000/kakao', {
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   method: 'POST',
+      //   body: JSON.stringify(result),
+      // });
 
-      console.log('server_resp', customToken);
+      // const {customToken} = await tokenResponse.json();
 
-      const signInResult = await auth().signInWithCustomToken(customToken);
-      console.log('custom fb signIn Success!!!', signInResult);
+      // console.log('server_resp', customToken);
 
-      dispatch(setUserToken(customToken));
-      await saveItem('userToken', customToken);
+      // const signInResult = await auth().signInWithCustomToken(customToken);
+      // console.log('custom fb signIn Success!!!', signInResult);
 
-      console.log(`Login Finished:${JSON.stringify(auth().currentUser)}`);
+      // dispatch(setUserToken(customToken));
+      // await saveItem('userToken', customToken);
 
-      const profileResult = await KakaoLogins.getProfile();
+      // console.log(`Login Finished:${JSON.stringify(auth().currentUser)}`);
 
-      const {nickname, profile_image_url, email, id} = profileResult;
+      // const profileResult = await KakaoLogins.getProfile();
 
-      dispatch(
-        setUser({
-          uid: id,
-          photoURL: profile_image_url,
-          displayName: nickname,
-          type: 'kakao',
-        }),
-      );
-      console.log(`Get Profile Finished:${JSON.stringify(profileResult)}`);
+      // const {nickname, profile_image_url, email, id} = profileResult;
 
-      dispatch(changeIsLoading(false));
+      // dispatch(
+      //   setUser({
+      //     uid: id,
+      //     photoURL: profile_image_url,
+      //     displayName: nickname,
+      //     type: 'kakao',
+      //   }),
+      // );
+      // console.log(`Get Profile Finished:${JSON.stringify(profileResult)}`);
+
+      // dispatch(changeIsLoading(false));
     } catch (err) {
       if (err.code === 'E_CANCELLED_OPERATION') {
         console.log(`Login Cancelled:${err.message}`);
@@ -90,7 +99,7 @@ export function requestLoginWithKakao() {
 export function logout() {
   return async (dispatch, getState) => {
     const {
-      user: {type},
+      user: { type },
     } = getState();
 
     console.log('before logout currentUser', auth().currentUser);
@@ -119,7 +128,7 @@ export function requestJoinWithFirebase(id, pw) {
 export function setUserToken(userToken) {
   return {
     type: 'setUserToken',
-    payload: {userToken},
+    payload: { userToken },
   };
 }
 
@@ -135,14 +144,14 @@ export function clearUserToken() {
 export function changeIsLoading(value) {
   return {
     type: 'changeIsLoading',
-    payload: {isLoading: value},
+    payload: { isLoading: value },
   };
 }
 
 export function setUser(user) {
   return {
     type: 'setUser',
-    payload: {user},
+    payload: { user },
   };
 }
 
@@ -155,7 +164,7 @@ export function clearUser() {
 export function addMeal(time, id) {
   return {
     type: 'addMeal',
-    payload: {time, id},
+    payload: { time, id },
   };
 }
 
