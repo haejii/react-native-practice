@@ -12,6 +12,7 @@ import {convertUserData} from '../utils/convertData';
 import Main from '../screen/MainContainer';
 import {Button} from 'react-native';
 import JoinScreen from '../screen/JoinScreen';
+import JoinCompleteScreen from '../screen/JoinCompleteScreen';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +76,10 @@ export default function AuthenticationFlow({navigation}) {
             <Stack.Screen
               name="Join"
               component={JoinScreen}
+            />
+            <Stack.Screen
+              name="JoinCompleteScreen"
+              component={JoinCompleteScreen}
             />
             </>
         ) : (
