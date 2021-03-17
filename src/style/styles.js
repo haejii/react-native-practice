@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 
+
 const ScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -54,6 +55,53 @@ const SignInScreenStyles = StyleSheet.create({
     color: '#000000',
     opacity: 0.8,
   },
+});
+
+// 회원가입 style
+const JoinScreenStyles = StyleSheet.create({
+  JoinField: {
+    width: '90%',
+    backgroundColor: 'white',
+    marginTop: '2%',
+    paddingHorizontal: 10,
+    height: 50,
+    fontSize: 16,
+    marginBottom: '1%',
+  },
+  
+  GenderButtonContainer: {
+    marginTop: '4%',
+    flexDirection: 'row',
+    width: '80%',
+    justifyContent: 'space-evenly',
+  },
+  GenderButton: {
+    borderWidth: 0,
+    height: 48,
+    width: 150,
+    marginLeft:'14%',
+    backgroundColor: 'hotpink',
+    borderRadius: 6,
+  },
+  GenderButtonText: {
+    color: 'white',
+  },
+  ViewContainer:{
+    width: '100%',
+    marginRight: '-6%',
+    marginTop: '3%'
+  },
+  checkIdBtn:{
+    width: 150,
+    height: 30,
+    marginTop:'2%',
+    marginLeft: '3%',
+    backgroundColor: 'yellow',
+    borderRadius: 4,
+  }
+
+  
+ 
 });
 
 const SplashScreenStyles = StyleSheet.create({
@@ -240,4 +288,5 @@ export {
   KakaoLoginStyles,
   FoodInformationModalStyles,
   SearchResultStyles,
+  JoinScreenStyles,
 };
