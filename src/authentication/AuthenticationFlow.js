@@ -47,9 +47,14 @@ export default function AuthenticationFlow({navigation}) {
   useEffect(() => {
     async function getToken() {
       const userToken = await loadItem('userToken');
+      const userInfo = await loadItem('userInfo');
 
       if (userToken) {
         dispatch(setUserToken(userToken));
+      }
+
+      if (userInfo) {
+        dispatch(setUser(userInfo));
       }
 
       dispatch(changeIsLoading(false));
@@ -61,27 +66,22 @@ export default function AuthenticationFlow({navigation}) {
     <NavigationContainer>
       <Stack.Navigator>
         {isLoading ? (
-          
           <Stack.Screen name="Splash" component={SplashScreen} />
         ) : accessToken == null ? (
           <>
-          <Stack.Screen
-            name="SignIn"
-            component={SignInScreen}
-            options={{
-              title: '로그인',
-              animationTypeForReplace: !accessToken ? 'pop' : 'push',
-            }}
-            />
             <Stack.Screen
-              name="Join"
-              component={JoinScreen}
+              name="SignIn"
+              component={SignInScreen}
+              options={{
+                title: '로그인',
+                animationTypeForReplace: !accessToken ? 'pop' : 'push',
+              }}
             />
             <Stack.Screen
               name="JoinCompleteScreen"
               component={JoinCompleteScreen}
             />
-            </>
+          </>
         ) : (
           <Stack.Screen
             name="Kidneys"
