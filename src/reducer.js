@@ -17,18 +17,16 @@ const initialUser = {
   },
 };
 
-const initialJoinFields ={
-
+const initialJoinFields = {
   email: '',
   password: '',
   nickname: '',
   height: '',
   weight: '',
-  gender:'',
+  gender: '',
   birth: '',
-  kidneyType:'',
+  kidneyType: '',
 };
-
 
 const initialState = {
   isLoading: true,
@@ -37,10 +35,10 @@ const initialState = {
     ...initialLoginFields,
   },
 
-  JoinFields:{
+  JoinFields: {
     ...initialJoinFields,
   },
-  
+
   user: {
     ...initialUser,
   },
@@ -64,9 +62,9 @@ const initialState = {
   storedFood: [],
 };
 
-const initialModa={
-  modal: false
-}
+const initialModa = {
+  modal: false,
+};
 
 const reducers = {
   changeLoginField: (state, {payload: {name, value}}) => {
@@ -79,11 +77,10 @@ const reducers = {
     };
   },
 
-
   changeJoinField: (state, {payload: {name, value}}) => {
-    return{
+    return {
       ...state,
-      JoinFields:{
+      JoinFields: {
         ...state.JoinFields,
         [name]: value,
       },

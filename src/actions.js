@@ -1,18 +1,16 @@
-import { removeItem, saveItem } from './utils/asyncStorage';
+import {removeItem, saveItem} from './utils/asyncStorage';
 import auth from '@react-native-firebase/auth';
-import KakaoLogins, { KAKAO_AUTH_TYPES } from '@react-native-seoul/kakao-login';
-import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
+import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 
 export function changeLoginField(name, value) {
   return {
     type: 'changeLoginField',
-    payload: { name, value },
+    payload: {name, value},
   };
 }
 
-
-export function changeJoinField(name, value){
-  return{
+export function changeJoinField(name, value) {
+  return {
     type: 'changeJoinField',
     payload: {name, value},
   };
@@ -38,9 +36,9 @@ export function requestLoginWithKakao() {
         KAKAO_AUTH_TYPES.Account,
       ]);
 
-      console.log('kakao api login request success', result);
+      // console.log('kakao api login request success', result);
 
-      await fetch('http://localhost:3000/kakao', {
+      const response = await fetch('http://localhost:3000/kakao', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -48,6 +46,17 @@ export function requestLoginWithKakao() {
         method: 'POST',
         body: JSON.stringify({accessToken: result.accessToken}),
       });
+
+      const loginResult = await response.json();
+      console.log(loginResult);
+
+      const {jwt: accessToken, userInfo} = loginResult;
+
+      dispatch(setUserToken(accessToken));
+      dispatch(setUser(userInfo));
+      saveItem('userToken', accessToken);
+      saveItem('userInfo', userInfo);
+      dispatch(changeIsLoading(false));
 
       // const tokenResponse = await fetch('http://localhost:3000/kakao', {
       //   headers: {
@@ -99,7 +108,7 @@ export function requestLoginWithKakao() {
 export function logout() {
   return async (dispatch, getState) => {
     const {
-      user: { type },
+      user: {type},
     } = getState();
 
     console.log('before logout currentUser', auth().currentUser);
@@ -128,7 +137,7 @@ export function requestJoinWithFirebase(id, pw) {
 export function setUserToken(userToken) {
   return {
     type: 'setUserToken',
-    payload: { userToken },
+    payload: {userToken},
   };
 }
 
@@ -144,14 +153,14 @@ export function clearUserToken() {
 export function changeIsLoading(value) {
   return {
     type: 'changeIsLoading',
-    payload: { isLoading: value },
+    payload: {isLoading: value},
   };
 }
 
 export function setUser(user) {
   return {
     type: 'setUser',
-    payload: { user },
+    payload: {user},
   };
 }
 
@@ -164,7 +173,7 @@ export function clearUser() {
 export function addMeal(time, id) {
   return {
     type: 'addMeal',
-    payload: { time, id },
+    payload: {time, id},
   };
 }
 

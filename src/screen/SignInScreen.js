@@ -4,8 +4,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import NativeButton from 'apsl-react-native-button';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 
-
-
 import {
   changeLoginField,
   requestLoginWithFirebase,
@@ -19,12 +17,11 @@ import {
 } from '../actions';
 import {ScreenStyles, SignInScreenStyles} from '../style/styles';
 import {saveItem} from '../utils/asyncStorage';
-import { SERVER_PATH } from '../service/apis';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import {SERVER_PATH} from '../service/apis';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
 import JoinScreen from './JoinScreen';
 //import JoinScreen from './JoinScreen';
-
 
 export default function SignInScreen({navigation}) {
   const dispatch = useDispatch();
@@ -61,8 +58,6 @@ export default function SignInScreen({navigation}) {
     dispatch(changeIsLoading(true));
   }
 
-  
-
   // function JoinScreen({ navigation }) {
   //   return (
   //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -74,8 +69,6 @@ export default function SignInScreen({navigation}) {
   //     </View>
   //   );
   // }
-
-
 
   // function handlePressJoin() {
   //   if (!username || !password) {
@@ -99,7 +92,6 @@ export default function SignInScreen({navigation}) {
   //     .then((response) => console.log(response));
   // }
 
-  
   function handlePressLogin() {
     if (!username || !password) {
       return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
@@ -109,7 +101,7 @@ export default function SignInScreen({navigation}) {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
-      credentials :'include',
+      credentials: 'include',
       body: JSON.stringify({
         email: username,
         password,
@@ -200,8 +192,6 @@ export default function SignInScreen({navigation}) {
   useEffect(() => {}, [username, password]);
 
   return (
-
-   
     <View style={ScreenStyles.container}>
       <View style={{flex: 2, justifyContent: 'center'}}>
         <Text style={SignInScreenStyles.loginTitle}>신장 환자를 위한 앱</Text>
@@ -222,8 +212,6 @@ export default function SignInScreen({navigation}) {
           secureTextEntry
         />
         <View style={SignInScreenStyles.loginButtonContainer}>
-
-          
           <NativeButton
             isLoading={isLoading}
             style={SignInScreenStyles.loginButton}
@@ -235,23 +223,19 @@ export default function SignInScreen({navigation}) {
             }}>
             로그인
           </NativeButton>
-         
+
           <NativeButton
             isLoading={isLoading}
             style={SignInScreenStyles.loginButton}
             textStyle={SignInScreenStyles.loginButtonText}
             activeOpacity={0.5}
-            
-        
-            onPress={() => navigation.navigate('Join')}> 
+            onPress={() => navigation.navigate('Join')}>
             회원가입
-           </NativeButton> 
-          
-          
-          
-           {/* <JoinModal/> */}
+          </NativeButton>
+
+          {/* <JoinModal/> */}
         </View>
-     
+
         <NativeButton
           isLoading={isLoading}
           onPress={handlePressSignInWithKakao}
@@ -262,6 +246,5 @@ export default function SignInScreen({navigation}) {
         </NativeButton>
       </View>
     </View>
-
   );
 }
