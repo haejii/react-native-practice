@@ -1,5 +1,3 @@
-const SERVER_PATH = 'https://a6b33cb81de2.ngrok.io';
+const SERVER_PATH = 'http://localhost:3000';
 
-export {
-  SERVER_PATH
-}
+export {SERVER_PATH};

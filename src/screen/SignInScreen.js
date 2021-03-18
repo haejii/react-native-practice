@@ -21,7 +21,6 @@ import {SERVER_PATH} from '../service/apis';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import JoinScreen from './JoinScreen';
-//import JoinScreen from './JoinScreen';
 
 export default function SignInScreen({navigation}) {
   const dispatch = useDispatch();

@@ -77,6 +77,7 @@ export default function AuthenticationFlow({navigation}) {
                 animationTypeForReplace: !accessToken ? 'pop' : 'push',
               }}
             />
+            <Stack.Screen name="Join" component={JoinScreen} />
             <Stack.Screen
               name="JoinCompleteScreen"
               component={JoinCompleteScreen}

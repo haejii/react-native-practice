@@ -59,8 +59,10 @@ export default function MyPageScreen() {
         source={{uri: user?.user?.profileImageUrl}}
       />
       <Text style={{fontSize: 20}}>
-        <Text style={{fontWeight: '800'}}>{user?.user?.nickname}</Text>님
-        환영합니다.
+        <Text style={{fontWeight: '800'}}>
+          {user?.user?.nickname || user?.user?.email}
+        </Text>
+        님 환영합니다.
       </Text>
 
       {/* <Text>{JSON.stringify(user)}</Text> */}
