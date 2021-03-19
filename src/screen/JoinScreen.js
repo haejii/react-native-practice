@@ -11,7 +11,9 @@ import {
 } from '../style/styles';
 import NativeButton from 'apsl-react-native-button';
 import RNPickerSelect from 'react-native-picker-select';
-import JoinCompleteScreen from '../screen/JoinCompleteScreen';
+import DatePicker from 'react-native-date-picker'
+import { compose } from 'redux';
+import {API_URL, API_TOKEN} from "@env"
 
 export default function JoinScreen({navigation}) {
   const dispatch = useDispatch();
@@ -75,73 +77,86 @@ export default function JoinScreen({navigation}) {
       });
   }
 
+  
+
   function handelPressNickNameCheck() {
-    if (!nickname) {
+    if (!email) {
       return Alert.alert('닉네임 오류', '닉네임을 입력하세요.');
     }
-    fetch(SERVER_PATH + '/nicknameCheck', {
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      body: JSON.stringify({
-        nickname,
-      }),
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.isSuccess == false) {
-          return Alert.alert('중복', '중복된 닉네임입니다.');
-        } else {
-          return Alert.alert('사용가능', '사용가능 닉네임 입니다.');
+        fetch(API_URL + '/nicknameCheck', {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST', 
+            mode : 'cors',
+            credentials: 'include', 
+            body: JSON.stringify({
+                nickname
+            }),
+        })
+    
+            .then((res) => res.json())
+            .then((response) => 
+            {if(response.isSuccess == false){
+                return Alert.alert('중복', '중복된 닉네임입니다.');
+            }else{
+                return Alert.alert('사용가능', '사용가능 닉네임 입니다.');
+            }}
+            );
+    
         }
-      });
-  }
+    
 
-  function handlePressJoin() {
-    if (
-      !email ||
-      !password ||
-      !nickname ||
-      !height ||
-      !weight ||
-      !gender ||
-      !birth ||
-      !kidneyType
-    ) {
-      return Alert.alert('회원가입 오류', '기입 하지 않은 부분이 있습니다.');
+
+    function handlePressJoin(){
+        if(!email || !password || !nickname || !height || !weight || !gender || !birth || !kidneyType || !activityId){
+            return Alert.alert('회원가입 오류', '기입 하지 않은 부분이 있습니다.');
+        }
+        fetch(SERVER_PATH + '/user', {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST', 
+            mode : 'cors',
+            credentials: 'include', 
+            body: JSON.stringify({
+                email,
+                password,
+                nickname, 
+                height, 
+                weight, 
+                gender,
+                kidneyType,
+                birth,
+                activityId,
+            }),
+        })
+
+            .then((res) => res.json())
+            .then((response) => 
+            {if(response.isSuccess == false){
+                return Alert.alert('오류', response.message);
+            }else{
+                return navigation.navigate('JoinCompleteScreen');
+            }}
+            );
+            
+            handleChangJoinField('email', null);
+            handleChangJoinField('password', null);
+            handleChangJoinField('nickname', null);
+            handleChangJoinField('height', null);
+            handleChangJoinField('weight', null);
+            handleChangJoinField('gender', null);
+            handleChangJoinField('birth', null);
+            handleChangJoinField('kidneyType', null);
+            handleChangJoinField('activityId', null);
+            
     }
-    fetch(SERVER_PATH + '/user', {
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      body: JSON.stringify({
-        email,
-        password,
-        nickname,
-        height,
-        weight,
-        gender,
-        kidneyType,
-        birth,
-        activityId,
-      }),
-    })
-      .then((res) => res.json())
-      .then((response) => console.log(response));
-    navigation.navigate('JoinCompleteScreen');
-  }
 
-  useEffect(() => {
-    console.log(kidneyType);
-  }, [kidneyType]);
 
-  return (
-    <ScrollView>
-      <View style={ScreenStyles.container}>
-        <View style={{flex: 1, alignItems: 'center'}}>
-          <Text>회원가입</Text>
+    
+    return(
+        <ScrollView>
+        <View style={ScreenStyles.container}>
+        <View style={{flex: 1, alignItems: 'center'}}> 
+            <Text>회원가입</Text>
+
         </View>
 
         <View style={{flex: 3, alignItems: 'center', width: '100%'}}>
@@ -208,71 +223,114 @@ export default function JoinScreen({navigation}) {
           <View style={JoinScreenStyles.ViewContainer}>
             <Text>몸무게(kg) </Text>
             <TextInput
-              autoCapitalize="none"
-              style={JoinScreenStyles.JoinField}
-              placeholder="weight"
-              value={weight}
-              onChangeText={(value) => handleChangJoinField('weight', value)}
-            />
-          </View>
+                style={JoinScreenStyles.JoinField}
+                placeholder = "weight"
+                value = {weight}
+                onChangeText={(value)=>handleChangJoinField('weight', value)}
+             />
+             </View>
 
-          <View style={JoinScreenStyles.ViewContainer}>
-            <Text>성별</Text>
-            <View style={JoinScreenStyles.GenderButtonContainer}>
-              <NativeButton
-                style={JoinScreenStyles.GenderButton}
-                textStyle={JoinScreenStyles.GenderButtonText}
-                activeOpacity={0.5}
-                onPress={() => {
-                  handleGenderField();
-                }}>
-                남자
-              </NativeButton>
+             <View style={JoinScreenStyles.ViewContainer}>
+                 <Text>성별</Text>
+                 <View style={JoinScreenStyles.GenderButtonContainer}>
+                
+          
+                 <NativeButton 
+                 style={JoinScreenStyles.buttonContent(gender)}
+                 textStyle={JoinScreenStyles.GenderButtonText}
+                 onPress={() => {handleGenderField()}}>
+                 남자</NativeButton>
 
-              <NativeButton
-                style={JoinScreenStyles.GenderButton}
-                textStyle={JoinScreenStyles.GenderButtonText}
-                activeOpacity={0.5}
-                onPress={() => {
-                  handleGenderField2();
-                }}>
-                여자
-              </NativeButton>
+                 <NativeButton 
+                 style={JoinScreenStyles.buttonContent2(gender)}
+                 textStyle={JoinScreenStyles.GenderButtonText}
+                 activeOpacity={0.5}
+                 onPress={() => {handleGenderField2()}}>
+                 여자</NativeButton>
+                 </View>
+
+             </View>
+
+            <View style={JoinScreenStyles.ViewContainer}>
+                <View style={JoinScreenStyles.ViewContainer}>
+                <Text>생년월일  </Text>
+                <View style={JoinScreenStyles.GenderButtonContainer}>
+                <Text>{date.getFullYear()+"-" + (+date.getMonth()+1)+"-" + date.getDate()}</Text>
+                <NativeButton
+                style={JoinScreenStyles.birthBtn}    
+                onPress={()=>{handelPressSetDate();}}
+                >
+                확인
+                
+                </NativeButton>
+                </View>
+              
+                </View>
+            
+                    
+                <DatePicker
+                style={{width: 200}}
+                date={date}
+                mode="date"
+                placeholder="select date"
+                format="YY-MM-DD"
+                minDate="2016-05-01"
+                maxDate="2016-06-01"
+                onDateChange={(date) => {setDate(date)}}
+                />               
+            
             </View>
-          </View>
+            
 
-          <View style={JoinScreenStyles.ViewContainer}>
-            <Text>생년월일 </Text>
-            <TextInput
-              autoCapitalize="none"
-              style={JoinScreenStyles.JoinField}
-              placeholder="birth"
-              value={birth}
-              onChangeText={(value) => handleChangJoinField('birth', value)}
-            />
-            <Text>예시: 19980101</Text>
-          </View>
+            
+            <View style={JoinScreenStyles.ViewContainer}>
+            <Text>건강상태   </Text>
+                    <RNPickerSelect
+                        onValueChange={(value) => handleChangJoinField('kidneyType', value)}
+                        value={kidneyType}
+                        placeholder={placeholder}
+                        items={[
+                        {label: '투석전단계<신증후군>', value: 1},
+                        {label: '투석전단계<만성신부전>', value: 2},
+                        {label: '신장이식<신장이식후~8주>', value: 3},
+                        {label: '신장이식<신작이식8주후>', value: 4},
+                        {label: '혈액투석', value:5},
+                        {label: '복막투석', value:6},
+                        {label: '해당없음', value:7}
+                    ]}
+                    />
 
           <View style={JoinScreenStyles.ViewContainer}>
             <Text>건강상태 </Text>
             <RNPickerSelect
-              onValueChange={(value) =>
-                handleChangJoinField('kidneyType', value)
-              }
-              //onValueChange={(initialKidney) => setKidney(initialKidney)}
-              value={kidneyType}
-              placeholder={placeholder}
-              items={[
-                {label: '투석전단계<신증후군>', value: 1},
-                {label: '투석전단계<만성신부전>', value: 2},
-                {label: '신장이식<신장이식후~8주>', value: 3},
-                {label: '신장이식<신작이식8주후>', value: 4},
-                {label: '혈액투석', value: 5},
-                {label: '복막투석', value: 6},
-                {label: '해당없음', value: 7},
-              ]}
-            />
-          </View>
+                        
+                        onValueChange={(value) => handleChangJoinField('activityId', value)}
+                        placeholder={placeholder2}
+                        value={activityId}
+                        textstyle={{color:"blue"}}
+                        items={[
+                        {label: '비활동적', value: 1},
+                        {label: '저활동적', value: 2},
+                        {label: '활동적', value: 3},
+                        {label: '매우 활동적', value: 4},
+                        
+                    ]}
+                    />
+            </View>
+
+        </View>
+
+            {/* <Button onPress={()=>{handlePressJoin();}}>
+            회원가입</Button> */}
+
+            <NativeButton
+               // onPress={()=>navigation.navigate('SignIn')}
+                onPress={()=>{handlePressJoin();}}
+            >
+                회원가입
+            </NativeButton>
+
+            
 
           <View style={JoinScreenStyles.ViewContainer}>
             <Text>활동상태 </Text>
@@ -302,4 +360,5 @@ export default function JoinScreen({navigation}) {
       </View>
     </ScrollView>
   );
+
 }

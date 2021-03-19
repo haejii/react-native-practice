@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Pressable, StyleSheet} from 'react-native';
 
 
 const ScreenStyles = StyleSheet.create({
@@ -68,7 +68,7 @@ const JoinScreenStyles = StyleSheet.create({
     fontSize: 16,
     marginBottom: '1%',
   },
-  
+
   GenderButtonContainer: {
     marginTop: '4%',
     flexDirection: 'row',
@@ -76,16 +76,39 @@ const JoinScreenStyles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   GenderButton: {
-    borderWidth: 0,
+    borderWidth: 2,
     height: 48,
     width: 150,
     marginLeft:'14%',
-    backgroundColor: 'hotpink',
+    backgroundColor: 'white',
+    borderColor: 'blue',
     borderRadius: 6,
   },
-  GenderButtonText: {
-    color: 'white',
+  buttonContent: (gender) => {
+    return {
+      borderWidth: 1,
+      height: 48,
+      width: 150,
+      marginLeft:'14%',
+      //borderRadius: 'green',
+      backgroundColor: gender ==='M' ? 'skyblue' : 'white',
+    };
   },
+
+  buttonContent2: (gender) => {
+    return {
+      borderWidth: 1,
+      height: 48,
+      width: 150,
+      marginLeft:'14%',
+      backgroundColor: gender ==='F' ? 'skyblue' : 'white',
+    };
+  },
+
+  GenderButtonText: {
+    color: 'black',
+  },
+
   ViewContainer:{
     width: '100%',
     marginRight: '-6%',
@@ -97,6 +120,15 @@ const JoinScreenStyles = StyleSheet.create({
     marginTop:'2%',
     marginLeft: '3%',
     backgroundColor: 'yellow',
+    borderRadius: 4,
+  },
+
+  birthBtn:{
+    width: 100,
+    height: 30,
+    alignItems:'center',
+    marginLeft: '3%',
+    backgroundColor: 'skyblue',
     borderRadius: 4,
   }
 

@@ -25,7 +25,8 @@ const initialJoinFields = {
   weight: '',
   gender: '',
   birth: '',
-  kidneyType: '',
+  kidneyType:'',
+  activityId: '',
 };
 
 const initialState = {

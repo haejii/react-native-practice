@@ -58,39 +58,6 @@ export default function SignInScreen({navigation}) {
     dispatch(changeIsLoading(true));
   }
 
-  // function JoinScreen({ navigation }) {
-  //   return (
-  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-  //       <Text>Home screen</Text>
-  //       <Button
-  //         title="Go to Details"
-  //         onPress={() => navigation.navigate('Details')}
-  //       />
-  //     </View>
-  //   );
-  // }
-
-  // function handlePressJoin() {
-  //   if (!username || !password) {
-  //     return Alert.alert(
-  //       '회원가입 오류',
-  //       '아이디 또는 패스워드가 비어있습니다',
-  //     );
-  //   }
-
-  //   fetch('https://8e5ad1cd77fb.ngrok.io/user', {
-  //     headers: {'Content-Type': 'application/json'},
-  //     method: 'POST',
-  //     mode: 'cors',
-  //     credentials :'include',
-  //     body: JSON.stringify({
-  //       email: username,
-  //       password,
-  //     }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((response) => console.log(response));
-  // }
 
   function handlePressLogin() {
     if (!username || !password) {
