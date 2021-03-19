@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet} from 'react-native';
+import {Platform, Pressable, StyleSheet, ViewComponent} from 'react-native';
 
 
 const ScreenStyles = StyleSheet.create({
@@ -165,7 +165,12 @@ const HomeScreenStyles = StyleSheet.create({
   },
   textDetail: {fontSize: 20},
   textInterval: {marginTop: 5},
-  mealButtonView: {flex: 3, width: '100%', height: '100%', marginTop: 20},
+  mealButtonView: {
+    flex: 3,
+    width: '100%',
+    marginTop: (Platform.OS === 'ios') ? 40 : 70,
+    height: '100%'},
+
   mealButtonContainer: {
     width: '100%',
     height: '50%',
@@ -303,14 +308,38 @@ const SearchResultStyles = StyleSheet.create({
   },
 });
 
-// const JoinStyle = StyleSheet.create({
-//   joinText:{
-//     flex : 1,
-//     width: '100%',
-//     paddingHorizontal: 20,
-//     jus
-//   }
-// })
+const MyPageScreenStyles = StyleSheet.create({
+
+    BasicInformationText:{
+      backgroundColor: 'skyblue',
+      width: '90%',
+      padding: 5,
+      fontSize: (Platform.OS === 'ios') ? 24 : 20,
+      fontWeight: '800',
+      marginBottom: 10,
+    },
+
+    anotherInformationText:{
+      fontSize: 20, 
+      fontWeight: '600',
+      marginBottom: 10
+    },
+
+    ViewContainer:{
+      flex: (Platform.OS === 'ios') ? 3 : 4,
+      left: '5%',
+      marginTop: 30
+  
+    },
+
+    TouchBtn:{
+      width:'50%',
+      height:'50%',
+      backgroundColor:'skyblue',
+    }
+
+
+});
 
 export {
   ScreenStyles,
@@ -321,4 +350,5 @@ export {
   FoodInformationModalStyles,
   SearchResultStyles,
   JoinScreenStyles,
+  MyPageScreenStyles
 };

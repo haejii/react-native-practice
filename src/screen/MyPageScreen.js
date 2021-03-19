@@ -9,6 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+
+import {
+  MyPageScreenStyles
+} from '../style/styles';
 import SplashScreen from './SplashScreen';
 import {changeJoinField, logout} from '../actions';
 import {ScreenStyles} from '../style/styles';
@@ -95,34 +99,24 @@ export default function MyPageScreen() {
         </View>
       </View>
       <View
-        style={{
-          flex: 3,
-          left: '5%',
-        }}>
+        style={MyPageScreenStyles.ViewContainer}>
         <Text
-          style={{
-            backgroundColor: 'skyblue',
-            width: '90%',
-            padding: 5,
-            fontSize: 24,
-            fontWeight: '800',
-            marginBottom: 10,
-          }}>
+          style={MyPageScreenStyles.BasicInformationText}>
           기본정보
         </Text>
-        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+        <Text style={MyPageScreenStyles.anotherInformationText}>
           나이: {user?.user?.age}
         </Text>
-        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+        <Text style={MyPageScreenStyles.anotherInformationText}>
           성별: {user?.user?.gender}
         </Text>
-        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+        <Text style={MyPageScreenStyles.anotherInformationText}>
           몸무게: {user?.user?.weight}
         </Text>
-        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+        <Text style={MyPageScreenStyles.anotherInformationText}>
           키: {user?.user?.height}
         </Text>
-        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+        <Text style={MyPageScreenStyles.anotherInformationText}>
           활동수준:{' '}
           {
             pickerItems.activityTypes.items.find(
@@ -131,23 +125,20 @@ export default function MyPageScreen() {
           }
         </Text>
       </View>
-      <View style={{flex: 3, left: '5%'}}>
+      <View style={MyPageScreenStyles.ViewContainer}>
         <Text
-          style={{
-            backgroundColor: 'skyblue',
-            width: '90%',
-            padding: 5,
-            fontSize: 24,
-            fontWeight: '800',
-            marginBottom: 10,
-          }}>
+          style={MyPageScreenStyles.BasicInformationText}>
           계정정보
         </Text>
-        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+        <Text style={MyPageScreenStyles.anotherInformationText}>
           아이디 : {user?.user?.email}
         </Text>
-        <Button title="비밀번호 재설정" onPress={() => {}} />
-        <Button title="로그아웃" onPress={() => handlePressSignOut()} />
+        <Button 
+        style={MyPageScreenStyles.TouchBtn}
+        title="비밀번호 재설정" onPress={() => {}} />
+        <Button 
+        style={MyPageScreenStyles.TouchBtn}
+        title="로그아웃" onPress={() => handlePressSignOut()} />
       </View>
 
       {/* <Text>{JSON.stringify(user)}</Text> */}

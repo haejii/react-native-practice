@@ -1,23 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Alert, ScrollView} from 'react-native';
+import {View, Text, Alert, ScrollView, StyleSheet} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
 import {changeJoinField, changeLoginField} from '../actions';
-import {SERVER_PATH} from '../service/apis';
 import {
-  SignInScreenStyles,
   JoinScreenStyles,
   ScreenStyles,
 } from '../style/styles';
 import NativeButton from 'apsl-react-native-button';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-date-picker'
-import { compose } from 'redux';
 import {API_URL, API_TOKEN} from "@env"
+import { pickerItems } from '../../assets/data/pickerData';
 
 export default function JoinScreen({navigation}) {
   const dispatch = useDispatch();
 
+  const user = useSelector((state) => state.user);
   const email = useSelector((state) => state.JoinFields.email);
   const password = useSelector((state) => state.JoinFields.password);
   const nickname = useSelector((state) => state.JoinFields.nickname);
@@ -29,18 +28,6 @@ export default function JoinScreen({navigation}) {
   const activityId = useSelector((state) => state.JoinFields.activityId);
   
   const [date, setDate] = useState(new Date('1980-01-01'));
-
-  const placeholder = {
-    label: '건강상태를 입력해주세요. ',
-    value: kidneyType,
-    color: '#9EA0A4',
-  };
-
-  const placeholder2 = {
-    label: '활동상태를 입력해주세요. ',
-    value: activityId,
-    color: '#9EA044',
-  };
 
   function handleChangJoinField(name, value) {
     dispatch(changeJoinField(name, value));
@@ -291,38 +278,31 @@ export default function JoinScreen({navigation}) {
             
             <View style={JoinScreenStyles.ViewContainer}>
             <Text>건강상태   </Text>
-                    <RNPickerSelect
-                        onValueChange={(value) => handleChangJoinField('kidneyType', value)}
-                        value={kidneyType}
-                        placeholder={placeholder}
-                        items={[
-                        {label: '투석전단계<신증후군>', value: 1},
-                        {label: '투석전단계<만성신부전>', value: 2},
-                        {label: '신장이식<신장이식후~8주>', value: 3},
-                        {label: '신장이식<신작이식8주후>', value: 4},
-                        {label: '혈액투석', value:5},
-                        {label: '복막투석', value:6},
-                        {label: '해당없음', value:7}
-                    ]}
-                    />
+                <RNPickerSelect
+                onValueChange={(value) => {
+                    handleChangJoinField('kidneyType', value);
+                }}
+                placeholder={pickerItems.kidneyTypes.placeholder({
+                    value: kidneyType,
+                })}
+                value={kidneyType}
+                items={pickerItems.kidneyTypes.items}
+              />
+            </View>
 
-        </View>
         
           <View style={JoinScreenStyles.ViewContainer}>
             <Text>활동상태 </Text>
-            <RNPickerSelect
-              onValueChange={(value) =>
-                handleChangJoinField('activityId', value)
-              }
-              placeholder={placeholder2}
-              value={activityId}
-              items={[
-                {label: '비활동적', value: 1},
-                {label: '저활동적', value: 2},
-                {label: '활동적', value: 3},
-                {label: '매우 활동적', value: 4},
-              ]}
-            />
+              <RNPickerSelect
+                onValueChange={(value) => {
+                    handleChangJoinField('activityId', value);
+                }}
+                placeholder={pickerItems.activityTypes.placeholder({
+                    value: activityId,
+                })}
+                value={activityId}
+                items={pickerItems.activityTypes.items}
+              />
           </View>
         </View>
 
@@ -338,3 +318,4 @@ export default function JoinScreen({navigation}) {
   );
 
 }
+
