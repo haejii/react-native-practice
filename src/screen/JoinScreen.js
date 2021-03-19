@@ -27,16 +27,18 @@ export default function JoinScreen({navigation}) {
   const birth = useSelector((state) => state.JoinFields.birth);
   const kidneyType = useSelector((state) => state.JoinFields.kidneyType);
   const activityId = useSelector((state) => state.JoinFields.activityId);
+  
+  const [date, setDate] = useState(new Date('1980-01-01'));
 
   const placeholder = {
     label: '건강상태를 입력해주세요. ',
-    value: null,
+    value: kidneyType,
     color: '#9EA0A4',
   };
 
   const placeholder2 = {
     label: '활동상태를 입력해주세요. ',
-    value: null,
+    value: activityId,
     color: '#9EA044',
   };
 
@@ -54,11 +56,15 @@ export default function JoinScreen({navigation}) {
     console.log(gender);
   }
 
+  function handelPressSetDate(){
+      dispatch(changeJoinField('birth', date.getFullYear()+"-" + (+date.getMonth()+1)+"-" + date.getDate()))
+  }
+
   function handelPressEmailCheck() {
     if (!email) {
       return Alert.alert('이메일 오류', '이메일을 입력하세요.');
     }
-    fetch(SERVER_PATH + '/Emailcheck', {
+    fetch(API_URL + '/Emailcheck', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
@@ -110,7 +116,7 @@ export default function JoinScreen({navigation}) {
         if(!email || !password || !nickname || !height || !weight || !gender || !birth || !kidneyType || !activityId){
             return Alert.alert('회원가입 오류', '기입 하지 않은 부분이 있습니다.');
         }
-        fetch(SERVER_PATH + '/user', {
+        fetch(API_URL + '/user', {
             headers: {'Content-Type': 'application/json'},
             method: 'POST', 
             mode : 'cors',
@@ -300,38 +306,8 @@ export default function JoinScreen({navigation}) {
                     ]}
                     />
 
-          <View style={JoinScreenStyles.ViewContainer}>
-            <Text>건강상태 </Text>
-            <RNPickerSelect
-                        
-                        onValueChange={(value) => handleChangJoinField('activityId', value)}
-                        placeholder={placeholder2}
-                        value={activityId}
-                        textstyle={{color:"blue"}}
-                        items={[
-                        {label: '비활동적', value: 1},
-                        {label: '저활동적', value: 2},
-                        {label: '활동적', value: 3},
-                        {label: '매우 활동적', value: 4},
-                        
-                    ]}
-                    />
-            </View>
-
         </View>
-
-            {/* <Button onPress={()=>{handlePressJoin();}}>
-            회원가입</Button> */}
-
-            <NativeButton
-               // onPress={()=>navigation.navigate('SignIn')}
-                onPress={()=>{handlePressJoin();}}
-            >
-                회원가입
-            </NativeButton>
-
-            
-
+        
           <View style={JoinScreenStyles.ViewContainer}>
             <Text>활동상태 </Text>
             <RNPickerSelect
