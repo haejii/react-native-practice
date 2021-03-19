@@ -1,25 +1,37 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {Button, Text, View, Image} from 'react-native';
-import database from '@react-native-firebase/database';
+import {
+  Button,
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 
 import SplashScreen from './SplashScreen';
-import {logout} from '../actions';
+import {changeJoinField, logout} from '../actions';
 import {ScreenStyles} from '../style/styles';
-import {SERVER_PATH} from '../service/apis';
+import no_user from '../../assets/image/no_user.png';
+import RNPickerSelect from 'react-native-picker-select';
+import {API_URL} from '@env';
+import {pickerItems} from '../../assets/data/pickerData';
 
 export default function MyPageScreen() {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
   const userToken = useSelector((state) => state.userToken);
+  const kidneyType = useSelector((state) => state.JoinFields.kidneyType);
+
+  const noUserImage = Image.resolveAssetSource(no_user).uri;
 
   async function handlePressSignOut() {
     dispatch(logout());
   }
 
   async function handlePressChangeUserName() {
-    fetch(SERVER_PATH, {
+    fetch(API_URL, {
       headers: {
         'Content-Type': 'application/json',
         'x-access-token': userToken.accessToken,
@@ -31,42 +43,139 @@ export default function MyPageScreen() {
       }),
     })
       .then((res) => res.json())
-      .then((response) => console.log(res));
+      .then((response) => console.log(response));
   }
 
-  // useEffect(() => {
-  //   database()
-  //     .ref('/users/123')
-  //     .once('value')
-  //     .then((snapshot) => {
-  //       if (!snapshot) {
-  //       } else {
-  //         console.log(snapshot);
-  //       }
-  //     });
-  // }, [user]);
+  function handleChangJoinField(name, value) {
+    console.log(name, value);
+    dispatch(changeJoinField(name, value));
+  }
+
+  useEffect(() => {
+    if (user) {
+      dispatch(changeJoinField('kidneyType', user?.user?.kidneyType));
+    }
+  }, [dispatch, user]);
 
   if (!user) {
     return <SplashScreen />;
   }
 
   return (
-    <View style={ScreenStyles.container}>
-      <Text>Signed in! {user.displayName}</Text>
-      <Button title="Sign out" onPress={() => handlePressSignOut()} />
-      <Image
-        style={{width: 180, height: 180}}
-        source={{uri: user?.user?.profileImageUrl}}
-      />
-      <Text style={{fontSize: 20}}>
-        <Text style={{fontWeight: '800'}}>
-          {user?.user?.nickname || user?.user?.email}
+    <View style={{flex: 1}}>
+      <View style={{flex: 2, flexDirection: 'row', top: '5%', left: '2.5%'}}>
+        <View style={{flex: 1}}>
+          <Image
+            // style={{width: '10%', height: '10%', borderRadius: 0}}
+            source={{
+              uri: user?.user?.profileImageUrl || noUserImage,
+              width: 80,
+              height: 80,
+            }}
+          />
+        </View>
+        <View style={{flex: 3}}>
+          <Text style={{fontSize: 20, fontWeight: '800'}}>
+            {user?.user?.nickname || user?.user?.email}
+          </Text>
+          <RNPickerSelect
+            onValueChange={(value) => {
+              handleChangJoinField('kidneyType', value);
+            }}
+            placeholder={pickerItems.kidneyTypes.placeholder({
+              value: user?.user?.kidneyDiseaseTypeId,
+            })}
+            value={kidneyType}
+            style={{
+              ...pickerSelectStyles,
+              iconContainer: {top: 0, right: 0},
+            }}
+            items={pickerItems.kidneyTypes.items}
+          />
+        </View>
+      </View>
+      <View
+        style={{
+          flex: 3,
+          left: '5%',
+        }}>
+        <Text
+          style={{
+            backgroundColor: 'skyblue',
+            width: '90%',
+            padding: 5,
+            fontSize: 24,
+            fontWeight: '800',
+            marginBottom: 10,
+          }}>
+          기본정보
         </Text>
-        님 환영합니다.
-      </Text>
+        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+          나이: {user?.user?.age}
+        </Text>
+        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+          성별: {user?.user?.gender}
+        </Text>
+        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+          몸무게: {user?.user?.weight}
+        </Text>
+        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+          키: {user?.user?.height}
+        </Text>
+        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+          활동수준:{' '}
+          {
+            pickerItems.activityTypes.items.find(
+              (item) => item.value === user?.user?.activityId,
+            )?.label
+          }
+        </Text>
+      </View>
+      <View style={{flex: 3, left: '5%'}}>
+        <Text
+          style={{
+            backgroundColor: 'skyblue',
+            width: '90%',
+            padding: 5,
+            fontSize: 24,
+            fontWeight: '800',
+            marginBottom: 10,
+          }}>
+          계정정보
+        </Text>
+        <Text style={{fontSize: 20, fontWeight: '600', marginBottom: 10}}>
+          아이디 : {user?.user?.email}
+        </Text>
+        <Button title="비밀번호 재설정" onPress={() => {}} />
+        <Button title="로그아웃" onPress={() => handlePressSignOut()} />
+      </View>
 
       {/* <Text>{JSON.stringify(user)}</Text> */}
       {/* <Text>{JSON.stringify(userToken)}</Text> */}
     </View>
   );
 }
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    width: '80%',
+    fontSize: 18,
+    fontWeight: '800',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderBottomWidth: 0.5,
+    borderColor: 'gray',
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'purple',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});

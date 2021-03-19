@@ -76,14 +76,21 @@ export default function SignInScreen({navigation}) {
     })
       .then((res) => res.json())
       .then((response) => {
-        const {jwt: accessToken, userInfo} = response;
+        try {
+          const {jwt: accessToken, userInfo, isSuccess, message} = response;
 
-        console.log(accessToken, userInfo);
-
-        dispatch(setUserToken(accessToken));
-        dispatch(setUser(userInfo));
-        saveItem('userToken', accessToken);
-        dispatch(changeIsLoading(false));
+          if (isSuccess) {
+            dispatch(setUserToken(accessToken));
+            dispatch(setUser(userInfo));
+            saveItem('userToken', accessToken);
+            saveItem('userInfo', userInfo);
+            dispatch(changeIsLoading(false));
+          } else {
+            return Alert.alert('로그인 오류', message);
+          }
+        } catch (e) {
+          console.log(e);
+        }
       });
   }
 

@@ -122,6 +122,7 @@ export function logout() {
     dispatch(clearUserToken());
     dispatch(clearUser());
     await removeItem('userToken');
+    await removeItem('userInfo');
   };
 }
 
@@ -143,6 +144,7 @@ export function setUserToken(userToken) {
 
 export function clearUserToken() {
   removeItem('userToken');
+  removeItem('userInfo');
   //.then(() => console.log('토큰 삭제 성공'));
 
   return {
