@@ -3,6 +3,7 @@ import {Alert, Text, TextInput, View, Modal} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import NativeButton from 'apsl-react-native-button';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
+import {API_URL} from '@env';
 
 import {
   changeLoginField,
@@ -96,7 +97,7 @@ export default function SignInScreen({navigation}) {
       return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
     }
 
-    fetch(SERVER_PATH + '/login', {
+    fetch(API_URL + '/login', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
