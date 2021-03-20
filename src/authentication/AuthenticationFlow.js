@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
@@ -7,8 +7,6 @@ import {changeIsLoading, setUser, setUserToken} from '../actions';
 import {loadItem, saveItem} from '../utils/asyncStorage';
 import SplashScreen from '../screen/SplashScreen';
 import SignInScreen from '../screen/SignInScreen';
-import auth from '@react-native-firebase/auth';
-import {convertUserData} from '../utils/convertData';
 import Main from '../screen/MainContainer';
 import {Button} from 'react-native';
 import JoinScreen from '../screen/JoinScreen';
@@ -16,41 +14,21 @@ import JoinCompleteScreen from '../screen/JoinCompleteScreen';
 
 const Stack = createStackNavigator();
 
-export default function AuthenticationFlow({navigation}) {
+export default function AuthenticationFlow() {
   const dispatch = useDispatch();
 
   const isLoading = useSelector((state) => state.isLoading);
   const accessToken = useSelector((state) => state.userToken);
 
-  // Handle user state changes
-  const onAuthStateChanged = useCallback(
-    (user) => {
-      if (user !== null) {
-        const {_user} = user;
-        console.log('onAuthStateChanged', _user.uid, _user);
-
-        const [refreshToken, userData] = convertUserData(_user);
-        dispatch(setUserToken(refreshToken));
-        dispatch(setUser(userData));
-        saveItem('userToken', refreshToken);
-        dispatch(changeIsLoading(false));
-      }
-    },
-    [dispatch],
-  );
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, [onAuthStateChanged]);
-
+  const user = useSelector((state) => state.user);
+  const userToken = useSelector((state) => state.userToken);
   useEffect(() => {
     async function getToken() {
-      const userToken = await loadItem('userToken');
+      const token = await loadItem('userToken');
       const userInfo = await loadItem('userInfo');
 
-      if (userToken) {
-        dispatch(setUserToken(userToken));
+      if (token) {
+        dispatch(setUserToken(token));
       }
 
       if (userInfo) {
@@ -83,6 +61,18 @@ export default function AuthenticationFlow({navigation}) {
               component={JoinCompleteScreen}
             />
           </>
+        ) : user &&
+          (!user.kidneyType ||
+            !user.age ||
+            !user.gender ||
+            !user.height ||
+            !user.weight ||
+            !user.activityId) ? (
+          <Stack.Screen
+            name="Join"
+            component={JoinScreen}
+            initialParams={{userInfo: user, accessToken: userToken}}
+          />
         ) : (
           <Stack.Screen
             name="Kidneys"

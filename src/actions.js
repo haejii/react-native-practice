@@ -54,46 +54,9 @@ export function requestLoginWithKakao() {
 
       dispatch(setUserToken(accessToken));
       dispatch(setUser(userInfo));
-      saveItem('userToken', accessToken);
-      saveItem('userInfo', userInfo);
+      await saveItem('userToken', accessToken);
+      await saveItem('userInfo', userInfo);
       dispatch(changeIsLoading(false));
-
-      // const tokenResponse = await fetch('http://localhost:3000/kakao', {
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   method: 'POST',
-      //   body: JSON.stringify(result),
-      // });
-
-      // const {customToken} = await tokenResponse.json();
-
-      // console.log('server_resp', customToken);
-
-      // const signInResult = await auth().signInWithCustomToken(customToken);
-      // console.log('custom fb signIn Success!!!', signInResult);
-
-      // dispatch(setUserToken(customToken));
-      // await saveItem('userToken', customToken);
-
-      // console.log(`Login Finished:${JSON.stringify(auth().currentUser)}`);
-
-      // const profileResult = await KakaoLogins.getProfile();
-
-      // const {nickname, profile_image_url, email, id} = profileResult;
-
-      // dispatch(
-      //   setUser({
-      //     uid: id,
-      //     photoURL: profile_image_url,
-      //     displayName: nickname,
-      //     type: 'kakao',
-      //   }),
-      // );
-      // console.log(`Get Profile Finished:${JSON.stringify(profileResult)}`);
-
-      // dispatch(changeIsLoading(false));
     } catch (err) {
       if (err.code === 'E_CANCELLED_OPERATION') {
         console.log(`Login Cancelled:${err.message}`);
@@ -213,5 +176,12 @@ export function changeNuturitionGoal(goal) {
     payload: {
       goal,
     },
+  };
+}
+
+export function setKakaoUser(user) {
+  return async (dispatch, getState) => {
+    dispatch(setUser(user));
+    await saveItem('userInfo', user);
   };
 }

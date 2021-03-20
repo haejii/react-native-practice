@@ -1,21 +1,10 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  Button,
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {Button, Text, View, Image, StyleSheet} from 'react-native';
 
-
-import {
-  MyPageScreenStyles
-} from '../style/styles';
+import {MyPageScreenStyles} from '../style/styles';
 import SplashScreen from './SplashScreen';
 import {changeJoinField, logout} from '../actions';
-import {ScreenStyles} from '../style/styles';
 import no_user from '../../assets/image/no_user.png';
 import RNPickerSelect from 'react-native-picker-select';
 import {API_URL} from '@env';
@@ -57,7 +46,7 @@ export default function MyPageScreen() {
 
   useEffect(() => {
     if (user) {
-      dispatch(changeJoinField('kidneyType', user?.user?.kidneyType));
+      dispatch(changeJoinField('kidneyType', user?.kidneyType));
     }
   }, [dispatch, user]);
 
@@ -70,24 +59,22 @@ export default function MyPageScreen() {
       <View style={{flex: 2, flexDirection: 'row', top: '5%', left: '2.5%'}}>
         <View style={{flex: 1}}>
           <Image
-            // style={{width: '10%', height: '10%', borderRadius: 0}}
+            style={{width: 80, height: 80, borderRadius: 40}}
             source={{
-              uri: user?.user?.profileImageUrl || noUserImage,
-              width: 80,
-              height: 80,
+              uri: user?.profileImageUrl || noUserImage,
             }}
           />
         </View>
         <View style={{flex: 3}}>
           <Text style={{fontSize: 20, fontWeight: '800'}}>
-            {user?.user?.nickname || user?.user?.email}
+            {user?.nickname || user?.email}
           </Text>
           <RNPickerSelect
             onValueChange={(value) => {
               handleChangJoinField('kidneyType', value);
             }}
             placeholder={pickerItems.kidneyTypes.placeholder({
-              value: user?.user?.kidneyDiseaseTypeId,
+              value: user?.kidneyType,
             })}
             value={kidneyType}
             style={{
@@ -98,47 +85,44 @@ export default function MyPageScreen() {
           />
         </View>
       </View>
-      <View
-        style={MyPageScreenStyles.ViewContainer}>
-        <Text
-          style={MyPageScreenStyles.BasicInformationText}>
-          기본정보
+      <View style={MyPageScreenStyles.ViewContainer}>
+        <Text style={MyPageScreenStyles.BasicInformationText}>기본정보</Text>
+        <Text style={MyPageScreenStyles.anotherInformationText}>
+          나이: {user?.age}
         </Text>
         <Text style={MyPageScreenStyles.anotherInformationText}>
-          나이: {user?.user?.age}
+          성별: {user?.gender}
         </Text>
         <Text style={MyPageScreenStyles.anotherInformationText}>
-          성별: {user?.user?.gender}
+          몸무게: {user?.weight}
         </Text>
         <Text style={MyPageScreenStyles.anotherInformationText}>
-          몸무게: {user?.user?.weight}
-        </Text>
-        <Text style={MyPageScreenStyles.anotherInformationText}>
-          키: {user?.user?.height}
+          키: {user?.height}
         </Text>
         <Text style={MyPageScreenStyles.anotherInformationText}>
           활동수준:{' '}
           {
             pickerItems.activityTypes.items.find(
-              (item) => item.value === user?.user?.activityId,
+              (item) => item.value === user?.activityId,
             )?.label
           }
         </Text>
       </View>
       <View style={MyPageScreenStyles.ViewContainer}>
-        <Text
-          style={MyPageScreenStyles.BasicInformationText}>
-          계정정보
-        </Text>
+        <Text style={MyPageScreenStyles.BasicInformationText}>계정정보</Text>
         <Text style={MyPageScreenStyles.anotherInformationText}>
-          아이디 : {user?.user?.email}
+          아이디 : {user?.email}
         </Text>
-        <Button 
-        style={MyPageScreenStyles.TouchBtn}
-        title="비밀번호 재설정" onPress={() => {}} />
-        <Button 
-        style={MyPageScreenStyles.TouchBtn}
-        title="로그아웃" onPress={() => handlePressSignOut()} />
+        <Button
+          style={MyPageScreenStyles.TouchBtn}
+          title="비밀번호 재설정"
+          onPress={() => {}}
+        />
+        <Button
+          style={MyPageScreenStyles.TouchBtn}
+          title="로그아웃"
+          onPress={() => handlePressSignOut()}
+        />
       </View>
 
       {/* <Text>{JSON.stringify(user)}</Text> */}

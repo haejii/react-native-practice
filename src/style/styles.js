@@ -1,6 +1,5 @@
 import {Platform, Pressable, StyleSheet, ViewComponent} from 'react-native';
 
-
 const ScreenStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -75,11 +74,18 @@ const JoinScreenStyles = StyleSheet.create({
     width: '80%',
     justifyContent: 'space-evenly',
   },
+
+  birthButtonContainer: {
+    marginTop: '4%',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-evenly',
+  },
   GenderButton: {
     borderWidth: 2,
     height: 48,
     width: 150,
-    marginLeft:'14%',
+    marginLeft: '14%',
     backgroundColor: 'white',
     borderColor: 'blue',
     borderRadius: 6,
@@ -89,9 +95,9 @@ const JoinScreenStyles = StyleSheet.create({
       borderWidth: 1,
       height: 48,
       width: 150,
-      marginLeft:'14%',
+      marginLeft: '14%',
       //borderRadius: 'green',
-      backgroundColor: gender ==='M' ? 'skyblue' : 'white',
+      backgroundColor: gender === 'M' ? 'skyblue' : 'white',
     };
   },
 
@@ -100,8 +106,8 @@ const JoinScreenStyles = StyleSheet.create({
       borderWidth: 1,
       height: 48,
       width: 150,
-      marginLeft:'14%',
-      backgroundColor: gender ==='F' ? 'skyblue' : 'white',
+      marginLeft: '14%',
+      backgroundColor: gender === 'F' ? 'skyblue' : 'white',
     };
   },
 
@@ -109,31 +115,28 @@ const JoinScreenStyles = StyleSheet.create({
     color: 'black',
   },
 
-  ViewContainer:{
+  ViewContainer: {
     width: '100%',
     marginRight: '-6%',
-    marginTop: '3%'
+    marginTop: '3%',
   },
-  checkIdBtn:{
+  checkIdBtn: {
     width: 150,
     height: 30,
-    marginTop:'2%',
+    marginTop: '2%',
     marginLeft: '3%',
     backgroundColor: 'yellow',
     borderRadius: 4,
   },
 
-  birthBtn:{
+  birthBtn: {
     width: 100,
     height: 30,
-    alignItems:'center',
+    alignItems: 'center',
     marginLeft: '3%',
     backgroundColor: 'skyblue',
     borderRadius: 4,
-  }
-
-  
- 
+  },
 });
 
 const SplashScreenStyles = StyleSheet.create({
@@ -168,8 +171,9 @@ const HomeScreenStyles = StyleSheet.create({
   mealButtonView: {
     flex: 3,
     width: '100%',
-    marginTop: (Platform.OS === 'ios') ? 40 : 70,
-    height: '100%'},
+    marginTop: Platform.OS === 'ios' ? 40 : 70,
+    height: '100%',
+  },
 
   mealButtonContainer: {
     width: '100%',
@@ -309,36 +313,32 @@ const SearchResultStyles = StyleSheet.create({
 });
 
 const MyPageScreenStyles = StyleSheet.create({
+  BasicInformationText: {
+    backgroundColor: 'skyblue',
+    width: '90%',
+    padding: 5,
+    fontSize: Platform.OS === 'ios' ? 24 : 20,
+    fontWeight: '800',
+    marginBottom: 10,
+  },
 
-    BasicInformationText:{
-      backgroundColor: 'skyblue',
-      width: '90%',
-      padding: 5,
-      fontSize: (Platform.OS === 'ios') ? 24 : 20,
-      fontWeight: '800',
-      marginBottom: 10,
-    },
+  anotherInformationText: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 10,
+  },
 
-    anotherInformationText:{
-      fontSize: 20, 
-      fontWeight: '600',
-      marginBottom: 10
-    },
+  ViewContainer: {
+    flex: Platform.OS === 'ios' ? 3 : 4,
+    left: '5%',
+    marginTop: 30,
+  },
 
-    ViewContainer:{
-      flex: (Platform.OS === 'ios') ? 3 : 4,
-      left: '5%',
-      marginTop: 30
-  
-    },
-
-    TouchBtn:{
-      width:'50%',
-      height:'50%',
-      backgroundColor:'skyblue',
-    }
-
-
+  TouchBtn: {
+    width: '50%',
+    height: '50%',
+    backgroundColor: 'skyblue',
+  },
 });
 
 export {
@@ -350,5 +350,5 @@ export {
   FoodInformationModalStyles,
   SearchResultStyles,
   JoinScreenStyles,
-  MyPageScreenStyles
+  MyPageScreenStyles,
 };

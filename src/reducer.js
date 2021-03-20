@@ -4,10 +4,6 @@ const initialLoginFields = {
 };
 
 const initialUser = {
-  uid: '',
-  photoURL: '',
-  displayName: '',
-  type: '',
   goal: {
     calorie: 2000,
     protein: 85,
@@ -15,6 +11,14 @@ const initialUser = {
     potassium: 2000,
     sodium: 2000,
   },
+  email: '',
+  nickname: '',
+  height: 0,
+  weight: 0,
+  gender: '',
+  birth: '',
+  kidneyType: null,
+  activityId: null,
 };
 
 const initialJoinFields = {
@@ -25,7 +29,7 @@ const initialJoinFields = {
   weight: '',
   gender: '',
   birth: '',
-  kidneyType:'',
+  kidneyType: '',
   activityId: '',
 };
 
@@ -113,7 +117,7 @@ const reducers = {
     const {user: previousUser} = state;
     return {
       ...state,
-      user: {...previousUser, user},
+      user: {...previousUser, ...user},
     };
   },
 
