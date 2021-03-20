@@ -194,8 +194,7 @@ export default function JoinScreen({
               weight,
               gender,
               kidneyType,
-              age:
-                new Date().getFullYear() - new Date(birth).getFullYear() + '세',
+              age: new Date().getFullYear() - new Date(birth).getFullYear(),
               activityId,
             }),
           );
