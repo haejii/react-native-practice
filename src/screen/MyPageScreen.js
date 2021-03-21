@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   Button,
@@ -7,11 +7,23 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  Modal,
+  Alert,
 } from 'react-native';
 
-import {MyPageScreenStyles} from '../style/styles';
+import {
+  FoodInformationModalStyles,
+  HomeScreenStyles,
+  MyPageScreenStyles,
+} from '../style/styles';
 import SplashScreen from './SplashScreen';
-import {changeJoinField, logout} from '../actions';
+import {
+  changeJoinField,
+  changePassword,
+  changePasswordField,
+  changeUserInfo,
+  logout,
+} from '../actions';
 import no_user from '../../assets/image/no_user.png';
 import RNPickerSelect from 'react-native-picker-select';
 import {API_URL} from '@env';
@@ -24,40 +36,75 @@ export default function MyPageScreen() {
   const user = useSelector((state) => state.user);
   const userToken = useSelector((state) => state.userToken);
   const kidneyType = useSelector((state) => state.JoinFields.kidneyType);
+  const weight = useSelector((state) => state.JoinFields.weight);
+  const {current, willBeChanged} = useSelector(
+    (state) => state.changePasswordFields,
+  );
 
   const noUserImage = Image.resolveAssetSource(no_user).uri;
 
+  const [isOpenBasicInfo, setIsOpenBasicInfo] = useState(false);
+  const [isOpenAccountInfo, setIsOpenAccountInfo] = useState(false);
+
+  const handlePressBasicInfoModal = () => {
+    setIsOpenBasicInfo(!isOpenBasicInfo);
+  };
+
+  const handlePressAccountInfoModal = () => {
+    setIsOpenAccountInfo(!isOpenAccountInfo);
+  };
   async function handlePressSignOut() {
     dispatch(logout());
   }
-
-  async function handlePressChangeUserName() {
-    fetch(API_URL, {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-access-token': userToken.accessToken,
-      },
-      method: 'patch',
-
-      body: JSON.stringify({
-        name: '드림찬',
-      }),
-    })
-      .then((res) => res.json())
-      .then((response) => console.log(response));
-  }
-
-  function handleChangJoinField(name, value) {
+  function handleChangeJoinField(name, value) {
     dispatch(changeJoinField(name, value));
   }
 
-  function handlePressUpdateWeight() {
-    dispatch(change);
-  }
+  const handlePressUpdateWeight = () => {
+    dispatch(changeUserInfo('weight', weight));
+    handlePressBasicInfoModal();
+  };
+
+  const handlePressNonUpdateWeight = () => {
+    dispatch(changeJoinField('weight', user?.weight));
+    handlePressBasicInfoModal();
+  };
+
+  const handleValueChangeKidneyType = (name, value) => {
+    handleChangeJoinField(name, value);
+    dispatch(changeUserInfo(name, value));
+  };
+
+  const handleValueChangeActivityId = (name, value) => {
+    handleChangeJoinField(name, value);
+    dispatch(changeUserInfo(name, value));
+  };
+
+  const handleChangePasswordField = (name, value) => {
+    dispatch(changePasswordField(name, value));
+  };
+
+  const handlePressUpdatePassword = () => {
+    if (willBeChanged.length < 6 || willBeChanged.length > 20) {
+      return Alert.alert(
+        '비밀번호 입력오류',
+        '비밀번호는 6자리 이상 입력해주세요.',
+      );
+    }
+    dispatch(changePassword(current, willBeChanged));
+    setIsOpenAccountInfo(!isOpenAccountInfo);
+  };
+
+  const handlePressNonUpdatePassword = () => {
+    dispatch(changePasswordField('current', ''));
+    dispatch(changePasswordField('willBeChanged', ''));
+    setIsOpenAccountInfo(!isOpenAccountInfo);
+  };
 
   useEffect(() => {
     if (user) {
       dispatch(changeJoinField('kidneyType', user?.kidneyType));
+      dispatch(changeJoinField('weight', user?.weight));
     }
   }, [dispatch, user]);
 
@@ -82,7 +129,9 @@ export default function MyPageScreen() {
           </Text>
           <RNPickerSelect
             onValueChange={(value) => {
-              handleChangJoinField('kidneyType', value);
+              if (value) {
+                handleValueChangeKidneyType('kidneyType', value);
+              }
             }}
             placeholder={pickerItems.kidneyTypes.placeholder({
               value: null,
@@ -111,26 +160,11 @@ export default function MyPageScreen() {
 
         <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
           <Text style={{...MyPageScreenStyles.anotherInformationText}}>
-            몸무게:
-          </Text>
-          <TextInput
-            value={user?.weight}
-            style={{
-              left: 10,
-              fontSize: 20,
-              backgroundColor: 'white',
-              borderWidth: 1,
-              width: 50,
-              textAlign: 'center',
-            }}
-          />
-          <Text
-            style={{...MyPageScreenStyles.anotherInformationText, left: 15}}>
-            kg
+            몸무게: {user?.weight}kg
           </Text>
           <TouchableOpacity
             style={{
-              left: 20,
+              left: 10,
               paddingHorizontal: 10,
               paddingVertical: 2.5,
               backgroundColor: 'yellow',
@@ -138,7 +172,7 @@ export default function MyPageScreen() {
               borderRadius: 5,
               borderWidth: 1.5,
             }}
-            onPress={() => handlePressUpdateWeight()}>
+            onPress={() => handlePressBasicInfoModal()}>
             <Text style={{fontSize: 18, fontWeight: '800'}}>변경하기</Text>
           </TouchableOpacity>
         </View>
@@ -149,7 +183,9 @@ export default function MyPageScreen() {
           </Text>
           <RNPickerSelect
             onValueChange={(value) => {
-              handleChangJoinField('activityId', value);
+              if (value) {
+                handleValueChangeActivityId('activityId', value);
+              }
             }}
             placeholder={pickerItems.activityTypes.placeholder({
               value: null,
@@ -162,7 +198,7 @@ export default function MyPageScreen() {
                 // paddingVertical: 1,
                 // paddingHorizontal: 10,
                 backgroundColor: 'yellow',
-                borderRadius: 10,
+                borderRadius: 5,
                 borderWidth: 1.5,
                 left: 10,
                 padding: 10,
@@ -181,20 +217,117 @@ export default function MyPageScreen() {
         <Text style={MyPageScreenStyles.anotherInformationText}>
           아이디 : {user?.email}
         </Text>
-        <Button
-          style={MyPageScreenStyles.TouchBtn}
-          title="비밀번호 재설정"
-          onPress={() => {}}
-        />
-        <Button
-          style={MyPageScreenStyles.TouchBtn}
-          title="로그아웃"
-          onPress={() => handlePressSignOut()}
-        />
+
+        {!user?.loginType ? (
+          <Button
+            style={MyPageScreenStyles.TouchBtn}
+            title="비밀번호 재설정"
+            onPress={() => handlePressAccountInfoModal()}
+          />
+        ) : (
+          <Text style={{fontSize: 16}}>( 카카오 아이디로 로그인 됨 )</Text>
+        )}
+
+        <View style={{marginTop: '5%', left: '-5%'}}>
+          <Button
+            style={MyPageScreenStyles.TouchBtn}
+            title="로그아웃"
+            onPress={() => handlePressSignOut()}
+          />
+        </View>
       </View>
 
       {/* <Text>{JSON.stringify(user)}</Text> */}
       {/* <Text>{JSON.stringify(userToken)}</Text> */}
+
+      <Modal
+        visible={isOpenBasicInfo}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handlePressBasicInfoModal}>
+        <View style={FoodInformationModalStyles.modalViewContainer}>
+          <View style={FoodInformationModalStyles.modalView}>
+            <View style={HomeScreenStyles.nuturitionInputContainer}>
+              <Text style={HomeScreenStyles.nuturitionInputSubject}>
+                몸무게 수정
+              </Text>
+              <Text style={HomeScreenStyles.nuturitionTitle}>몸무게</Text>
+              <TextInput
+                style={HomeScreenStyles.nuturitionInput}
+                keyboardType="number-pad"
+                value={String(weight)}
+                onChangeText={(value) => {
+                  handleChangeJoinField('weight', value.replace(/[^0-9]/g, ''));
+                }}
+              />
+            </View>
+
+            <View style={FoodInformationModalStyles.modalButtonContainer}>
+              <Button
+                title="수정"
+                onPress={() => handlePressUpdateWeight(weight)}
+              />
+              <Button
+                title="취소"
+                onPress={() => handlePressNonUpdateWeight()}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={isOpenAccountInfo}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handlePressAccountInfoModal}>
+        <View style={FoodInformationModalStyles.modalViewContainer}>
+          <View style={FoodInformationModalStyles.modalView}>
+            <View style={HomeScreenStyles.nuturitionInputContainer}>
+              <Text style={HomeScreenStyles.nuturitionInputSubject}>
+                비밀번호 재설정
+              </Text>
+
+              <Text style={HomeScreenStyles.nuturitionTitle}>
+                현재 비밀번호
+              </Text>
+              <TextInput
+                style={HomeScreenStyles.nuturitionInput}
+                placeholder="현재 비밀번호"
+                secureTextEntry={true}
+                value={current}
+                onChangeText={(value) => {
+                  handleChangePasswordField('current', value);
+                }}
+              />
+
+              <Text style={HomeScreenStyles.nuturitionTitle}>
+                새로운 비밀번호
+              </Text>
+              <TextInput
+                style={HomeScreenStyles.nuturitionInput}
+                placeholder="새로운 비밀번호"
+                secureTextEntry={true}
+                value={willBeChanged}
+                onChangeText={(value) => {
+                  handleChangePasswordField('willBeChanged', value);
+                }}
+              />
+            </View>
+
+            <View style={FoodInformationModalStyles.modalButtonContainer}>
+              <Button
+                title="수정"
+                onPress={() => handlePressUpdatePassword()}
+              />
+              <Button
+                title="취소"
+                onPress={() => handlePressNonUpdatePassword()}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

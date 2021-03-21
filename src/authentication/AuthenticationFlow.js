@@ -52,7 +52,7 @@ export default function AuthenticationFlow() {
               component={SignInScreen}
               options={{
                 title: '로그인',
-                animationTypeForReplace: !accessToken ? 'pop' : 'push',
+                // animationTypeForReplace: !accessToken ? 'pop' : 'push',
               }}
             />
             <Stack.Screen name="Join" component={JoinScreen} />
@@ -62,11 +62,11 @@ export default function AuthenticationFlow() {
             />
           </>
         ) : user &&
-          (!user.kidneyType ||
-            !user.age ||
+          (!user.age ||
             !user.gender ||
             !user.height ||
             !user.weight ||
+            !user.kidneyType ||
             !user.activityId) ? (
           <Stack.Screen
             name="Join"

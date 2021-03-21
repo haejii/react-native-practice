@@ -177,7 +177,10 @@ export default function HomeScreen() {
                 keyboardType="numeric"
                 value={String(nuturitionInput.calorie)}
                 onChangeText={(value) => {
-                  handleChangeNuturitionGoal('calorie', value);
+                  handleChangeNuturitionGoal(
+                    'calorie',
+                    value.replace(/[^0-9]/g, ''),
+                  );
                 }}
               />
               <Text style={HomeScreenStyles.nuturitionTitle}>단백질</Text>
@@ -186,7 +189,10 @@ export default function HomeScreen() {
                 keyboardType="numeric"
                 value={String(nuturitionInput.protein)}
                 onChangeText={(value) => {
-                  handleChangeNuturitionGoal('protein', value);
+                  handleChangeNuturitionGoal(
+                    'protein',
+                    value.replace(/[^0-9]/g, ''),
+                  );
                 }}
               />
               <Text style={HomeScreenStyles.nuturitionTitle}>인</Text>
@@ -195,7 +201,10 @@ export default function HomeScreen() {
                 keyboardType="numeric"
                 value={String(nuturitionInput.phosphorus)}
                 onChangeText={(value) => {
-                  handleChangeNuturitionGoal('phosphorus', value);
+                  handleChangeNuturitionGoal(
+                    'phosphorus',
+                    value.replace(/[^0-9]/g, ''),
+                  );
                 }}
               />
               <Text style={HomeScreenStyles.nuturitionTitle}>칼륨</Text>
@@ -204,7 +213,10 @@ export default function HomeScreen() {
                 keyboardType="numeric"
                 value={String(nuturitionInput.potassium)}
                 onChangeText={(value) => {
-                  handleChangeNuturitionGoal('potassium', value);
+                  handleChangeNuturitionGoal(
+                    'potassium',
+                    value.replace(/[^0-9]/g, ''),
+                  );
                 }}
               />
               <Text style={HomeScreenStyles.nuturitionTitle}>나트륨</Text>
@@ -213,7 +225,10 @@ export default function HomeScreen() {
                 keyboardType="numeric"
                 value={String(nuturitionInput.sodium)}
                 onChangeText={(value) => {
-                  handleChangeNuturitionGoal('sodium', value);
+                  handleChangeNuturitionGoal(
+                    'sodium',
+                    value.replace(/[^0-9]/g, ''),
+                  );
                 }}
               />
             </View>

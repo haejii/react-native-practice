@@ -286,7 +286,7 @@ export default function JoinScreen({
               keyboardType="number-pad"
               style={JoinScreenStyles.JoinField}
               placeholder="height"
-              value={height}
+              value={String(height)}
               onChangeText={(value) =>
                 handleChangJoinField('height', value.replace(/[^0-9]/g, ''))
               }
@@ -299,7 +299,7 @@ export default function JoinScreen({
               style={JoinScreenStyles.JoinField}
               keyboardType="number-pad"
               placeholder="weight"
-              value={weight}
+              value={String(weight)}
               onChangeText={(value) =>
                 handleChangJoinField('weight', value.replace(/[^0-9]/g, ''))
               }

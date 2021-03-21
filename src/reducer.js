@@ -19,6 +19,7 @@ const initialUser = {
   birth: '',
   kidneyType: null,
   activityId: null,
+  loginType: '',
 };
 
 const initialJoinFields = {
@@ -31,6 +32,11 @@ const initialJoinFields = {
   birth: '',
   kidneyType: '',
   activityId: '',
+};
+
+const initialChangePasswordFields = {
+  current: '',
+  willBeChanged: '',
 };
 
 const initialState = {
@@ -65,10 +71,9 @@ const initialState = {
     snack: [],
   },
   storedFood: [],
-};
-
-const initialModa = {
-  modal: false,
+  changePasswordFields: {
+    ...initialChangePasswordFields,
+  },
 };
 
 const reducers = {
@@ -200,6 +205,26 @@ const reducers = {
       user: {
         ...state.user,
         goal,
+      },
+    };
+  },
+
+  changeUserInfo: (state, {payload: {name, value}}) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        [name]: value,
+      },
+    };
+  },
+
+  changePasswordField: (state, {payload: {name, value}}) => {
+    return {
+      ...state,
+      changePasswordFields: {
+        ...state.changePasswordFields,
+        [name]: value,
       },
     };
   },

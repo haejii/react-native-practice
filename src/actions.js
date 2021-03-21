@@ -1,6 +1,7 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
 import auth from '@react-native-firebase/auth';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
+import {API_URL} from '@env';
 
 export function changeLoginField(name, value) {
   return {
@@ -183,5 +184,37 @@ export function setKakaoUser(user) {
   return async (dispatch, getState) => {
     dispatch(setUser(user));
     await saveItem('userInfo', user);
+  };
+}
+
+export function changeUserInfo(name, value) {
+  return {
+    type: 'changeUserInfo',
+    payload: {name, value},
+  };
+}
+
+export function changePasswordField(name, value) {
+  return {
+    type: 'changePasswordField',
+    payload: {name, value},
+  };
+}
+
+export function changePassword(current, willBeChanged) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    const response = await fetch(API_URL + '/user', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': userToken,
+      },
+      body: JSON.stringify({current, willBeChanged}),
+    });
+
+    const result = await response.json();
+    console.log(result);
   };
 }
