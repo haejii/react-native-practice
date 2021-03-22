@@ -25,6 +25,7 @@ import {
   changeWeight,
   logout,
   changeKidneyType,
+  changeActivityId,
 } from '../actions';
 import no_user from '../../assets/image/no_user.png';
 import RNPickerSelect from 'react-native-picker-select';
@@ -79,7 +80,7 @@ export default function MyPageScreen() {
 
   const handleValueChangeActivityId = (name, value) => {
     handleChangeJoinField(name, value);
-    dispatch(changeUserInfo(name, value));
+    dispatch(changeActivityId(value));
   };
 
   const handleChangePasswordField = (name, value) => {
@@ -183,35 +184,43 @@ export default function MyPageScreen() {
           <Text style={MyPageScreenStyles.anotherInformationText}>
             활동수준:
           </Text>
-          <RNPickerSelect
-            onValueChange={(value) => {
-              if (value) {
-                handleValueChangeActivityId('activityId', value);
-              }
-            }}
-            placeholder={pickerItems.activityTypes.placeholder({
-              value: null,
-            })}
-            value={user?.activityId}
-            style={{
-              inputIOS: {
-                fontSize: 18,
-                fontWeight: '800',
-                // paddingVertical: 1,
-                // paddingHorizontal: 10,
-                backgroundColor: 'yellow',
-                borderRadius: 5,
-                borderWidth: 1.5,
-                left: 10,
-                padding: 10,
-                borderColor: 'gray',
-                color: 'black',
-                // paddingRight: 30, // to ensure the text is never behind the icon
-              },
-              iconContainer: {top: 0, right: 0},
-            }}
-            items={pickerItems.activityTypes.items}
-          />
+          <View>
+            <RNPickerSelect
+              onValueChange={(value) => {
+                if (value) {
+                  handleValueChangeActivityId('activityId', value);
+                }
+              }}
+              placeholder={pickerItems.activityTypes.placeholder({
+                value: null,
+              })}
+              value={user?.activityId}
+              style={{
+                inputIOS: {
+                  fontSize: 18,
+                  fontWeight: '800',
+                  // paddingVertical: 1,
+                  // paddingHorizontal: 10,
+                  backgroundColor: 'yellow',
+                  borderRadius: 5,
+                  borderWidth: 1.5,
+                  left: 10,
+                  padding: 10,
+                  borderColor: 'gray',
+                  color: 'black',
+                  // paddingRight: 30, // to ensure the text is never behind the icon
+                },
+                inputAndroid: {
+                  width: 200,
+                  top: 11,
+                  left: 10,
+                  color: 'teal',
+                },
+                iconContainer: {top: 0, right: 0},
+              }}
+              items={pickerItems.activityTypes.items}
+            />
+          </View>
         </View>
       </View>
       <View style={MyPageScreenStyles.ViewContainer}>
@@ -349,13 +358,7 @@ const pickerSelectStyles = StyleSheet.create({
     paddingRight: 30, // to ensure the text is never behind the icon
   },
   inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    color: 'teal',
+    width: 250,
   },
 });

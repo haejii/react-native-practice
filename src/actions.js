@@ -271,3 +271,27 @@ export function changeKidneyType(kidneyType) {
     }
   };
 }
+
+export function changeActivityId(activityId) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(API_URL + '/user/activityId', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        body: JSON.stringify({activityId}),
+      });
+
+      const result = await response.json();
+      console.log('건강상태 변경 성공', result);
+
+      dispatch(changeUserInfo('activityId', activityId));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
