@@ -37,9 +37,10 @@ export function requestLoginWithKakao() {
         KAKAO_AUTH_TYPES.Account,
       ]);
 
-      // console.log('kakao api login request success', result);
+      console.log('kakao api login request success', result);
+      console.log('API_URL', API_URL);
 
-      const response = await fetch('http://localhost:3000/kakao', {
+      const response = await fetch(API_URL + '/kakao', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -78,9 +79,7 @@ export function logout() {
     console.log('before logout currentUser', auth().currentUser);
 
     if (loginType === 'kakao') {
-      await KakaoLogins.logout();
-      // const result = await KakaoLogins.unlink();
-      // console.log('unlink', result);
+      // await KakaoLogins.logout();
     }
     // await auth().signOut();
 
@@ -207,7 +206,7 @@ export function changePassword(current, willBeChanged) {
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
-    const response = await fetch(API_URL + '/user', {
+    const response = await fetch(API_URL + '/user/password', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -218,5 +217,29 @@ export function changePassword(current, willBeChanged) {
 
     const result = await response.json();
     console.log(result);
+  };
+}
+
+export function changeWeight(weight) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(API_URL + '/user/weight', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        body: JSON.stringify({weight}),
+      });
+
+      const result = await response.json();
+      console.log('체중 변경 성공', result);
+
+      dispatch(changeUserInfo('weight', weight));
+    } catch (e) {
+      console.log(e);
+    }
   };
 }

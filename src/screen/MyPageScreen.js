@@ -22,6 +22,7 @@ import {
   changePassword,
   changePasswordField,
   changeUserInfo,
+  changeWeight,
   logout,
 } from '../actions';
 import no_user from '../../assets/image/no_user.png';
@@ -61,7 +62,7 @@ export default function MyPageScreen() {
   }
 
   const handlePressUpdateWeight = () => {
-    dispatch(changeUserInfo('weight', weight));
+    dispatch(changeWeight(weight));
     handlePressBasicInfoModal();
   };
 

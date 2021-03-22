@@ -200,7 +200,7 @@ const HomeScreenStyles = StyleSheet.create({
   nuturitionInput: {
     width: '100%',
     backgroundColor: 'lightgrey',
-    height: '8%',
+    height: Platform.OS === 'ios' ? '8%' : '20%',
     paddingHorizontal: 10,
     fontSize: 16,
     marginBottom: '4%',

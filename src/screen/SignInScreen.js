@@ -58,7 +58,6 @@ export default function SignInScreen({navigation}) {
     dispatch(changeIsLoading(true));
   }
 
-
   function handlePressLogin() {
     if (!username || !password) {
       return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
