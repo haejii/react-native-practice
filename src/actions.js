@@ -72,13 +72,15 @@ export function requestLoginWithKakao() {
 export function logout() {
   return async (dispatch, getState) => {
     const {
-      user: {type},
+      user: {loginType},
     } = getState();
 
     console.log('before logout currentUser', auth().currentUser);
 
-    if (type === 'kakao') {
+    if (loginType === 'kakao') {
       await KakaoLogins.logout();
+      // const result = await KakaoLogins.unlink();
+      // console.log('unlink', result);
     }
     // await auth().signOut();
 

@@ -20,7 +20,7 @@ import {getTwoDigits} from '../utils/functions';
 
 export default function JoinScreen({
   navigation,
-  route: {params: {userInfo, accessToken}} = {},
+  route: {params: {userInfo, accessToken} = {}} = {},
 }) {
   const dispatch = useDispatch();
 

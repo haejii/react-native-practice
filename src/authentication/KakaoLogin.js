@@ -1,17 +1,8 @@
 import React, {useState} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  LogBox,
-  Alert,
-} from 'react-native';
+import {Platform, StyleSheet, Text, View, Image, LogBox} from 'react-native';
 
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 import NativeButton from 'apsl-react-native-button';
-import {ScreenStyles} from '../style/styles';
 
 if (!KakaoLogins) {
   console.error('Module is Not Linked');
@@ -53,7 +44,6 @@ export default function KakaoLogin() {
         if (err.code === 'E_CANCELLED_OPERATION') {
           logCallback(`Login Cancelled:${err.message}`, setLoginLoading(false));
         } else {
-          Alert.alert('네트워크 오류', '잠시후에 다시 시도해주세요');
           logCallback(
             `Login Failed:${err.code} ${err.message}`,
             setLoginLoading(false),
@@ -118,7 +108,7 @@ export default function KakaoLogin() {
   const {id, email, profile_image_url: photo} = profile;
 
   return (
-    <View style={ScreenStyles.container}>
+    <View style={styles.container}>
       <View style={styles.profile}>
         <Image style={styles.profilePhoto} source={{uri: photo}} />
         <Text>{`id : ${id}`}</Text>
