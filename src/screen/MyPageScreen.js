@@ -24,6 +24,7 @@ import {
   changeUserInfo,
   changeWeight,
   logout,
+  changeKidneyType,
 } from '../actions';
 import no_user from '../../assets/image/no_user.png';
 import RNPickerSelect from 'react-native-picker-select';
@@ -73,7 +74,7 @@ export default function MyPageScreen() {
 
   const handleValueChangeKidneyType = (name, value) => {
     handleChangeJoinField(name, value);
-    dispatch(changeUserInfo(name, value));
+    dispatch(changeKidneyType(value));
   };
 
   const handleValueChangeActivityId = (name, value) => {
@@ -220,11 +221,13 @@ export default function MyPageScreen() {
         </Text>
 
         {!user?.loginType ? (
-          <Button
-            style={MyPageScreenStyles.TouchBtn}
-            title="비밀번호 재설정"
-            onPress={() => handlePressAccountInfoModal()}
-          />
+          <View style={MyPageScreenStyles.AndroidTouchBtnContainer}>
+            <Button
+              style={MyPageScreenStyles.TouchBtn}
+              title="비밀번호 재설정"
+              onPress={() => handlePressAccountInfoModal()}
+            />
+          </View>
         ) : (
           <Text style={{fontSize: 16}}>( 카카오 아이디로 로그인 됨 )</Text>
         )}

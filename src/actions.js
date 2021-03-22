@@ -206,17 +206,21 @@ export function changePassword(current, willBeChanged) {
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
-    const response = await fetch(API_URL + '/user/password', {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-access-token': userToken,
-      },
-      body: JSON.stringify({current, willBeChanged}),
-    });
+    try {
+      const response = await fetch(API_URL + '/user/password', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        body: JSON.stringify({current, willBeChanged}),
+      });
 
-    const result = await response.json();
-    console.log(result);
+      const result = await response.json();
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
   };
 }
 
@@ -238,6 +242,30 @@ export function changeWeight(weight) {
       console.log('체중 변경 성공', result);
 
       dispatch(changeUserInfo('weight', weight));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
+
+export function changeKidneyType(kidneyType) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(API_URL + '/user/kidneyType', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        body: JSON.stringify({kidneyType}),
+      });
+
+      const result = await response.json();
+      console.log('건강상태 변경 성공', result);
+
+      dispatch(changeUserInfo('kidneyType', kidneyType));
     } catch (e) {
       console.log(e);
     }

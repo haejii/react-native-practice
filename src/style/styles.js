@@ -325,13 +325,19 @@ const MyPageScreenStyles = StyleSheet.create({
   anotherInformationText: {
     fontSize: 20,
     fontWeight: '600',
-    marginBottom: 10,
+    marginBottom: Platform.OS === 'ios' ? 10 : 0,
   },
 
   ViewContainer: {
     flex: Platform.OS === 'ios' ? 3 : 4,
     left: '5%',
     marginTop: 30,
+  },
+
+  AndroidTouchBtnContainer: {
+    alignItems: Platform.OS === 'ios' ? '' : 'center',
+    left: Platform.OS === 'ios' ? '' : '-5%',
+    marginTop: Platform.OS === 'ios' ? '' : '5%',
   },
 
   TouchBtn: {
