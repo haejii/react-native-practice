@@ -21,15 +21,14 @@ import {
   changeJoinField,
   changePassword,
   changePasswordField,
-  changeUserInfo,
   changeWeight,
   logout,
   changeKidneyType,
   changeActivityId,
+  requestUserInfo,
 } from '../actions';
 import no_user from '../../assets/image/no_user.png';
 import RNPickerSelect from 'react-native-picker-select';
-import {API_URL} from '@env';
 import {pickerItems} from '../../assets/data/pickerData';
 import {TextInput} from 'react-native-gesture-handler';
 
@@ -37,7 +36,6 @@ export default function MyPageScreen() {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
-  const userToken = useSelector((state) => state.userToken);
   const kidneyType = useSelector((state) => state.JoinFields.kidneyType);
   const weight = useSelector((state) => state.JoinFields.weight);
   const {current, willBeChanged} = useSelector(
@@ -110,6 +108,12 @@ export default function MyPageScreen() {
       dispatch(changeJoinField('weight', user?.weight));
     }
   }, [dispatch, user]);
+
+  // useEffect(() => {
+  //   if (!user) {
+  //   dispatch(requestUserInfo());
+  //   }
+  // }, [dispatch, user]);
 
   if (!user) {
     return <SplashScreen />;

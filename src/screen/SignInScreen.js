@@ -1,27 +1,18 @@
-import React, {useEffect, useState, state} from 'react';
-import {Alert, Text, TextInput, View, Modal} from 'react-native';
+import React from 'react';
+import {Alert, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import NativeButton from 'apsl-react-native-button';
-import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 import {API_URL} from '@env';
 
 import {
   changeLoginField,
-  requestLoginWithFirebase,
-  requestJoinWithFirebase,
   changeIsLoading,
   setUserToken,
-  clearUser,
-  clearUserToken,
   setUser,
   requestLoginWithKakao,
 } from '../actions';
 import {ScreenStyles, SignInScreenStyles} from '../style/styles';
 import {saveItem} from '../utils/asyncStorage';
-import {SERVER_PATH} from '../service/apis';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
-import JoinScreen from './JoinScreen';
 
 export default function SignInScreen({navigation}) {
   const dispatch = useDispatch();
@@ -35,27 +26,6 @@ export default function SignInScreen({navigation}) {
 
   function handleChangeLoginField(name, value) {
     dispatch(changeLoginField(name, value));
-  }
-
-  function handlePressSignInWithEmail() {
-    if (!username || !password) {
-      return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
-    }
-
-    dispatch(requestLoginWithFirebase(username, password));
-    dispatch(changeIsLoading(true));
-  }
-
-  function handlePressSignUpWithEmail() {
-    if (!username || !password) {
-      return Alert.alert(
-        '회원가입 오류',
-        '아이디 또는 패스워드가 비어있습니다',
-      );
-    }
-
-    dispatch(requestJoinWithFirebase(username, password));
-    dispatch(changeIsLoading(true));
   }
 
   function handlePressLogin() {
@@ -77,6 +47,7 @@ export default function SignInScreen({navigation}) {
       .then((response) => {
         try {
           const {jwt: accessToken, userInfo, isSuccess, message} = response;
+          console.log(userInfo);
 
           if (isSuccess) {
             dispatch(setUserToken(accessToken));
@@ -98,71 +69,6 @@ export default function SignInScreen({navigation}) {
     dispatch(changeIsLoading(true));
     dispatch(requestLoginWithKakao());
   };
-
-  const _handlePressSignInWithKakao = () => {
-    console.log('Kakao Login Start');
-    dispatch(changeIsLoading(true));
-
-    KakaoLogins.login([KAKAO_AUTH_TYPES.Talk, KAKAO_AUTH_TYPES.Account])
-      .then((result) => {
-        dispatch(setUserToken(result.accessToken));
-        console.log(`Login Finished:${JSON.stringify(result)}`);
-        dispatch(changeIsLoading(false));
-
-        KakaoLogins.getProfile()
-          .then((profileResult) => {
-            console.log(
-              `Get Profile Finished:${JSON.stringify(profileResult)}`,
-            );
-
-            const {nickname, profile_image_url, email, id} = profileResult;
-
-            dispatch(
-              setUser({
-                uid: id,
-                photoURL: profile_image_url,
-                displayName: nickname,
-              }),
-            );
-
-            KakaoLogins.getTokens().then((tokens) => {
-              console.log(tokens);
-              dispatch(setUserToken(tokens.accessToken));
-            });
-          })
-          .catch((err) => {
-            console.log(`Get Profile Failed:${err.code} ${err.message}`);
-          });
-      })
-      .catch((err) => {
-        if (err.code === 'E_CANCELLED_OPERATION') {
-          console.log(`Login Cancelled:${err.message}`);
-          dispatch(changeIsLoading(false));
-        } else {
-          console.log(`Login Failed:${err.code} ${err.message}`);
-          dispatch(changeIsLoading(false));
-        }
-      });
-  };
-
-  const kakaoLogout = () => {
-    console.log('Logout Start');
-    dispatch(changeIsLoading(true));
-
-    KakaoLogins.unlink()
-      .then((result) => {
-        dispatch(clearUserToken());
-        dispatch(clearUser());
-        console.log(`Logout Finished:${result}`);
-        dispatch(changeIsLoading(false));
-      })
-      .catch((err) => {
-        console.log(`Logout Failed:${err.code} ${err.message}`);
-        dispatch(changeIsLoading(false));
-      });
-  };
-
-  useEffect(() => {}, [username, password]);
 
   return (
     <View style={ScreenStyles.container}>

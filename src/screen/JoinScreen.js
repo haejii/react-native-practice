@@ -209,6 +209,10 @@ export default function JoinScreen({
     handleChangJoinField('activityId', null);
   }
 
+  // useEffect(() => {
+  //   dispatch(logout());
+  // }, [dispatch]);
+
   return (
     <ScrollView>
       {/* <Text>{JSON.stringify(userInfo)}</Text> */}

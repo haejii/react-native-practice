@@ -241,7 +241,8 @@ export function changeWeight(weight) {
       const result = await response.json();
       console.log('체중 변경 성공', result);
 
-      dispatch(changeUserInfo('weight', weight));
+      dispatch(requestUserInfo());
+      // dispatch(changeUserInfo('weight', weight));
     } catch (e) {
       console.log(e);
     }
@@ -265,7 +266,8 @@ export function changeKidneyType(kidneyType) {
       const result = await response.json();
       console.log('건강상태 변경 성공', result);
 
-      dispatch(changeUserInfo('kidneyType', kidneyType));
+      dispatch(requestUserInfo());
+      // dispatch(changeUserInfo('kidneyType', kidneyType));
     } catch (e) {
       console.log(e);
     }
@@ -290,6 +292,32 @@ export function changeActivityId(activityId) {
       console.log('건강상태 변경 성공', result);
 
       dispatch(changeUserInfo('activityId', activityId));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+}
+
+export function requestUserInfo() {
+  return async (dispatch, getState) => {
+    const {
+      user: {id},
+      userToken,
+    } = getState();
+
+    try {
+      const response = await fetch(API_URL + '/user/' + id, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+      });
+
+      const {userInfo} = await response.json();
+
+      dispatch(setUser(userInfo));
+      await saveItem('userInfo', userInfo);
     } catch (e) {
       console.log(e);
     }

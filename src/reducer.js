@@ -4,6 +4,7 @@ const initialLoginFields = {
 };
 
 const initialUser = {
+  id: null,
   goal: {
     calorie: 2000,
     protein: 85,
@@ -13,8 +14,8 @@ const initialUser = {
   },
   email: '',
   nickname: '',
-  height: 0,
-  weight: 0,
+  height: null,
+  weight: null,
   gender: '',
   birth: '',
   kidneyType: null,
