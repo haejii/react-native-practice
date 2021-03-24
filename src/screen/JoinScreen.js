@@ -16,6 +16,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-date-picker';
 import {pickerItems} from '../../assets/data/pickerData';
 import {getTwoDigits} from '../utils/functions';
+import {SERVER_PATH} from '../service/apis';
 
 export default function JoinScreen({
   navigation,
@@ -68,7 +69,7 @@ export default function JoinScreen({
     if (!email) {
       return Alert.alert('이메일 오류', '이메일을 입력하세요.');
     }
-    fetch('https://8505f6beed63.ngrok.io' + '/Emailcheck', {
+    fetch(SERVER_PATH + '/Emailcheck', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
@@ -91,7 +92,7 @@ export default function JoinScreen({
     if (!email) {
       return Alert.alert('닉네임 오류', '닉네임을 입력하세요.');
     }
-    fetch('https://8505f6beed63.ngrok.io' + '/nicknameCheck', {
+    fetch(SERVER_PATH + '/nicknameCheck', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
@@ -127,7 +128,7 @@ export default function JoinScreen({
     ) {
       return Alert.alert('회원가입 오류', '기입 하지 않은 부분이 있습니다.');
     }
-    fetch('https://8505f6beed63.ngrok.io' + '/user', {
+    fetch(SERVER_PATH + '/user', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
@@ -169,7 +170,7 @@ export default function JoinScreen({
     if (!height || !weight || !gender || !birth || !kidneyType || !activityId) {
       return Alert.alert('회원가입 오류', '기입 하지 않은 부분이 있습니다.');
     }
-    fetch('https://8505f6beed63.ngrok.io' + '/user/kakao', {
+    fetch(SERVER_PATH + '/user/kakao', {
       headers: {
         'Content-Type': 'application/json',
         'x-access-token': accessToken,

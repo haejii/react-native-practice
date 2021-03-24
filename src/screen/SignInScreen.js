@@ -14,6 +14,7 @@ import {
 import {ScreenStyles, SignInScreenStyles} from '../style/styles';
 import {saveItem} from '../utils/asyncStorage';
 import {API_URL} from '@env';
+import {SERVER_PATH} from '../service/apis';
 
 export default function SignInScreen({navigation}) {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ export default function SignInScreen({navigation}) {
       return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
     }
 
-    fetch('https://8505f6beed63.ngrok.io' + '/login', {
+    fetch(SERVER_PATH + '/login', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',

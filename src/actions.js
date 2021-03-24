@@ -1,5 +1,6 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
+import {SERVER_PATH} from './service/apis';
 
 export function changeLoginField(name, value) {
   return {
@@ -25,7 +26,7 @@ export function requestLoginWithKakao() {
 
       console.log('kakao api login request success', result);
 
-      const response = await fetch('https://8505f6beed63.ngrok.io' + '/kakao', {
+      const response = await fetch(SERVER_PATH + '/kakao', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -184,7 +185,7 @@ export function changePassword(current, willBeChanged) {
     const {userToken} = getState();
 
     try {
-      const response = await fetch('http://localhost:3000' + '/user/password', {
+      const response = await fetch(SERVER_PATH + '/user/password', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -205,7 +206,7 @@ export function requestUpdateBasicInfo({weight, kidneyType, activityId}) {
     const {userToken} = getState();
 
     try {
-      const response = await fetch('http://localhost:3000' + '/user', {
+      const response = await fetch(SERVER_PATH + '/user', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -231,7 +232,7 @@ export function requestUserInfo() {
     console.log('userToken', userToken);
 
     try {
-      const response = await fetch('http://localhost:3000' + '/me', {
+      const response = await fetch(SERVER_PATH + '/me', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
