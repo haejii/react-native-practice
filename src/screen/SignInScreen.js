@@ -34,7 +34,7 @@ export default function SignInScreen({navigation}) {
       return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
     }
 
-    fetch('http://localhost:3000' + '/login', {
+    fetch('https://8505f6beed63.ngrok.io' + '/login', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',

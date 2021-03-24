@@ -1,6 +1,5 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
-import {API_URL} from '@env';
 
 export function changeLoginField(name, value) {
   return {
@@ -25,9 +24,8 @@ export function requestLoginWithKakao() {
       ]);
 
       console.log('kakao api login request success', result);
-      console.log('API_URL', API_URL);
 
-      const response = await fetch('http://localhost:3000' + '/kakao', {
+      const response = await fetch('https://8505f6beed63.ngrok.io' + '/kakao', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -192,7 +190,6 @@ export function changePassword(current, willBeChanged) {
           'Content-Type': 'application/json',
           'x-access-token': userToken,
         },
-        body: JSON.stringify({current, willBeChanged}),
       });
 
       const result = await response.json();

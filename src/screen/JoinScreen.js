@@ -14,7 +14,6 @@ import {JoinScreenStyles, ScreenStyles} from '../style/styles';
 import NativeButton from 'apsl-react-native-button';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-date-picker';
-import {API_URL} from '@env';
 import {pickerItems} from '../../assets/data/pickerData';
 import {getTwoDigits} from '../utils/functions';
 
@@ -34,6 +33,7 @@ export default function JoinScreen({
   const birth = useSelector((state) => state.JoinFields.birth);
   const kidneyType = useSelector((state) => state.JoinFields.kidneyType);
   const activityId = useSelector((state) => state.JoinFields.activityId);
+  const password2 = useSelector((state) => state.JoinFields.password2);
 
   const [date, setDate] = useState(new Date('1980-01-01'));
 
@@ -68,7 +68,7 @@ export default function JoinScreen({
     if (!email) {
       return Alert.alert('이메일 오류', '이메일을 입력하세요.');
     }
-    fetch('http://localhost:3000' + '/Emailcheck', {
+    fetch('https://8505f6beed63.ngrok.io' + '/Emailcheck', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
@@ -91,7 +91,7 @@ export default function JoinScreen({
     if (!email) {
       return Alert.alert('닉네임 오류', '닉네임을 입력하세요.');
     }
-    fetch('http://localhost:3000' + '/nicknameCheck', {
+    fetch('https://8505f6beed63.ngrok.io' + '/nicknameCheck', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
@@ -111,6 +111,9 @@ export default function JoinScreen({
   }
 
   function handlePressJoin() {
+    if (password !== password2) {
+      return Alert.alert('비밀번호 오류', '비밀번호가 일치하지 않습니다.');
+    }
     if (
       !email ||
       !password ||
@@ -124,7 +127,7 @@ export default function JoinScreen({
     ) {
       return Alert.alert('회원가입 오류', '기입 하지 않은 부분이 있습니다.');
     }
-    fetch('http://localhost:3000' + '/user', {
+    fetch('https://8505f6beed63.ngrok.io' + '/user', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
@@ -152,6 +155,7 @@ export default function JoinScreen({
 
     handleChangJoinField('email', null);
     handleChangJoinField('password', null);
+    handleChangJoinField('password2', null);
     handleChangJoinField('nickname', null);
     handleChangJoinField('height', null);
     handleChangJoinField('weight', null);
@@ -165,7 +169,7 @@ export default function JoinScreen({
     if (!height || !weight || !gender || !birth || !kidneyType || !activityId) {
       return Alert.alert('회원가입 오류', '기입 하지 않은 부분이 있습니다.');
     }
-    fetch('http://localhost:3000' + '/user/kakao', {
+    fetch('https://8505f6beed63.ngrok.io' + '/user/kakao', {
       headers: {
         'Content-Type': 'application/json',
         'x-access-token': accessToken,
@@ -257,6 +261,21 @@ export default function JoinScreen({
                   value={password}
                   onChangeText={(value) =>
                     handleChangJoinField('password', value)
+                  }
+                />
+              </View>
+
+              <View style={JoinScreenStyles.ViewContainer}>
+                <Text>비밀번호 확인</Text>
+
+                <TextInput
+                  autoCapitalize="none"
+                  secureTextEntry={true}
+                  style={JoinScreenStyles.JoinField}
+                  placeholder="password"
+                  value={password2}
+                  onChangeText={(value) =>
+                    handleChangJoinField('password2', value)
                   }
                 />
               </View>
