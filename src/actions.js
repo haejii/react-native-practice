@@ -1,5 +1,4 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
-import auth from '@react-native-firebase/auth';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 import {API_URL} from '@env';
 
@@ -17,18 +16,6 @@ export function changeJoinField(name, value) {
   };
 }
 
-export function requestLoginWithFirebase(id, pw) {
-  return async (dispatch) => {
-    try {
-      const response = await auth().signInWithEmailAndPassword(id, pw);
-      console.log('requestLoginWithFirebase', response);
-    } catch (err) {
-      console.log(err);
-      dispatch(changeIsLoading(false));
-    }
-  };
-}
-
 export function requestLoginWithKakao() {
   return async (dispatch) => {
     try {
@@ -40,7 +27,7 @@ export function requestLoginWithKakao() {
       console.log('kakao api login request success', result);
       console.log('API_URL', API_URL);
 
-      const response = await fetch(API_URL + '/kakao', {
+      const response = await fetch('http://localhost:3000' + '/kakao', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -55,9 +42,12 @@ export function requestLoginWithKakao() {
       const {jwt: accessToken, userInfo} = loginResult;
 
       dispatch(setUserToken(accessToken));
-      dispatch(setUser(userInfo));
+      // dispatch(setUser(userInfo));
       await saveItem('userToken', accessToken);
-      await saveItem('userInfo', userInfo);
+      // await saveItem('userInfo', userInfo);
+
+      dispatch(requestUserInfo());
+
       dispatch(changeIsLoading(false));
     } catch (err) {
       if (err.code === 'E_CANCELLED_OPERATION') {
@@ -76,27 +66,15 @@ export function logout() {
       user: {loginType},
     } = getState();
 
-    console.log('before logout currentUser', auth().currentUser);
-
     if (loginType === 'kakao') {
       // await KakaoLogins.logout();
     }
     // await auth().signOut();
 
-    console.log('after logout currentUser', auth().currentUser);
     dispatch(clearUserToken());
     dispatch(clearUser());
     await removeItem('userToken');
     await removeItem('userInfo');
-  };
-}
-
-export function requestJoinWithFirebase(id, pw) {
-  return async () => {
-    await auth()
-      .createUserWithEmailAndPassword(id, pw)
-      .then(() => console.log('SignUp Success!'))
-      .catch((err) => console.log(err));
   };
 }
 
@@ -125,6 +103,7 @@ export function changeIsLoading(value) {
 }
 
 export function setUser(user) {
+  console.log(user);
   return {
     type: 'setUser',
     payload: {user},
@@ -207,7 +186,7 @@ export function changePassword(current, willBeChanged) {
     const {userToken} = getState();
 
     try {
-      const response = await fetch(API_URL + '/user/password', {
+      const response = await fetch('http://localhost:3000' + '/user/password', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -224,74 +203,24 @@ export function changePassword(current, willBeChanged) {
   };
 }
 
-export function changeWeight(weight) {
+export function requestUpdateBasicInfo({weight, kidneyType, activityId}) {
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
     try {
-      const response = await fetch(API_URL + '/user/weight', {
-        method: 'PATCH',
+      const response = await fetch('http://localhost:3000' + '/user', {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'x-access-token': userToken,
         },
-        body: JSON.stringify({weight}),
+        body: JSON.stringify({weight, kidneyType, activityId}),
       });
 
       const result = await response.json();
-      console.log('체중 변경 성공', result);
+      console.log('기본정보 변경 성공', result);
 
       dispatch(requestUserInfo());
-      // dispatch(changeUserInfo('weight', weight));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-}
-
-export function changeKidneyType(kidneyType) {
-  return async (dispatch, getState) => {
-    const {userToken} = getState();
-
-    try {
-      const response = await fetch(API_URL + '/user/kidneyType', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': userToken,
-        },
-        body: JSON.stringify({kidneyType}),
-      });
-
-      const result = await response.json();
-      console.log('건강상태 변경 성공', result);
-
-      dispatch(requestUserInfo());
-      // dispatch(changeUserInfo('kidneyType', kidneyType));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-}
-
-export function changeActivityId(activityId) {
-  return async (dispatch, getState) => {
-    const {userToken} = getState();
-
-    try {
-      const response = await fetch(API_URL + '/user/activityId', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': userToken,
-        },
-        body: JSON.stringify({activityId}),
-      });
-
-      const result = await response.json();
-      console.log('건강상태 변경 성공', result);
-
-      dispatch(changeUserInfo('activityId', activityId));
     } catch (e) {
       console.log(e);
     }
@@ -300,13 +229,12 @@ export function changeActivityId(activityId) {
 
 export function requestUserInfo() {
   return async (dispatch, getState) => {
-    const {
-      user: {id},
-      userToken,
-    } = getState();
+    const {userToken} = getState();
+
+    console.log('userToken', userToken);
 
     try {
-      const response = await fetch(API_URL + '/user/' + id, {
+      const response = await fetch('http://localhost:3000' + '/me', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -315,9 +243,10 @@ export function requestUserInfo() {
       });
 
       const {userInfo} = await response.json();
+      console.log(userInfo);
 
       dispatch(setUser(userInfo));
-      await saveItem('userInfo', userInfo);
+      // await saveItem('userInfo', userInfo);
     } catch (e) {
       console.log(e);
     }

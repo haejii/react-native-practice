@@ -3,7 +3,12 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {changeIsLoading, setUser, setUserToken} from '../actions';
+import {
+  changeIsLoading,
+  requestUserInfo,
+  setUser,
+  setUserToken,
+} from '../actions';
 import {loadItem, saveItem} from '../utils/asyncStorage';
 import SplashScreen from '../screen/SplashScreen';
 import SignInScreen from '../screen/SignInScreen';
@@ -22,18 +27,20 @@ export default function AuthenticationFlow() {
 
   const user = useSelector((state) => state.user);
   const userToken = useSelector((state) => state.userToken);
+
   useEffect(() => {
     async function getToken() {
       const token = await loadItem('userToken');
-      const userInfo = await loadItem('userInfo');
+      // const userInfo = await loadItem('userInfo');
 
       if (token) {
         dispatch(setUserToken(token));
+        dispatch(requestUserInfo());
       }
 
-      if (userInfo) {
-        dispatch(setUser(userInfo));
-      }
+      // if (userInfo) {
+      //   dispatch(setUser(userInfo));
+      // }
 
       dispatch(changeIsLoading(false));
     }

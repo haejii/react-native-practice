@@ -2,7 +2,6 @@ import React from 'react';
 import {Alert, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import NativeButton from 'apsl-react-native-button';
-import {API_URL} from '@env';
 
 import {
   changeLoginField,
@@ -10,9 +9,11 @@ import {
   setUserToken,
   setUser,
   requestLoginWithKakao,
+  requestUserInfo,
 } from '../actions';
 import {ScreenStyles, SignInScreenStyles} from '../style/styles';
 import {saveItem} from '../utils/asyncStorage';
+import {API_URL} from '@env';
 
 export default function SignInScreen({navigation}) {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ export default function SignInScreen({navigation}) {
       return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
     }
 
-    fetch(API_URL + '/login', {
+    fetch('http://localhost:3000' + '/login', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',
@@ -47,13 +48,17 @@ export default function SignInScreen({navigation}) {
       .then((response) => {
         try {
           const {jwt: accessToken, userInfo, isSuccess, message} = response;
-          console.log(userInfo);
+
+          console.log(response);
 
           if (isSuccess) {
             dispatch(setUserToken(accessToken));
-            dispatch(setUser(userInfo));
+            // dispatch(setUser(userInfo));
             saveItem('userToken', accessToken);
-            saveItem('userInfo', userInfo);
+            // saveItem('userInfo', userInfo);
+
+            dispatch(requestUserInfo());
+
             dispatch(changeIsLoading(false));
           } else {
             return Alert.alert('로그인 오류', message);

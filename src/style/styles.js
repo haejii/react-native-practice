@@ -335,9 +335,9 @@ const MyPageScreenStyles = StyleSheet.create({
   },
 
   AndroidTouchBtnContainer: {
-    alignItems: Platform.OS === 'ios' ? '' : 'center',
-    left: Platform.OS === 'ios' ? '' : '-5%',
-    marginTop: Platform.OS === 'ios' ? '' : '5%',
+    alignItems: Platform.OS === 'ios' ? 'baseline' : 'center',
+    left: Platform.OS === 'ios' ? 0 : '-5%',
+    marginTop: Platform.OS === 'ios' ? 0 : '5%',
   },
 
   TouchBtn: {
