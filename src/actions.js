@@ -159,6 +159,43 @@ export function changeNuturitionGoal(goal) {
   };
 }
 
+export function requestUpdateNuturitionGoal({
+  calorie,
+  protein,
+  phosphorus,
+  potassium,
+  sodium,
+}) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(SERVER_PATH + '/nutrition', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        body: JSON.stringify({
+          calorie,
+          protein,
+          phosphorus,
+          potassium,
+          sodium,
+        }),
+      });
+
+      const result = await response.json();
+      console.log('영양소 변경 성공', result);
+
+      dispatch(requestUserInfo());
+    } catch (e) {
+      console.log('영양소 저장 실패');
+      console.log(e);
+    }
+  };
+}
+
 export function setKakaoUser(user) {
   return async (dispatch, getState) => {
     dispatch(setUser(user));

@@ -1,3 +1,3 @@
-const SERVER_PATH = 'http://localhost:3000';
+const SERVER_PATH = 'https://dev.falconsea.shop';
 
 export {SERVER_PATH};

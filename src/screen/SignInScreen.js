@@ -13,7 +13,6 @@ import {
 } from '../actions';
 import {ScreenStyles, SignInScreenStyles} from '../style/styles';
 import {saveItem} from '../utils/asyncStorage';
-import {API_URL} from '@env';
 import {SERVER_PATH} from '../service/apis';
 
 export default function SignInScreen({navigation}) {

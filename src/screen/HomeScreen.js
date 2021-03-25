@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View, Modal, Button} from 'react-native';
 
 import {
@@ -7,12 +7,9 @@ import {
   ScreenStyles,
 } from '../style/styles';
 import {useSelector, useDispatch} from 'react-redux';
-import FoodController from '../controller/FoodController';
-import MealTimeSum from './MealTimeSum';
-import {convertMealTime} from '../utils/functions';
 import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
 import {TextInput} from 'react-native-gesture-handler';
-import {changeNuturitionGoal} from '../actions';
+import {changeNuturitionGoal, requestUpdateNuturitionGoal} from '../actions';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -57,9 +54,22 @@ export default function HomeScreen() {
     setNuturitionInput({...nuturitionInput, [name]: value});
   };
 
+  const nuturitionFun = (nuturitionGoal) => {
+    dispatch(
+      requestUpdateNuturitionGoal({
+        calorie: nuturitionGoal.calorie,
+        protein: nuturitionGoal.protein,
+        phosphorus: nuturitionGoal.phosphorus,
+        potassium: nuturitionGoal.potassium,
+        sodium: nuturitionGoal.sodium,
+      }),
+    );
+  };
+
   const handlePressUpdateGoal = (nuturitionGoal) => {
     dispatch(changeNuturitionGoal(nuturitionGoal));
-    handlePressModal();
+    handlePressModal(nuturitionGoal);
+    nuturitionFun(nuturitionGoal);
   };
 
   const handlePressNonUpdateGoal = () => {
@@ -81,11 +91,11 @@ export default function HomeScreen() {
         <Text style={HomeScreenStyles.textTitle}>오늘의 목표</Text>
 
         <Text style={HomeScreenStyles.textDetail}>
-          열량 ({nuturition.calorie} kcal / {goal.calorie} kcal)
+          열량 ({nuturition.calorie} kcal / {goal?.calorie} kcal)
         </Text>
         <NuturitionBarChart
           nuturition={nuturition.calorie}
-          goal={goal.calorie}
+          goal={goal?.calorie}
         />
 
         <Text
@@ -93,11 +103,11 @@ export default function HomeScreen() {
             ...HomeScreenStyles.textDetail,
             ...HomeScreenStyles.textInterval,
           }}>
-          단백질 ({nuturition.protein} g/ {goal.protein} g)
+          단백질 ({nuturition.protein} g/ {goal?.protein} g)
         </Text>
         <NuturitionBarChart
           nuturition={nuturition.protein}
-          goal={goal.protein}
+          goal={goal?.protein}
         />
 
         <Text
@@ -105,11 +115,11 @@ export default function HomeScreen() {
             ...HomeScreenStyles.textDetail,
             ...HomeScreenStyles.textInterval,
           }}>
-          인 ({nuturition.phosphorus} mg / {goal.phosphorus} mg)
+          인 ({nuturition.phosphorus} mg / {goal?.phosphorus} mg)
         </Text>
         <NuturitionBarChart
           nuturition={nuturition.phosphorus}
-          goal={goal.phosphorus}
+          goal={goal?.phosphorus}
         />
 
         <Text
@@ -117,11 +127,12 @@ export default function HomeScreen() {
             ...HomeScreenStyles.textDetail,
             ...HomeScreenStyles.textInterval,
           }}>
-          칼륨 ({nuturition.potassium} mg / {goal.potassium} mg)
+          칼륨 ({nuturition.potassium} mg / {goal?.potassium} mg)
         </Text>
+
         <NuturitionBarChart
           nuturition={nuturition.potassium}
-          goal={goal.potassium}
+          goal={goal?.potassium}
         />
 
         <Text
@@ -129,9 +140,12 @@ export default function HomeScreen() {
             ...HomeScreenStyles.textDetail,
             ...HomeScreenStyles.textInterval,
           }}>
-          나트륨 ({nuturition.sodium} mg / {goal.sodium} mg)
+          나트륨 ({nuturition.sodium} mg / {goal?.sodium} mg)
         </Text>
-        <NuturitionBarChart nuturition={nuturition.sodium} goal={goal.sodium} />
+        <NuturitionBarChart
+          nuturition={nuturition.sodium}
+          goal={goal?.sodium}
+        />
       </TouchableOpacity>
       <View style={HomeScreenStyles.mealButtonView}>
         <View style={HomeScreenStyles.mealButtonContainer}>
