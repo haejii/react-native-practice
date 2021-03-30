@@ -170,7 +170,7 @@ export function requestUpdateNuturitionGoal({
     const {userToken} = getState();
 
     try {
-      const response = await fetch(SERVER_PATH + '/nutrition', {
+      const response = await fetch(SERVER_PATH + '/user/nutirition', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -51,11 +51,12 @@ export default function HomeScreen() {
   };
 
   const handleChangeNuturitionGoal = (name, value) => {
+    value = Number(value);
     setNuturitionInput({...nuturitionInput, [name]: value});
   };
 
-  const nuturitionFun = (nuturitionGoal) => {
-    dispatch(
+  const nuturitionFun = async (nuturitionGoal) => {
+    await dispatch(
       requestUpdateNuturitionGoal({
         calorie: nuturitionGoal.calorie,
         protein: nuturitionGoal.protein,
@@ -66,10 +67,19 @@ export default function HomeScreen() {
     );
   };
 
-  const handlePressUpdateGoal = (nuturitionGoal) => {
-    dispatch(changeNuturitionGoal(nuturitionGoal));
-    handlePressModal(nuturitionGoal);
-    nuturitionFun(nuturitionGoal);
+  const handlePressUpdateGoal = async (nuturitionGoal) => {
+    await nuturitionFun(nuturitionGoal);
+    await dispatch(changeNuturitionGoal(nuturitionGoal));
+    console.log('nutiritionGoal ' + nuturitionGoal.protein);
+
+    await handlePressModal(nuturitionGoal);
+    await setNuturitionInput({
+      calorie: nuturitionGoal.calorie,
+      protein: nuturitionGoal.protein,
+      phosphorus: nuturitionGoal.phosphorus,
+      potassium: nuturitionGoal.potassium,
+      sodium: nuturitionGoal.sodium,
+    });
   };
 
   const handlePressNonUpdateGoal = () => {
