@@ -108,17 +108,17 @@ export default function SearchScreen() {
         style: {backgroundColor: 'powderblue'},
       }}>
       <Tab.Screen
-        name="Feed"
+        name="Search"
         component={Search}
         options={{tabBarLabel: '검색'}}
       />
       <Tab.Screen
-        name="Notifications"
+        name="StoredFood"
         component={StoredFood}
         options={{tabBarLabel: '찜'}}
       />
       <Tab.Screen
-        name="Profile"
+        name="MyFood"
         component={Search}
         options={{tabBarLabel: '내 음식'}}
       />

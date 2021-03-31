@@ -24,7 +24,7 @@ export default function JoinScreen({
 }) {
   const dispatch = useDispatch();
 
-  // const user = useSelector((state) => state.user);
+  const error = useSelector((state) => state.error);
   const email = useSelector((state) => state.JoinFields.email);
   const password = useSelector((state) => state.JoinFields.password);
   const nickname = useSelector((state) => state.JoinFields.nickname);
@@ -170,6 +170,7 @@ export default function JoinScreen({
     if (!height || !weight || !gender || !birth || !kidneyType || !activityId) {
       return Alert.alert('회원가입 오류', '기입 하지 않은 부분이 있습니다.');
     }
+
     fetch(SERVER_PATH + '/user/kakao', {
       headers: {
         'Content-Type': 'application/json',
@@ -206,17 +207,23 @@ export default function JoinScreen({
         }
       });
 
-    handleChangJoinField('height', null);
-    handleChangJoinField('weight', null);
-    handleChangJoinField('gender', null);
-    handleChangJoinField('birth', null);
-    handleChangJoinField('kidneyType', null);
-    handleChangJoinField('activityId', null);
+    // handleChangJoinField('height', 0);
+    // handleChangJoinField('weight', 0);
+    // handleChangJoinField('gender', null);
+    // handleChangJoinField('birth', null);
+    // handleChangJoinField('kidneyType', null);
+    // handleChangJoinField('activityId', null);
   }
 
-  // useEffect(() => {
-  //   dispatch(logout());
-  // }, [dispatch]);
+  useEffect(() => {
+    console.log('error', error);
+    if (error.status) {
+      // navigation.replace('SignIn');
+      // Alert.alert(error.name, error.message);
+      dispatch(logout());
+    }
+    // dispatch(logout());
+  }, [dispatch, error, navigation]);
 
   return (
     <ScrollView>

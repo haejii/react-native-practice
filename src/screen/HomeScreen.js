@@ -72,7 +72,7 @@ export default function HomeScreen() {
     await dispatch(changeNuturitionGoal(nuturitionGoal));
     console.log('nutiritionGoal ' + nuturitionGoal.protein);
 
-    await handlePressModal(nuturitionGoal);
+    await handlePressModal();
     await setNuturitionInput({
       calorie: nuturitionGoal.calorie,
       protein: nuturitionGoal.protein,

@@ -1,6 +1,7 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 import {SERVER_PATH} from './service/apis';
+import Axios from 'axios';
 
 export function changeLoginField(name, value) {
   return {
@@ -24,7 +25,7 @@ export function requestLoginWithKakao() {
         KAKAO_AUTH_TYPES.Account,
       ]);
 
-      console.log('kakao api login request success', result);
+      // console.log('kakao api login request success', result);
 
       const response = await fetch(SERVER_PATH + '/kakao', {
         headers: {
@@ -36,7 +37,7 @@ export function requestLoginWithKakao() {
       });
 
       const loginResult = await response.json();
-      console.log(loginResult);
+      console.log('requestLoginWithKakao result', loginResult);
 
       const {jwt: accessToken, userInfo} = loginResult;
 
@@ -278,12 +279,27 @@ export function requestUserInfo() {
       });
 
       const {userInfo} = await response.json();
-      console.log(userInfo);
+      console.log('requestUserInfo result', userInfo);
 
+      dispatch(setError({}));
       dispatch(setUser(userInfo));
       // await saveItem('userInfo', userInfo);
     } catch (e) {
-      console.log(e);
+      dispatch(
+        setError({
+          status: true,
+          name: '로그인 실패',
+          message: '네트워크 에러가 발생했습니다. 잠시 후 다시 시도해주세요!',
+        }),
+      );
+      console.log('유저정보 가져오기 실패!', e);
     }
+  };
+}
+
+export function setError({status, name, message} = {}) {
+  return {
+    type: 'setError',
+    payload: {status, name, message},
   };
 }

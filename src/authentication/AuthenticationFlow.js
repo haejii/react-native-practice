@@ -28,6 +28,8 @@ export default function AuthenticationFlow() {
   const user = useSelector((state) => state.user);
   const userToken = useSelector((state) => state.userToken);
 
+  const error = useSelector((state) => state.error);
+
   useEffect(() => {
     async function getToken() {
       const token = await loadItem('userToken');
@@ -44,6 +46,7 @@ export default function AuthenticationFlow() {
 
       dispatch(changeIsLoading(false));
     }
+
     getToken();
   }, [dispatch]);
 
@@ -52,7 +55,8 @@ export default function AuthenticationFlow() {
       <Stack.Navigator>
         {isLoading ? (
           <Stack.Screen name="Splash" component={SplashScreen} />
-        ) : accessToken == null ? (
+        ) : accessToken == null ||
+          (error.status && error.name === '로그인 실패') ? (
           <>
             <Stack.Screen
               name="SignIn"
@@ -62,7 +66,11 @@ export default function AuthenticationFlow() {
                 // animationTypeForReplace: !accessToken ? 'pop' : 'push',
               }}
             />
-            <Stack.Screen name="Join" component={JoinScreen} />
+            <Stack.Screen
+              name="Join"
+              component={JoinScreen}
+              initialParams={{error}}
+            />
             <Stack.Screen
               name="JoinCompleteScreen"
               component={JoinCompleteScreen}
@@ -78,7 +86,7 @@ export default function AuthenticationFlow() {
           <Stack.Screen
             name="Join"
             component={JoinScreen}
-            initialParams={{userInfo: user, accessToken: userToken}}
+            initialParams={{userInfo: user, accessToken: userToken, error}}
           />
         ) : (
           <Stack.Screen

@@ -49,7 +49,7 @@ export default function SignInScreen({navigation}) {
         try {
           const {jwt: accessToken, userInfo, isSuccess, message} = response;
 
-          console.log(response);
+          // console.log(response);
 
           if (isSuccess) {
             dispatch(setUserToken(accessToken));
@@ -64,7 +64,7 @@ export default function SignInScreen({navigation}) {
             return Alert.alert('로그인 오류', message);
           }
         } catch (e) {
-          console.log(e);
+          console.log('로그인 오류', e);
         }
       });
   }

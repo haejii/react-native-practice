@@ -5,6 +5,7 @@ const FoodController = {
     return foodIngredients.filter((food) => food.name.includes(name));
   },
   findByFoodId: (id) => {
+    console.log('id', id);
     return foodIngredients.find((food) => food.id === id);
   },
   findFoodsByIds: (ids) => {

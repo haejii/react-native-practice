@@ -75,6 +75,11 @@ const initialState = {
   changePasswordFields: {
     ...initialChangePasswordFields,
   },
+  error: {
+    status: false,
+    name: '',
+    message: '',
+  },
 };
 
 const reducers = {
@@ -121,6 +126,7 @@ const reducers = {
 
   setUser: (state, {payload: {user}}) => {
     const {user: previousUser} = state;
+    console.log(user);
     return {
       ...state,
       user: {...previousUser, ...user},
@@ -226,6 +232,17 @@ const reducers = {
       changePasswordFields: {
         ...state.changePasswordFields,
         [name]: value,
+      },
+    };
+  },
+
+  setError: (state, {payload: {status = false, name = '', message = ''}}) => {
+    return {
+      ...state,
+      error: {
+        status,
+        name,
+        message,
       },
     };
   },
