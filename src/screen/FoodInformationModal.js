@@ -1,18 +1,59 @@
+import {DrawerContentScrollView} from '@react-navigation/drawer';
 import React, {useState} from 'react';
-import {Modal, Text, View, Button, TouchableOpacity, Alert} from 'react-native';
-import {TouchableHighlight} from 'react-native-gesture-handler';
-import {useDispatch} from 'react-redux';
+import {
+  Modal,
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  Alert,
+  TextInput,
+} from 'react-native';
+import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
+import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
+
+import {useDispatch, useSelector} from 'react-redux';
 import {addMeal, addNuturition, deleteFood, saveFood} from '../actions';
-import {FoodInformationModalStyles} from '../style/styles';
+import {FoodInformationModalStyles, HomeScreenStyles} from '../style/styles';
+import {useEffect} from 'react/cjs/react.development';
+import FoodController from '../controller/FoodController';
 
 export default function FoodInformationModal({food, onPress, type}) {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const {goal} = useSelector((state) => state.user);
+
+  const [inputMeal, setInputMeal] = useState(0);
+  const [change, setChange] = useState(false);
+  const [calorie, setCalorie] = useState(food.calorie);
+  const [protein, setProtein] = useState(food.protein);
+  const [phosphorus, setPhosphorus] = useState(food.phosphorus);
+  const [potassium, setPotasium] = useState(food.potassium);
+  const [sodium, setSodium] = useState(food.sodium);
+
   const handlePressModal = () => {
     setIsOpen(!isOpen);
   };
+
+  function FoodCalc(inputMeal) {
+    setCalorie(Math.round((food.calorie / 100) * inputMeal));
+    setProtein(Math.round((food.protein / 100) * inputMeal));
+    setPhosphorus(Math.round(food.phosphorus * 0.01 * inputMeal));
+    setPotasium(Math.round(food.potassium * 0.01 * inputMeal));
+    setSodium(Math.round(food.sodium * 0.01 * inputMeal));
+  }
+
+  function handleChangeInput(inputMeal) {
+    if (!inputMeal) {
+      setChange(false);
+    } else {
+      setInputMeal(inputMeal);
+      FoodCalc(inputMeal);
+      setChange(true);
+    }
+  }
 
   const handlePressAdd = () => {
     Alert.alert(
@@ -73,6 +114,9 @@ export default function FoodInformationModal({food, onPress, type}) {
     handlePressModal();
   };
 
+  useEffect(() => {
+    setInputMeal();
+  });
   return (
     <TouchableOpacity
       onPress={() => {
@@ -93,33 +137,97 @@ export default function FoodInformationModal({food, onPress, type}) {
                 <Text style={FoodInformationModalStyles.foodTitle}>
                   {food.name}
                 </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  칼로리: {food.calorie} kcal
+                <View
+                  style={{
+                    width: 100,
+                    backgroundColor: 'white',
+                    borderWidth: 2,
+                    borderColor: 'black',
+                    borderRadius: 5,
+                    height: 50,
+                    alignItems: 'center',
+                    paddingHorizontal: 10,
+                    fontSize: 16,
+                    marginBottom: '1%',
+                    marginRight: '5%',
+                    flexDirection: 'row',
+                  }}>
+                  <TextInput
+                    style={{
+                      width: 95,
+                      fontSize: 17,
+                    }}
+                    keyboardType="number-pad"
+                    placeholder="100"
+                    placeholderTextColor="black"
+                    value={Number(inputMeal)}
+                    onChangeText={(value) => {
+                      handleChangeInput(value);
+                    }}
+                  />
+
+                  <Text style={{fontSize: 24}}>g</Text>
+                </View>
+                <Text
+                  style={{
+                    ...HomeScreenStyles.textDetail,
+                    ...HomeScreenStyles.textInterval,
+                  }}>
+                  열량 ({change ? calorie : food.calorie}
+                  g/ {goal?.calorie} g)
                 </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  탄수화물: {food.carbohydrate} g
+                <NuturitionBarChart
+                  nuturition={change ? calorie : food.calorie}
+                  goal={goal?.calorie}
+                />
+
+                <Text
+                  style={{
+                    ...HomeScreenStyles.textDetail,
+                    ...HomeScreenStyles.textInterval,
+                  }}>
+                  단백질 ({change ? protein : food.protein} g/ {goal?.protein}{' '}
+                  g)
                 </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  단백질: {food.protein} g
+                <NuturitionBarChart
+                  nuturition={change ? protein : food.protein}
+                  goal={goal?.protein}
+                />
+                <Text
+                  style={{
+                    ...HomeScreenStyles.textDetail,
+                    ...HomeScreenStyles.textInterval,
+                  }}>
+                  인 ({change ? phosphorus : food.phosphorus} g/{' '}
+                  {goal?.phosphorus} g)
                 </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  지방: {food.fat} g
+                <NuturitionBarChart
+                  nuturition={change ? phosphorus : food.phosphorus}
+                  goal={goal?.phosphorus}
+                />
+                <Text
+                  style={{
+                    ...HomeScreenStyles.textDetail,
+                    ...HomeScreenStyles.textInterval,
+                  }}>
+                  칼륨 ({change ? potassium : food.potassium} g/{' '}
+                  {goal?.potassium} g)
                 </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  나트륨: {food.sodium} mg
+                <NuturitionBarChart
+                  nuturition={change ? potassium : food.potassium}
+                  goal={goal?.potassium}
+                />
+                <Text
+                  style={{
+                    ...HomeScreenStyles.textDetail,
+                    ...HomeScreenStyles.textInterval,
+                  }}>
+                  나트륨 ({change ? sodium : food.sodium} g/ {goal?.sodium} g)
                 </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  칼슘: {food.calcium} mg
-                </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  칼륨: {food.potassium} mg
-                </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  철: {food.iron} mg
-                </Text>
-                <Text style={FoodInformationModalStyles.nuturitionText}>
-                  인: {food.phosphorus} mg
-                </Text>
+                <NuturitionBarChart
+                  nuturition={change ? sodium : food.sodium}
+                  goal={goal?.sodium}
+                />
               </View>
 
               <View style={FoodInformationModalStyles.modalButtonContainer}>
