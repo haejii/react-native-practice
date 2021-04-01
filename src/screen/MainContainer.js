@@ -8,6 +8,7 @@ import MyPageScreen from './MyPageScreen';
 import RecipeScreen from './RecipeScreen';
 import SearchScreen from './SearchScreen';
 import ContentScreen from './ContentScreen';
+import ContentScreen2 from './ContentScreen2';
 import HomeScreen from './HomeScreen';
 
 const Tab = createBottomTabNavigator();
@@ -73,7 +74,7 @@ export default function Main() {
       />
       <Tab.Screen name="커뮤니티" component={RecipeScreen} />
       <Tab.Screen name="검색" component={SearchScreen} />
-      <Tab.Screen name="식단" component={ContentScreen} />
+      <Tab.Screen name="식단" component={ContentScreen2} />
       <Tab.Screen name="내 정보" component={MyPageScreen} />
     </Tab.Navigator>
   );
