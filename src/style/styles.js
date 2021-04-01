@@ -1,3 +1,4 @@
+import {stackOrderNone} from 'd3-shape';
 import {Platform, Pressable, StyleSheet, ViewComponent} from 'react-native';
 
 const ScreenStyles = StyleSheet.create({
@@ -260,7 +261,7 @@ const FoodInformationModalStyles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     width: '80%',
-    height: '60%',
+    height: Platform.OS === 'ios' ? '60%' : '70%',
     justifyContent: 'center',
     alignItems: 'center',
 
@@ -279,12 +280,13 @@ const FoodInformationModalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   foodTitle: {fontWeight: 'bold', fontSize: 24, marginBottom: 20},
-  nuturitionText: {fontSize: 20},
+  nuturitionText: {fontSize: Platform.OS === 'ios' ? 20 : 17},
   modalButtonContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '80%',
+    margin: Platform.OS === 'ios' ? 0 : 15,
   },
 
   openButton: {
@@ -347,6 +349,19 @@ const MyPageScreenStyles = StyleSheet.create({
   },
 });
 
+const ContentScreenStyle = StyleSheet.create({
+  removeBtn: {
+    backgroundColor: 'red',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 22,
+    height: 22,
+    marginLeft: 10,
+    marginTop: 4,
+    borderColor: 'red',
+    borderRadius: 35,
+  },
+});
 export {
   ScreenStyles,
   SignInScreenStyles,
@@ -357,4 +372,5 @@ export {
   SearchResultStyles,
   JoinScreenStyles,
   MyPageScreenStyles,
+  ContentScreenStyle,
 };
