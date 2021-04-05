@@ -39,6 +39,9 @@ const initialChangePasswordFields = {
   current: '',
   willBeChanged: '',
 };
+// const initialFoodCount = {
+//   foodcount: 0,
+// };
 
 const initialState = {
   isLoading: true,
@@ -80,6 +83,8 @@ const initialState = {
     name: '',
     message: '',
   },
+  foodCount: 0,
+  basketFood: [],
 };
 
 const reducers = {
@@ -244,6 +249,22 @@ const reducers = {
         name,
         message,
       },
+    };
+  },
+
+  changeCount: (state, {payload: {foodCount}}) => {
+    return {
+      ...state,
+      foodCount,
+    };
+  },
+
+  addBasket: (state, {payload: {foodId}}) => {
+    const {basketFood} = state;
+
+    return {
+      ...state,
+      basketFood: [...basketFood, foodId],
     };
   },
 };
