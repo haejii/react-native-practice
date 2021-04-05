@@ -28,6 +28,18 @@ const pickerItems = {
       color: color || '#9EA044',
     }),
   },
+  MealTypes: {
+    items: [
+      {label: '아침', value: 1},
+      {label: '점심', value: 2},
+      {label: '저녁', value: 3},
+    ],
+    placeholder: ({label, value, color} = {}) => ({
+      label: label || '식사시기를 선택해주세요.',
+      value: value || null,
+      color: color || '#9EA044',
+    }),
+  },
 };
 
 export {pickerItems};

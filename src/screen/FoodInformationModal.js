@@ -13,7 +13,14 @@ import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
 
 import {useDispatch, useSelector} from 'react-redux';
-import {addMeal, addNuturition, deleteFood, saveFood} from '../actions';
+import {
+  addMeal,
+  addNuturition,
+  deleteFood,
+  saveFood,
+  changeCount,
+  addBasket,
+} from '../actions';
 import {FoodInformationModalStyles, HomeScreenStyles} from '../style/styles';
 import {useEffect} from 'react/cjs/react.development';
 import FoodController from '../controller/FoodController';
@@ -32,6 +39,8 @@ export default function FoodInformationModal({food, onPress, type}) {
   const [phosphorus, setPhosphorus] = useState(food.phosphorus);
   const [potassium, setPotasium] = useState(food.potassium);
   const [sodium, setSodium] = useState(food.sodium);
+
+  const count = useSelector((state) => state.foodCount);
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
@@ -55,54 +64,15 @@ export default function FoodInformationModal({food, onPress, type}) {
     }
   }
 
-  const handlePressAdd = () => {
-    Alert.alert(
-      '식사 시기를 선택해주세요.',
-      '',
-      [
-        {
-          text: '아침',
-          onPress: () => {
-            dispatch(addMeal('breakfast', food.id));
-            dispatch(addNuturition(food));
-            handlePressModal();
-          },
-        },
-        {
-          text: '점심',
-          onPress: () => {
-            dispatch(addMeal('lunch', food.id));
-            dispatch(addNuturition(food));
-            handlePressModal();
-          },
-        },
-        {
-          text: '저녁',
-          onPress: () => {
-            dispatch(addMeal('dinner', food.id));
-            dispatch(addNuturition(food));
-            handlePressModal();
-          },
-        },
-        {
-          text: '간식',
-          onPress: () => {
-            dispatch(addMeal('snack', food.id));
-            dispatch(addNuturition(food));
-            handlePressModal();
-          },
-        },
-        {
-          text: '취소',
-          onPress: () => {
-            return false;
-          },
-          style: 'cancel',
-        },
-      ],
-      {cancelable: false},
-    );
-  };
+  function handlePressAdd() {
+    dispatch(changeCount(count + 1));
+    dispatch(addMeal('breakfast', food.id));
+    dispatch(addNuturition(food));
+    //dispatch(addMeal('breakfast', food.id));
+    //dispatch(addBasket(food.id));
+    console.log(food.id);
+    handlePressModal();
+  }
 
   const handlePressSave = () => {
     dispatch(saveFood(food.id));
@@ -114,9 +84,6 @@ export default function FoodInformationModal({food, onPress, type}) {
     handlePressModal();
   };
 
-  useEffect(() => {
-    setInputMeal();
-  });
   return (
     <TouchableOpacity
       onPress={() => {
