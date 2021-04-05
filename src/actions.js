@@ -303,3 +303,21 @@ export function setError({status, name, message} = {}) {
     payload: {status, name, message},
   };
 }
+
+export function changeCount(foodCount) {
+  return {
+    type: 'changeCount',
+    payload: {
+      foodCount,
+    },
+  };
+}
+
+export function addBasket(foodId) {
+  return {
+    type: 'addBasket',
+    payload: {
+      foodId,
+    },
+  };
+}
