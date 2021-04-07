@@ -313,14 +313,33 @@ export function changeCount(foodCount) {
   };
 }
 
-export function addBasket(foodId) {
+export function addBasket(newBasketFood) {
   return {
     type: 'addBasket',
     payload: {
-      foodId,
+      newBasketFood,
     },
   };
 }
+
+export function removeBasket(value) {
+  return {
+    type: 'removeBasket',
+    payload: {
+      value,
+    },
+  };
+}
+
+export function resetBasket(value) {
+  return {
+    type: 'resetBasket',
+    payload: {
+      value,
+    },
+  };
+}
+
 export function requestFoods(foodName) {
   return async (dispatch, getState) => {
     try {
@@ -377,7 +396,7 @@ export function postAddMeal(foodIntakeRecordType, foodIds) {
       });
       const result = await response.json();
 
-      dispatch(requestFoodRecord());
+      //dispatch(requestFoodRecord());
       // dispatch(requestFoods());
     } catch (e) {
       console.log(e);
@@ -411,9 +430,13 @@ export function requestFoodRecord() {
       if (isSuccess) {
         dispatch(setError());
         dispatch(setMeal(diet));
+        console.log('성공');
       } else {
         dispatch(setError({status: true, name: '식단 불러오기 실패', message}));
         dispatch(setMeal([]));
+        console.log('실패');
+        console.log(result);
+        console.log(diet);
       }
     } catch (e) {
       console.log(e);

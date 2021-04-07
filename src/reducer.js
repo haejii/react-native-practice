@@ -39,10 +39,6 @@ const initialChangePasswordFields = {
   current: '',
   willBeChanged: '',
 };
-// const initialFoodCount = {
-//   foodcount: 0,
-// };
-
 const initialState = {
   isLoading: true,
   userToken: null,
@@ -84,7 +80,7 @@ const initialState = {
     message: '',
   },
   foodCount: 0,
-  basketFood: [],
+  basketFoods: [],
   searchedFoodResults: [],
 };
 
@@ -260,14 +256,36 @@ const reducers = {
     };
   },
 
-  addBasket: (state, {payload: {foodId}}) => {
-    const {basketFood} = state;
+  addBasket: (state, {payload: {newBasketFood}}) => {
+    const {basketFoods} = state;
+
+    console.log({basketFoods: [...basketFoods, newBasketFood]});
+    return {
+      ...state,
+      basketFoods: [...basketFoods, newBasketFood],
+    };
+  },
+
+  removeBasket: (state, {payload: {value}}) => {
+    const {basketFoods} = state;
+    console.log('basketFoods : ' + basketFoods);
+    console.log('value : ' + value);
 
     return {
       ...state,
-      basketFood: [...basketFood, foodId],
+      basketFoods: basketFoods.filter(
+        (basketFood) => basketFood.foodId !== value,
+      ),
     };
   },
+
+  resetBasket: (state, {payload: {value}}) => {
+    return {
+      ...state,
+      basketFoods: value,
+    };
+  },
+
   setSearchedFoodResults: (state, {payload: {foods}}) => {
     return {
       ...state,

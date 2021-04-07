@@ -13,6 +13,7 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import {ContentScreenStyle} from '../style/styles';
+import {requestFoodRecord, resetBasket} from '../actions';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -27,8 +28,12 @@ const hadlePressRemove = () => {
 };
 
 function MyDiet() {
+  const dispatch = useDispatch();
   const meal = useSelector((state) => state.meal);
 
+  const handlerequest = () => {
+    dispatch(requestFoodRecord());
+  };
   return (
     <View>
       <View>
@@ -48,7 +53,17 @@ function MyDiet() {
         </TouchableOpacity>
       </View>
 
-      <View>
+      <NativeButton
+        style={{
+          margin: 10,
+        }}
+        onPress={() => {
+          handlerequest();
+        }}>
+        추가하기
+      </NativeButton>
+
+      {/* <View>
         {Object.keys(meal).map((key, i) => (
           <View key={i}>
             <TouchableOpacity>
@@ -87,7 +102,7 @@ function MyDiet() {
             </TouchableOpacity>
           </View>
         ))}
-      </View>
+      </View> */}
     </View>
   );
 }

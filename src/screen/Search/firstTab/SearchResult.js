@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {SearchResultStyles} from '../style/styles';
+import {SearchResultStyles} from '../../../style/styles';
 import FoodInformationModal from './FoodInformationModal';
 
 export default function SearchResult({result}) {

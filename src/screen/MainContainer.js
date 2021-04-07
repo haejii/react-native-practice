@@ -6,8 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import MyPageScreen from './MyPageScreen';
 import RecipeScreen from './RecipeScreen';
-import SearchScreen from './SearchScreen';
-import ContentScreen from './ContentScreen';
+import SearchScreen from './Search/SearchScreen';
 import ContentScreen2 from './ContentScreen2';
 import HomeScreen from './HomeScreen';
 

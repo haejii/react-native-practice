@@ -10,7 +10,7 @@ import {
   TextInput,
 } from 'react-native';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
-import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
+import NuturitionBarChart from '../../../moduleComponent/NuturitionBarChart';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -20,8 +20,11 @@ import {
   saveFood,
   changeCount,
   addBasket,
-} from '../actions';
-import {FoodInformationModalStyles, HomeScreenStyles} from '../style/styles';
+} from '../../../actions';
+import {
+  FoodInformationModalStyles,
+  HomeScreenStyles,
+} from '../../../style/styles';
 
 export default function FoodInformationModal({food, onPress, type}) {
   const dispatch = useDispatch();
@@ -30,7 +33,7 @@ export default function FoodInformationModal({food, onPress, type}) {
 
   const {goal} = useSelector((state) => state.user);
 
-  const [inputMeal, setInputMeal] = useState(0);
+  const [inputMeal, setInputMeal] = useState('100');
   const [change, setChange] = useState(false);
   const [calorie, setCalorie] = useState(food.calorie);
   const [protein, setProtein] = useState(food.protein);
@@ -42,33 +45,44 @@ export default function FoodInformationModal({food, onPress, type}) {
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
+    setInputMeal('100');
+    setCalorie(food.calorie);
+    setProtein(food.protein);
+    setPhosphorus(food.phosphorus);
+    setPotasium(food.potassium);
+    setSodium(food.sodium);
   };
 
   function FoodCalc(inputMeal) {
-    setCalorie(Math.round((food.calorie / 100) * inputMeal));
-    setProtein(Math.round((food.protein / 100) * inputMeal));
-    setPhosphorus(Math.round(food.phosphorus * 0.01 * inputMeal));
-    setPotasium(Math.round(food.potassium * 0.01 * inputMeal));
-    setSodium(Math.round(food.sodium * 0.01 * inputMeal));
+    let gram = 0.01 * inputMeal;
+    setCalorie((food.calorie * gram).toFixed(2));
+    setProtein((food.protein * gram).toFixed(2));
+    setPhosphorus((food.phosphorus * gram).toFixed(2));
+    setPotasium((food.potassium * gram).toFixed(2));
+    setSodium((food.sodium * gram).toFixed(2));
   }
 
   function handleChangeInput(inputMeal) {
-    if (!inputMeal) {
-      setChange(false);
-    } else {
-      setInputMeal(inputMeal);
-      FoodCalc(inputMeal);
-      setChange(true);
-    }
+    setInputMeal(inputMeal);
+    FoodCalc(inputMeal);
+    setChange(true);
   }
 
   function handlePressAdd() {
     dispatch(changeCount(count + 1));
-    dispatch(addMeal('breakfast', food.id));
-    dispatch(addNuturition(food));
-    //dispatch(addMeal('breakfast', food.id));
-    //dispatch(addBasket(food.id));
-    console.log(food.id);
+    dispatch(
+      addBasket({
+        foodId: food.foodId,
+        foodAmount: inputMeal,
+        calorie,
+        protein,
+        phosphorus,
+        potassium,
+        sodium,
+        foodName: food.foodName,
+      }),
+    );
+    console.log(food.foodId, ': ', food.foodName);
     handlePressModal();
   }
 
@@ -139,12 +153,12 @@ export default function FoodInformationModal({food, onPress, type}) {
                       width: 95,
                       fontSize: 17,
                     }}
-                    keyboardType="number-pad"
-                    placeholder="100"
+                    keyboardType="numeric"
+                    //placeholder="100"
                     placeholderTextColor="black"
-                    value={Number(inputMeal)}
+                    value={String(inputMeal)}
                     onChangeText={(value) => {
-                      handleChangeInput(value);
+                      handleChangeInput(value.replace(/[^0-9]/g, ''));
                     }}
                   />
 
