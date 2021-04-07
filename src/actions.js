@@ -313,14 +313,15 @@ export function changeCount(foodCount) {
   };
 }
 
-export function addBasket(foodId) {
+export function addBasket(newBasketFood) {
   return {
     type: 'addBasket',
     payload: {
-      foodId,
+      newBasketFood,
     },
   };
 }
+
 export function requestFoods(foodName) {
   return async (dispatch, getState) => {
     try {

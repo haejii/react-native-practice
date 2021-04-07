@@ -84,7 +84,7 @@ const initialState = {
     message: '',
   },
   foodCount: 0,
-  basketFood: [],
+  basketFoods: [],
   searchedFoodResults: [],
 };
 
@@ -260,14 +260,16 @@ const reducers = {
     };
   },
 
-  addBasket: (state, {payload: {foodId}}) => {
-    const {basketFood} = state;
+  addBasket: (state, {payload: {newBasketFood}}) => {
+    const {basketFoods} = state;
 
+    console.log({basketFoods: [...basketFoods, newBasketFood]});
     return {
       ...state,
-      basketFood: [...basketFood, foodId],
+      basketFoods: [...basketFoods, newBasketFood],
     };
   },
+
   setSearchedFoodResults: (state, {payload: {foods}}) => {
     return {
       ...state,

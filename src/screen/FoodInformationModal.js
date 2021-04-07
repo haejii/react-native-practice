@@ -30,7 +30,7 @@ export default function FoodInformationModal({food, onPress, type}) {
 
   const {goal} = useSelector((state) => state.user);
 
-  const [inputMeal, setInputMeal] = useState(0);
+  const [inputMeal, setInputMeal] = useState('100');
   const [change, setChange] = useState(false);
   const [calorie, setCalorie] = useState(food.calorie);
   const [protein, setProtein] = useState(food.protein);
@@ -42,6 +42,7 @@ export default function FoodInformationModal({food, onPress, type}) {
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
+    setInputMeal('100');
   };
 
   function FoodCalc(inputMeal) {
@@ -53,22 +54,26 @@ export default function FoodInformationModal({food, onPress, type}) {
   }
 
   function handleChangeInput(inputMeal) {
-    if (!inputMeal) {
-      setChange(false);
-    } else {
-      setInputMeal(inputMeal);
-      FoodCalc(inputMeal);
-      setChange(true);
-    }
+    setInputMeal(inputMeal);
+    FoodCalc(inputMeal);
+    setChange(true);
   }
 
   function handlePressAdd() {
     dispatch(changeCount(count + 1));
-    dispatch(addMeal('breakfast', food.id));
-    dispatch(addNuturition(food));
-    //dispatch(addMeal('breakfast', food.id));
-    //dispatch(addBasket(food.id));
-    console.log(food.id);
+    dispatch(
+      addBasket({
+        foodId: food.foodId,
+        foodAmount: inputMeal,
+        calorie,
+        protein,
+        phosphorus,
+        potassium,
+        sodium,
+        foodName: food.foodName,
+      }),
+    );
+    console.log(food.foodId, ': ', food.foodName);
     handlePressModal();
   }
 
@@ -139,12 +144,12 @@ export default function FoodInformationModal({food, onPress, type}) {
                       width: 95,
                       fontSize: 17,
                     }}
-                    keyboardType="number-pad"
-                    placeholder="100"
+                    keyboardType="numeric"
+                    //placeholder="100"
                     placeholderTextColor="black"
-                    value={Number(inputMeal)}
+                    value={String(inputMeal)}
                     onChangeText={(value) => {
-                      handleChangeInput(value);
+                      handleChangeInput(value.replace(/[^0-9]/g, ''));
                     }}
                   />
 

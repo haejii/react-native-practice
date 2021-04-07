@@ -16,7 +16,13 @@ import NativeButton from 'apsl-react-native-button';
 import {pickerItems} from '../../assets/data/pickerData';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import RNPickerSelect from 'react-native-picker-select';
-import {addFood, addMeal, addNuturition, saveFood} from '../actions';
+import {
+  addFood,
+  addMeal,
+  addNuturition,
+  saveFood,
+  postAddMeal,
+} from '../actions';
 
 import {requestFoods, setError} from '../actions';
 import ingredients from '../../foodIngredient.json';
@@ -120,9 +126,17 @@ function StoredFood() {
 }
 
 function BasketFood() {
+  const dispatch = useDispatch();
   const meal = useSelector((state) => state.meal);
-  const basket = useSelector((state) => state.basket);
+  const basketFoods = useSelector((state) => state.basketFoods);
   const [mealTime, setMealTime] = useState('');
+
+  const handleOnpress = () => {
+    const basketIds = basketFoods.map((basketFood, index) => basketFood.foodId);
+    console.log('basketIds', basketIds);
+    console.log(mealTime);
+    dispatch(postAddMeal(mealTime, basketIds));
+  };
 
   function handleChange() {
     console.log(meal);
@@ -145,26 +159,11 @@ function BasketFood() {
       </View>
 
       <View>
-        {Object.keys(meal).map((key, i) => (
-          <View key={i}>
-            <TouchableOpacity>
-              <View>
-                <ScrollView style={{paddingHorizontal: 10, paddingVertical: 5}}>
-                  {FoodController.findFoodsByIds(meal[key]).map((food) => (
-                    <View style={{flexDirection: 'row'}}>
-                      <Text style={{paddingVertical: 5}}>- {food.name}</Text>
-                      <NativeButton
-                        style={ContentScreenStyle.removeBtn}
-                        textStyle={{color: 'white'}}>
-                        -
-                      </NativeButton>
-                    </View>
-                  ))}
-                </ScrollView>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ))}
+        <ScrollView>
+          {basketFoods.map((basketFood, index) => {
+            return <Text key={index}>{basketFood.foodName}</Text>;
+          })}
+        </ScrollView>
       </View>
 
       <View>
@@ -176,7 +175,7 @@ function BasketFood() {
         </Text>
         <RNPickerSelect
           onValueChange={(value) => {
-            handleChange();
+            setMealTime(value);
           }}
           placeholder={pickerItems.MealTypes.placeholder({
             value: null,
@@ -186,7 +185,13 @@ function BasketFood() {
           style={pickerSelectStyles}
         />
         <View>
-          <NativeButton>추가하기</NativeButton>
+          <NativeButton
+            onPress={() => {
+              console.log('추가하기 버튼 클릭됨');
+              handleOnpress();
+            }}>
+            추가하기
+          </NativeButton>
         </View>
       </View>
     </View>
