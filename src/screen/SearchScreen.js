@@ -17,6 +17,8 @@ import {pickerItems} from '../../assets/data/pickerData';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import RNPickerSelect from 'react-native-picker-select';
 import {addFood, addMeal, addNuturition, saveFood} from '../actions';
+
+import {requestFoods, setError} from '../actions';
 import ingredients from '../../foodIngredient.json';
 import FoodController from '../controller/FoodController';
 import SearchResult from './SearchResult';
@@ -26,8 +28,14 @@ import FoodInformationModal from './FoodInformationModal';
 const Tab = createMaterialTopTabNavigator();
 
 function Search() {
+  const dispatch = useDispatch();
+
+  const searchedFoodResults = useSelector((state) => state.searchedFoodResults);
+  const error = useSelector((state) => state.error);
+
   const handlePressSearch = () => {
-    setSearchResult(FoodController.findByFoodName(food));
+    dispatch(requestFoods(food));
+    // setSearchResult(FoodController.findByFoodName(food));
   };
 
   const handleChangeFoodField = (name, value) => {
@@ -64,9 +72,19 @@ function Search() {
         />
         <Button title="검색" onPress={() => handlePressSearch()} />
       </View>
+      {error.status ? (
+        <View
+          style={{
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 20, color: 'hotpink'}}>
+            검색결과가 없습니다. 다시 검색해주세요.
+          </Text>
+        </View>
+      ) : null}
       <View style={{flex: 3}}>
         <ScrollView>
-          <SearchResult result={searchResult} />
+          <SearchResult result={searchedFoodResults} />
         </ScrollView>
       </View>
     </View>

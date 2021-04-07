@@ -1,16 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View, TouchableOpacity, Button} from 'react-native';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import FoodController from '../controller/FoodController';
 import {convertMealTimeEnglishToKorean} from '../utils/convertData';
+import {requestFoodRecord} from '../actions';
 
 const Tab = createMaterialTopTabNavigator();
 
 function MyDiet() {
+  const dispatch = useDispatch();
+
   const meal = useSelector((state) => state.meal);
+
+  useEffect(() => {
+    dispatch(requestFoodRecord());
+  }, []);
 
   return (
     <View>
@@ -32,8 +39,8 @@ function MyDiet() {
       </View>
 
       <View>
-        {Object.keys(meal).map((key, i) => (
-          <View key={i}>
+        {Object.keys(meal).map((key, mealIdx) => (
+          <View key={mealIdx}>
             <TouchableOpacity>
               <View
                 style={{
@@ -48,36 +55,36 @@ function MyDiet() {
                   {convertMealTimeEnglishToKorean(key)}
                 </Text>
               </View>
-              <ScrollView style={{paddingHorizontal: 10, paddingVertical: 5}}>
-                {FoodController.findFoodsByIds(meal[key]).map((food) => (
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={{paddingVertical: 5}}>- {food.name}</Text>
-                    <View
-                      style={{
-                        borderWidth: 0.5,
-                        backgroundColor: 'red',
-                        borderRadius: 15,
-                        borderColor: 'white',
-                        width: 25,
-                        height: 25,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        left: 10,
-                      }}
-                      onPress={() => console.log('abcdef')}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'white',
-                        }}>
-                        −
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-              </ScrollView>
             </TouchableOpacity>
+            <ScrollView style={{paddingHorizontal: 10, paddingVertical: 5}}>
+              {meal[key].map((food, foodIdx) => (
+                <View style={{flexDirection: 'row'}} key={foodIdx}>
+                  <Text style={{paddingVertical: 5}}>- {food.foodName}</Text>
+                  <TouchableOpacity
+                    style={{
+                      borderWidth: 0.5,
+                      backgroundColor: 'red',
+                      borderRadius: 15,
+                      borderColor: 'white',
+                      width: 25,
+                      height: 25,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      left: 10,
+                    }}
+                    onPress={() => console.log('abcdef')}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: 'white',
+                      }}>
+                      −
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </ScrollView>
           </View>
         ))}
       </View>

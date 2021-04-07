@@ -22,8 +22,6 @@ import {
   addBasket,
 } from '../actions';
 import {FoodInformationModalStyles, HomeScreenStyles} from '../style/styles';
-import {useEffect} from 'react/cjs/react.development';
-import FoodController from '../controller/FoodController';
 
 export default function FoodInformationModal({food, onPress, type}) {
   const dispatch = useDispatch();
@@ -89,9 +87,26 @@ export default function FoodInformationModal({food, onPress, type}) {
       onPress={() => {
         handlePressModal();
       }}
-      style={FoodInformationModalStyles.itemContainer}>
+      style={FoodInformationModalStyles.itemContainer({
+        isAlreadyEat: food.isAlreadyEat,
+        mealTime: food.mealTime,
+      })}>
       <View style={FoodInformationModalStyles.itemView}>
-        <Text style={FoodInformationModalStyles.foodName}>{food.name}</Text>
+        <Text style={FoodInformationModalStyles.foodName}>
+          {food.foodName}
+          <Text>
+            {food.mealTime &&
+              (food.mealTime === 1
+                ? '(아침)'
+                : food.mealTime === 2
+                ? '(점심)'
+                : food.mealTime === 3
+                ? '(저녁)'
+                : food.mealTime === 4
+                ? '(간식)'
+                : '')}
+          </Text>
+        </Text>
 
         <Modal
           visible={isOpen}

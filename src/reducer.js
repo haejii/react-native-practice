@@ -85,6 +85,7 @@ const initialState = {
   },
   foodCount: 0,
   basketFood: [],
+  searchedFoodResults: [],
 };
 
 const reducers = {
@@ -265,6 +266,24 @@ const reducers = {
     return {
       ...state,
       basketFood: [...basketFood, foodId],
+    };
+  },
+  setSearchedFoodResults: (state, {payload: {foods}}) => {
+    return {
+      ...state,
+      searchedFoodResults: foods,
+    };
+  },
+
+  setMeal: (state, {payload: {meal}}) => {
+    console.log('setMeal', meal);
+
+    return {
+      ...state,
+      meal: {
+        ...state.meal,
+        ...meal,
+      },
     };
   },
 };

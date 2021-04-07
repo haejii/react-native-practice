@@ -230,17 +230,17 @@ const KakaoLoginStyles = StyleSheet.create({
 });
 
 const FoodInformationModalStyles = StyleSheet.create({
-  itemContainer: {
+  itemContainer: ({isAlreadyEat, mealTime} = {}) => ({
     width: '90%',
     height: 40,
     marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'skyblue',
+    backgroundColor: isAlreadyEat ? 'red' : 'skyblue',
     paddingHorizontal: 10,
     borderRadius: 8,
-  },
+  }),
   itemView: {
     flex: 1,
     justifyContent: 'center',
