@@ -271,6 +271,7 @@ const reducers = {
     console.log('basketFoods : ' + basketFoods);
     console.log('value : ' + value);
 
+    console.log({basketFoods: [...basketFoods, newBasketFood]});
     return {
       ...state,
       basketFoods: basketFoods.filter(
