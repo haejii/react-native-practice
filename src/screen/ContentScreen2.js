@@ -13,27 +13,27 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import {ContentScreenStyle} from '../style/styles';
-import {requestFoodRecord, resetBasket} from '../actions';
+import {requestFoodRecord, resetBasket, requestRemoveFood} from '../actions';
 
 const Tab = createMaterialTopTabNavigator();
 
-const hadlePressRemove = () => {
-  Alert.alert('이 음식을 지우겠습니까?', '', [
-    {
-      text: '지우기',
-      onPress: () => {},
-    },
-    {text: '취소'},
-  ]);
-};
-
 function MyDiet() {
   const dispatch = useDispatch();
+
   const meal = useSelector((state) => state.meal);
 
-  const handlerequest = () => {
-    dispatch(requestFoodRecord());
+  const handlePressRemove = (foodIntakeRecordTypeId, foodId) => {
+    Alert.alert('이 음식을 지우겠습니까?', '', [
+      {
+        text: '지우기',
+        onPress: () => {
+          dispatch(requestRemoveFood(foodIntakeRecordTypeId, foodId));
+        },
+      },
+      {text: '취소'},
+    ]);
   };
+
   return (
     <View>
       <View>
@@ -58,7 +58,7 @@ function MyDiet() {
           margin: 10,
         }}
         onPress={() => {
-          handlerequest();
+          // handlerequest();
         }}>
         추가하기
       </NativeButton>
@@ -85,13 +85,20 @@ function MyDiet() {
                 <CollapseBody>
                   <ScrollView
                     style={{paddingHorizontal: 10, paddingVertical: 5}}>
-                    {FoodController.findFoodsByIds(meal[key]).map((food) => (
+                    {meal[key].map((food) => (
                       <View style={{flexDirection: 'row'}}>
-                        <Text style={{paddingVertical: 5}}>- {food.name}</Text>
+                        <Text style={{paddingVertical: 5}}>
+                          - {food.foodName}
+                        </Text>
                         <NativeButton
                           style={ContentScreenStyle.removeBtn}
                           textStyle={{color: 'white'}}
-                          onPress={() => hadlePressRemove()}>
+                          onPress={() =>
+                            handlePressRemove(
+                              food.foodIntakeRecordTypeId,
+                              food.foodId,
+                            )
+                          }>
                           -
                         </NativeButton>
                       </View>

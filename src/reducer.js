@@ -39,6 +39,14 @@ const initialChangePasswordFields = {
   current: '',
   willBeChanged: '',
 };
+
+const initialMeal = {
+  breakfast: [],
+  lunch: [],
+  dinner: [],
+  snack: [],
+};
+
 const initialState = {
   isLoading: true,
   userToken: null,
@@ -65,10 +73,7 @@ const initialState = {
     phosphorus: 0,
   },
   meal: {
-    breakfast: [],
-    lunch: [],
-    dinner: [],
-    snack: [],
+    ...initialMeal,
   },
   storedFood: [],
   changePasswordFields: {
@@ -299,7 +304,7 @@ const reducers = {
     return {
       ...state,
       meal: {
-        ...state.meal,
+        ...initialMeal,
         ...meal,
       },
     };

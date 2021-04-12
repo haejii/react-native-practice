@@ -131,11 +131,11 @@ function BasketFood() {
   const basketFoods = useSelector((state) => state.basketFoods);
   const [mealTime, setMealTime] = useState('');
 
-  const handleOnpress = () => {
-    const basketIds = basketFoods.map((basketFood, index) => basketFood.foodId);
-    console.log('basketIds', basketIds);
-    console.log(mealTime);
-    dispatch(postAddMeal(mealTime, basketIds));
+  const handlePressAddMeal = () => {
+    // const basketIds = basketFoods.map((basketFood, index) => basketFood.foodId);
+    // console.log('basketIds', basketIds);
+    // console.log(mealTime);
+    dispatch(postAddMeal(mealTime, basketFoods));
   };
 
   function handleChange() {
@@ -187,8 +187,7 @@ function BasketFood() {
         <View>
           <NativeButton
             onPress={() => {
-              console.log('추가하기 버튼 클릭됨');
-              handleOnpress();
+              handlePressAddMeal();
             }}>
             추가하기
           </NativeButton>

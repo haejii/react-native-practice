@@ -381,7 +381,7 @@ export function setSearchedFoodResults(foods) {
   };
 }
 
-export function postAddMeal(foodIntakeRecordType, foodIds) {
+export function postAddMeal(foodIntakeRecordType, basketFoods) {
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
@@ -392,12 +392,16 @@ export function postAddMeal(foodIntakeRecordType, foodIds) {
           'Content-Type': 'application/json',
           'x-access-token': userToken,
         },
-        body: JSON.stringify({foodIntakeRecordType, foodIds}),
+        body: JSON.stringify({foodIntakeRecordType, basketFoods}),
       });
-      const result = await response.json();
+      const {isSuccess, message} = await response.json();
 
-      //dispatch(requestFoodRecord());
-      // dispatch(requestFoods());
+      console.log(message);
+
+      if (isSuccess) {
+        dispatch(requestFoodRecord());
+        // dispatch(requestFoods());
+      }
     } catch (e) {
       console.log(e);
       dispatch(setError({status: true, name: '식단 추가 에러', message: e}));
@@ -443,6 +447,43 @@ export function requestFoodRecord() {
       dispatch(
         setError({status: true, name: '식단 불러오기 에러', message: e}),
       );
+    }
+  };
+}
+
+export function requestRemoveFood(foodIntakeRecordTypeId, foodId) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(
+        SERVER_PATH +
+          '/food-record?foodIntakeRecordTypeId=' +
+          foodIntakeRecordTypeId +
+          '&foodId=' +
+          foodId,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+        },
+      );
+      const result = await response.json();
+      console.log(result);
+
+      const {isSuccess, diet, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError());
+        dispatch(requestFoodRecord());
+      } else {
+        dispatch(setError({status: true, name: '음식 삭제 실패', message}));
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(setError({status: true, name: '음식 삭제 에러', message: e}));
     }
   };
 }
