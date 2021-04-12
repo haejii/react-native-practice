@@ -51,8 +51,8 @@ export default function BasketFood() {
   let sodium2 = sodium.reduce((acc, curr) => acc + curr, 0);
 
   const handleOnpress = () => {
-    const basketIds = basketFoods.map((basketFood, index) => basketFood.foodId);
-    dispatch(postAddMeal(mealTime, basketIds));
+    // const basketIds = basketFoods.map((basketFood, index) => basketFood.foodId);
+    dispatch(postAddMeal(mealTime, basketFoods));
     dispatch(changeCount(0));
     dispatch(resetBasket([]));
   };

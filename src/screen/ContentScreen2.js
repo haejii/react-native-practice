@@ -63,7 +63,7 @@ function MyDiet() {
         추가하기
       </NativeButton>
 
-      {/* <View>
+      <View>
         {Object.keys(meal).map((key, i) => (
           <View key={i}>
             <TouchableOpacity>
@@ -85,8 +85,8 @@ function MyDiet() {
                 <CollapseBody>
                   <ScrollView
                     style={{paddingHorizontal: 10, paddingVertical: 5}}>
-                    {meal[key].map((food) => (
-                      <View style={{flexDirection: 'row'}}>
+                    {meal[key].map((food, idx) => (
+                      <View style={{flexDirection: 'row'}} key={idx}>
                         <Text style={{paddingVertical: 5}}>
                           - {food.foodName}
                         </Text>
@@ -109,7 +109,7 @@ function MyDiet() {
             </TouchableOpacity>
           </View>
         ))}
-      </View> */}
+      </View>
     </View>
   );
 }
