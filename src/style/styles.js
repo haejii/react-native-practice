@@ -260,15 +260,15 @@ const FoodInformationModalStyles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     borderWidth: 1,
-    width: '80%',
+    width: '90%',
     height: Platform.OS === 'ios' ? '60%' : '70%',
     justifyContent: 'center',
     alignItems: 'center',
 
     shadowColor: '#000',
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: 10,
+      height: 20,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,

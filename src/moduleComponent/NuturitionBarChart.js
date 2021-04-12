@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   chartOutline: {
-    width: '80%',
+    marginLeft: 20,
+    width: '70%',
     height: 30,
     backgroundColor: 'white',
     borderColor: 'black',
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     };
   },
   chartText: {
+    width: '20%',
     marginLeft: 10,
     fontSize: 20,
   },
