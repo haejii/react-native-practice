@@ -31,24 +31,25 @@ export default function BasketFood() {
   const [mealTime, setMealTime] = useState('');
   const {goal} = useSelector((state) => state.user);
 
-  const calorie = basketFoods.map((basketFood, index) => basketFood.calorie);
-  let calorie2 = calorie.reduce((acc, curr) => acc + curr, 0);
+  const calorie = basketFoods
+    .map((basketFood) => basketFood.calorie)
+    .reduce((acc, curr) => acc + curr, 0);
 
-  const protein = basketFoods.map((basketFood, index) => basketFood.protein);
-  let protein2 = protein.reduce((acc, curr) => acc + curr, 0);
+  const protein = basketFoods
+    .map((basketFood) => basketFood.protein)
+    .reduce((acc, curr) => acc + curr, 0);
 
-  const phosphorus = basketFoods.map(
-    (basketFood, index) => basketFood.phosphorus,
-  );
-  let phosphorus2 = phosphorus.reduce((acc, curr) => acc + curr, 0);
+  const phosphorus = basketFoods
+    .map((basketFood) => basketFood.phosphorus)
+    .reduce((acc, curr) => acc + curr, 0);
 
-  const potassium = basketFoods.map(
-    (basketFood, index) => basketFood.potassium,
-  );
-  let potassium2 = potassium.reduce((acc, curr) => acc + curr, 0);
+  const potassium = basketFoods
+    .map((basketFood) => basketFood.potassium)
+    .reduce((acc, curr) => acc + curr, 0);
 
-  const sodium = basketFoods.map((basketFood, index) => basketFood.sodium);
-  let sodium2 = sodium.reduce((acc, curr) => acc + curr, 0);
+  const sodium = basketFoods
+    .map((basketFood) => basketFood.sodium)
+    .reduce((acc, curr) => acc + curr, 0);
 
   const handleOnpress = () => {
     // const basketIds = basketFoods.map((basketFood, index) => basketFood.foodId);
@@ -84,10 +85,8 @@ export default function BasketFood() {
             margin: 10,
           }}>
           {basketFoods.map((basketFood, index) => (
-            <View style={{flexDirection: 'row'}}>
-              <Text style={{paddingVertical: 5}} key={index}>
-                -{basketFood.foodName}
-              </Text>
+            <View style={{flexDirection: 'row'}} key={index}>
+              <Text style={{paddingVertical: 5}}>-{basketFood.foodName}</Text>
               <NativeButton
                 style={ContentScreenStyle.removeBtn}
                 textStyle={{color: 'white'}}
@@ -114,33 +113,30 @@ export default function BasketFood() {
             margin: 10,
           }}>
           <Text>
-            열량 ({calorie2} kcal / {goal?.calorie} kcal)
+            열량 ({calorie} kcal / {goal?.calorie} kcal)
           </Text>
-          <NuturitionBarChart nuturition={calorie2} goal={goal?.calorie} />
+          <NuturitionBarChart nuturition={calorie} goal={goal?.calorie} />
 
           <Text>
-            단백질 ({protein2} g/ {goal?.protein} g)
+            단백질 ({protein} g/ {goal?.protein} g)
           </Text>
-          <NuturitionBarChart nuturition={protein2} goal={goal?.protein} />
+          <NuturitionBarChart nuturition={protein} goal={goal?.protein} />
 
           <Text>
-            인 ({phosphorus2} mg / {goal?.phosphorus} mg)
+            인 ({phosphorus} mg / {goal?.phosphorus} mg)
           </Text>
-          <NuturitionBarChart
-            nuturition={phosphorus2}
-            goal={goal?.phosphorus}
-          />
+          <NuturitionBarChart nuturition={phosphorus} goal={goal?.phosphorus} />
 
           <Text>
-            칼륨 ({potassium2} mg / {goal?.potassium} mg)
+            칼륨 ({potassium} mg / {goal?.potassium} mg)
           </Text>
 
-          <NuturitionBarChart nuturition={potassium2} goal={goal?.potassium} />
+          <NuturitionBarChart nuturition={potassium} goal={goal?.potassium} />
 
           <Text>
-            나트륨 ({sodium2} mg / {goal?.sodium} mg)
+            나트륨 ({sodium} mg / {goal?.sodium} mg)
           </Text>
-          <NuturitionBarChart nuturition={sodium2} goal={goal?.sodium} />
+          <NuturitionBarChart nuturition={sodium} goal={goal?.sodium} />
         </View>
 
         <View>
