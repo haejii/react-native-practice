@@ -11,7 +11,7 @@ import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
 import {TextInput} from 'react-native-gesture-handler';
 import {changeNuturitionGoal, requestUpdateNuturitionGoal} from '../actions';
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
 
   const nuturition = useSelector((state) => state.nuturition);
@@ -48,6 +48,7 @@ export default function HomeScreen() {
     }
 
     setCurrent(time);
+    navigation.navigate('식단');
   };
 
   const handleChangeNuturitionGoal = (name, value) => {

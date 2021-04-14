@@ -362,6 +362,52 @@ const ContentScreenStyle = StyleSheet.create({
     borderRadius: 35,
   },
 });
+
+const DietModalStyles = StyleSheet.create({
+  modalViewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    flex: 0,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    borderWidth: 1,
+    width: '90%',
+    height: Platform.OS === 'ios' ? '60%' : '70%',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 10,
+      height: 20,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  foodTitle: {
+    fontWeight: 'bold',
+    fontSize: 24,
+  },
+
+  modalButtonContainer: {
+    flex: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    margin: Platform.OS === 'ios' ? 0 : 15,
+  },
+});
+
 export {
   ScreenStyles,
   SignInScreenStyles,
@@ -373,4 +419,5 @@ export {
   JoinScreenStyles,
   MyPageScreenStyles,
   ContentScreenStyle,
+  DietModalStyles,
 };
