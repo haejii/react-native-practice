@@ -147,9 +147,21 @@ export default function DietModal({mealTime, foods, nutrition, goal}) {
                 </ScrollView>
 
                 <View style={DietModalStyles.modalButtonContainer}>
-                  <Button title="음식 추가" onPress={() => {}} />
-                  <Button title="닫기" onPress={() => handlePressModal()} />
-                  <Button title="전체 삭제" onPress={() => {}} />
+                  <Button
+                    textStyle={{color: 'white'}}
+                    title="음식 추가"
+                    onPress={() => {}}
+                  />
+                  <Button
+                    textStyle={{color: 'white'}}
+                    title="닫기"
+                    onPress={() => handlePressModal()}
+                  />
+                  <Button
+                    textStyle={{color: 'white'}}
+                    title="전체 삭제"
+                    onPress={() => {}}
+                  />
                 </View>
               </View>
             </View>

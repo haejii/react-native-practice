@@ -45,29 +45,6 @@ export default function HomeScreen({navigation}) {
     setIsOpen(!isOpen);
   };
 
-  const handlePressMealButton = (num) => {
-    console.log(num);
-    if (num === 1) {
-      if (!meal.breakfast.length) {
-        navigation.navigate('검색');
-        console.log('breakfast size : ' + meal.breakfast.length); // 무언가 들어있으면 아무것도 안뜬다.. 즉 meal.breakfast.length !== null 일때 contentScreen으로 ...
-      }
-    } else if (num === 2) {
-      if (!meal.lunch.length) {
-        console.log('lunch size : ' + meal.lunch.length);
-      }
-    } else if (num === 3) {
-      if (!meal.dinner.length) {
-        console.log('dinner size : ' + meal.dinner.length);
-      }
-    } else if (num === 4) {
-      if (!meal.snack.length) {
-        console.log('snack size : ' + meal.snack.length);
-      }
-    }
-    navigation.navigate('식단');
-  };
-
   const handleChangeNuturitionGoal = (name, value) => {
     value = Number(value);
     setNuturitionInput({...nuturitionInput, [name]: value});
@@ -180,25 +157,41 @@ export default function HomeScreen({navigation}) {
         <View style={HomeScreenStyles.mealButtonContainer}>
           <TouchableOpacity
             style={HomeScreenStyles.mealButton}
-            onPress={() => handlePressMealButton(1)}>
+            onPress={() => {
+              meal.breakfast.length === 0
+                ? navigation.navigate('검색')
+                : navigation.navigate('식단');
+            }}>
             <Text style={HomeScreenStyles.mealButtonText}>아침</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={HomeScreenStyles.mealButton}
-            onPress={() => handlePressMealButton(2)}>
+            onPress={() => {
+              meal.lunch.length === 0
+                ? navigation.navigate('검색')
+                : navigation.navigate('식단');
+            }}>
             <Text style={HomeScreenStyles.mealButtonText}>점심</Text>
           </TouchableOpacity>
         </View>
         <View style={HomeScreenStyles.mealButtonContainer}>
           <TouchableOpacity
             style={HomeScreenStyles.mealButton}
-            onPress={() => handlePressMealButton(3)}>
+            onPress={() => {
+              meal.dinner.length === 0
+                ? navigation.navigate('검색')
+                : navigation.navigate('식단');
+            }}>
             <Text style={HomeScreenStyles.mealButtonText}>저녁</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={HomeScreenStyles.mealButton}
-            onPress={() => navigation.navigete('MyDiet')}>
+            onPress={() => {
+              meal.snack.length === 0
+                ? navigation.navigate('검색')
+                : navigation.navigate('식단');
+            }}>
             <Text style={HomeScreenStyles.mealButtonText}>간식</Text>
           </TouchableOpacity>
         </View>
