@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MyPageScreen from './MyPageScreen';
 import RecipeScreen from './RecipeScreen';
 import SearchScreen from './Search/SearchScreen';
-import ContentScreen from './ContentScreen';
+import DietScreen from './Diet/DietScreen';
 import HomeScreen from './HomeScreen';
 
 const Tab = createBottomTabNavigator();
@@ -73,7 +73,7 @@ export default function Main() {
       />
       <Tab.Screen name="커뮤니티" component={RecipeScreen} />
       <Tab.Screen name="검색" component={SearchScreen} />
-      <Tab.Screen name="식단" component={ContentScreen} />
+      <Tab.Screen name="식단" component={DietScreen} />
       <Tab.Screen name="내 정보" component={MyPageScreen} />
     </Tab.Navigator>
   );

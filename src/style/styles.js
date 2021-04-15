@@ -350,7 +350,7 @@ const MyPageScreenStyles = StyleSheet.create({
   },
 });
 
-const ContentScreenStyle = StyleSheet.create({
+const DietScreenStyle = StyleSheet.create({
   removeBtn: {
     backgroundColor: 'red',
     alignItems: 'center',
@@ -421,6 +421,6 @@ export {
   SearchResultStyles,
   JoinScreenStyles,
   MyPageScreenStyles,
-  ContentScreenStyle,
+  DietScreenStyle,
   DietModalStyles,
 };

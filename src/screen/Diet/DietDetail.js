@@ -3,7 +3,7 @@ import {Alert, ScrollView, Text, View} from 'react-native';
 import NativeButton from 'apsl-react-native-button';
 import {useDispatch} from 'react-redux';
 import {requestRemoveFood} from '../../actions';
-import {ContentScreenStyle} from '../../style/styles';
+import {DietScreenStyle} from '../../style/styles';
 
 export default function DietDetail({foods}) {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export default function DietDetail({foods}) {
         <View style={{flexDirection: 'row'}} key={idx}>
           <Text style={{paddingVertical: 5}}>- {food.foodName}</Text>
           <NativeButton
-            style={ContentScreenStyle.removeBtn}
+            style={DietScreenStyle.removeBtn}
             textStyle={{color: 'white'}}
             onPress={() =>
               handlePressRemove(food.foodIntakeRecordTypeId, food.foodId)

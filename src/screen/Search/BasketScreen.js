@@ -20,7 +20,7 @@ import {
   removeBasket,
   resetBasket,
 } from '../../actions';
-import {ContentScreenStyle} from '../../style/styles';
+import {DietScreenStyle} from '../../style/styles';
 import NuturitionBarChart from '../../moduleComponent/NuturitionBarChart';
 
 export default function BasketFood() {
@@ -88,7 +88,7 @@ export default function BasketFood() {
             <View style={{flexDirection: 'row'}} key={index}>
               <Text style={{paddingVertical: 5}}>-{basketFood.foodName}</Text>
               <NativeButton
-                style={ContentScreenStyle.removeBtn}
+                style={DietScreenStyle.removeBtn}
                 textStyle={{color: 'white'}}
                 onPress={() => hadlePressRemove(basketFood.foodId)}>
                 -

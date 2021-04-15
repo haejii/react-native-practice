@@ -11,9 +11,9 @@ import {
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useDispatch, useSelector} from 'react-redux';
 import NativeButton from 'apsl-react-native-button';
-import {requestFoodRecord, requestRemoveFood} from '../actions';
-import DietHeader from './Diet/DietHeader';
+import DietHeader from './DietHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {requestFoodRecord, requestRemoveFood} from '../../actions';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -101,7 +101,7 @@ function RecommendDiet() {
   );
 }
 
-export default function ContentScreen() {
+export default function DietScreen() {
   return (
     <Tab.Navigator
       initialRouteName="MyDiet"
