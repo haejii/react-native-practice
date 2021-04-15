@@ -154,12 +154,12 @@ const SplashScreenStyles = StyleSheet.create({
 const HomeScreenStyles = StyleSheet.create({
   textViewContainer: {
     flexDirection: 'column',
-    height: 300,
-    paddingVertical: 30,
-    flex: 2,
+    flex: 4,
     width: '100%',
     paddingHorizontal: 20,
-    justifyContent: 'center',
+    // height: 300,
+    // paddingVertical: 30,
+    // justifyContent: 'flex-start',
   },
   textTitle: {
     marginTop: 20,
@@ -167,10 +167,10 @@ const HomeScreenStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  textDetail: {fontSize: 20},
-  textInterval: {marginTop: 5},
+  textDetail: {fontSize: Platform.OS === 'ios' ? 20 : 16},
+  textInterval: {marginTop: Platform.OS === 'ios' ? 10 : 5},
   mealButtonView: {
-    flex: 3,
+    flex: 5,
     width: '100%',
     marginTop: Platform.OS === 'ios' ? 40 : 70,
     height: '100%',
@@ -184,30 +184,30 @@ const HomeScreenStyles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   mealButton: {
-    width: '35%',
+    width: Platform.OS === 'ios' ? '35%' : '30%',
     height: '70%',
     borderRadius: 12,
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  mealButtonText: {fontSize: 24},
+  mealButtonText: {fontSize: Platform.OS === 'ios' ? 24 : 20},
   nuturitionInputContainer: {
     flex: 6,
     width: '80%',
     justifyContent: 'center',
   },
-  nuturitionInputSubject: {fontSize: 27, bottom: 10},
+  nuturitionInputSubject: {fontSize: 27},
   nuturitionInput: {
     width: '100%',
     backgroundColor: 'lightgrey',
-    height: Platform.OS === 'ios' ? '8%' : '20%',
+    height: Platform.OS === 'ios' ? '15%' : 50,
     paddingHorizontal: 10,
     fontSize: 16,
-    marginBottom: '4%',
+    marginBottom: Platform.OS === 'ios' ? '4%' : '2%',
     marginRight: '5%',
   },
-  nuturitionTitle: {fontSize: 16, marginBottom: 10},
+  nuturitionTitle: {fontSize: 16, marginBottom: Platform.OS === 'ios' ? 10 : 0},
 });
 
 const KakaoLoginStyles = StyleSheet.create({
@@ -261,7 +261,7 @@ const FoodInformationModalStyles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     width: '90%',
-    height: Platform.OS === 'ios' ? '60%' : '70%',
+    height: Platform.OS === 'ios' ? '70%' : '80%',
     justifyContent: 'center',
     alignItems: 'center',
 
@@ -284,8 +284,9 @@ const FoodInformationModalStyles = StyleSheet.create({
   modalButtonContainer: {
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
     justifyContent: 'space-around',
-    width: '80%',
     margin: Platform.OS === 'ios' ? 0 : 15,
   },
 
@@ -375,7 +376,7 @@ const DietModalStyles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     width: '90%',
-    height: Platform.OS === 'ios' ? '60%' : '70%',
+    height: Platform.OS === 'ios' ? '60%' : '80%',
     justifyContent: 'center',
     alignItems: 'center',
 
@@ -390,6 +391,7 @@ const DietModalStyles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -400,9 +402,10 @@ const DietModalStyles = StyleSheet.create({
   },
 
   modalButtonContainer: {
-    flex: 6,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%',
     justifyContent: 'space-around',
     margin: Platform.OS === 'ios' ? 0 : 15,
   },

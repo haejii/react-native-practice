@@ -6,6 +6,7 @@ import {
   Modal,
   Button,
   Linking,
+  Platform,
 } from 'react-native';
 
 import {
@@ -15,7 +16,7 @@ import {
 } from '../style/styles';
 import {useSelector, useDispatch} from 'react-redux';
 import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
-import {TextInput} from 'react-native-gesture-handler';
+import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import {changeNuturitionGoal, requestUpdateNuturitionGoal} from '../actions';
 import SearchResult from './Search/firstTab/SearchResult';
 import {Route} from 'react-router';
@@ -90,68 +91,70 @@ export default function HomeScreen({navigation}) {
 
   return (
     <View style={ScreenStyles.container}>
-      <TouchableOpacity
-        style={HomeScreenStyles.textViewContainer}
-        onPress={() => handlePressModal()}>
+      <View style={{flex: 1, justifyContent: 'center'}}>
         <Text style={HomeScreenStyles.textTitle}>오늘의 목표</Text>
+      </View>
 
-        <Text style={HomeScreenStyles.textDetail}>
-          열량 ({nuturition.calorie} kcal / {goal?.calorie} kcal)
-        </Text>
-        <NuturitionBarChart
-          nuturition={nuturition.calorie}
-          goal={goal?.calorie}
-        />
+      <View style={HomeScreenStyles.textViewContainer}>
+        <TouchableOpacity onPress={() => handlePressModal()}>
+          <Text style={HomeScreenStyles.textDetail}>
+            열량 ({nuturition.calorie} kcal / {goal?.calorie} kcal)
+          </Text>
+          <NuturitionBarChart
+            nuturition={nuturition.calorie}
+            goal={goal?.calorie}
+          />
 
-        <Text
-          style={{
-            ...HomeScreenStyles.textDetail,
-            ...HomeScreenStyles.textInterval,
-          }}>
-          단백질 ({nuturition.protein} g/ {goal?.protein} g)
-        </Text>
-        <NuturitionBarChart
-          nuturition={nuturition.protein}
-          goal={goal?.protein}
-        />
+          <Text
+            style={{
+              ...HomeScreenStyles.textDetail,
+              ...HomeScreenStyles.textInterval,
+            }}>
+            단백질 ({nuturition.protein} g/ {goal?.protein} g)
+          </Text>
+          <NuturitionBarChart
+            nuturition={nuturition.protein}
+            goal={goal?.protein}
+          />
 
-        <Text
-          style={{
-            ...HomeScreenStyles.textDetail,
-            ...HomeScreenStyles.textInterval,
-          }}>
-          인 ({nuturition.phosphorus} mg / {goal?.phosphorus} mg)
-        </Text>
-        <NuturitionBarChart
-          nuturition={nuturition.phosphorus}
-          goal={goal?.phosphorus}
-        />
+          <Text
+            style={{
+              ...HomeScreenStyles.textDetail,
+              ...HomeScreenStyles.textInterval,
+            }}>
+            인 ({nuturition.phosphorus} mg / {goal?.phosphorus} mg)
+          </Text>
+          <NuturitionBarChart
+            nuturition={nuturition.phosphorus}
+            goal={goal?.phosphorus}
+          />
 
-        <Text
-          style={{
-            ...HomeScreenStyles.textDetail,
-            ...HomeScreenStyles.textInterval,
-          }}>
-          칼륨 ({nuturition.potassium} mg / {goal?.potassium} mg)
-        </Text>
+          <Text
+            style={{
+              ...HomeScreenStyles.textDetail,
+              ...HomeScreenStyles.textInterval,
+            }}>
+            칼륨 ({nuturition.potassium} mg / {goal?.potassium} mg)
+          </Text>
 
-        <NuturitionBarChart
-          nuturition={nuturition.potassium}
-          goal={goal?.potassium}
-        />
+          <NuturitionBarChart
+            nuturition={nuturition.potassium}
+            goal={goal?.potassium}
+          />
 
-        <Text
-          style={{
-            ...HomeScreenStyles.textDetail,
-            ...HomeScreenStyles.textInterval,
-          }}>
-          나트륨 ({nuturition.sodium} mg / {goal?.sodium} mg)
-        </Text>
-        <NuturitionBarChart
-          nuturition={nuturition.sodium}
-          goal={goal?.sodium}
-        />
-      </TouchableOpacity>
+          <Text
+            style={{
+              ...HomeScreenStyles.textDetail,
+              ...HomeScreenStyles.textInterval,
+            }}>
+            나트륨 ({nuturition.sodium} mg / {goal?.sodium} mg)
+          </Text>
+          <NuturitionBarChart
+            nuturition={nuturition.sodium}
+            goal={goal?.sodium}
+          />
+        </TouchableOpacity>
+      </View>
 
       <View style={HomeScreenStyles.mealButtonView}>
         <View style={HomeScreenStyles.mealButtonContainer}>
@@ -205,69 +208,80 @@ export default function HomeScreen({navigation}) {
         <View style={FoodInformationModalStyles.modalViewContainer}>
           <View style={FoodInformationModalStyles.modalView}>
             <View style={HomeScreenStyles.nuturitionInputContainer}>
-              <Text style={HomeScreenStyles.nuturitionInputSubject}>
-                목표 섭취량 조절하기
-              </Text>
-              <Text style={HomeScreenStyles.nuturitionTitle}>열량</Text>
-              <TextInput
-                style={HomeScreenStyles.nuturitionInput}
-                keyboardType="numeric"
-                value={String(nuturitionInput.calorie)}
-                onChangeText={(value) => {
-                  handleChangeNuturitionGoal(
-                    'calorie',
-                    value.replace(/[^0-9]/g, ''),
-                  );
-                }}
-              />
-              <Text style={HomeScreenStyles.nuturitionTitle}>단백질</Text>
-              <TextInput
-                style={HomeScreenStyles.nuturitionInput}
-                keyboardType="numeric"
-                value={String(nuturitionInput.protein)}
-                onChangeText={(value) => {
-                  handleChangeNuturitionGoal(
-                    'protein',
-                    value.replace(/[^0-9]/g, ''),
-                  );
-                }}
-              />
-              <Text style={HomeScreenStyles.nuturitionTitle}>인</Text>
-              <TextInput
-                style={HomeScreenStyles.nuturitionInput}
-                keyboardType="numeric"
-                value={String(nuturitionInput.phosphorus)}
-                onChangeText={(value) => {
-                  handleChangeNuturitionGoal(
-                    'phosphorus',
-                    value.replace(/[^0-9]/g, ''),
-                  );
-                }}
-              />
-              <Text style={HomeScreenStyles.nuturitionTitle}>칼륨</Text>
-              <TextInput
-                style={HomeScreenStyles.nuturitionInput}
-                keyboardType="numeric"
-                value={String(nuturitionInput.potassium)}
-                onChangeText={(value) => {
-                  handleChangeNuturitionGoal(
-                    'potassium',
-                    value.replace(/[^0-9]/g, ''),
-                  );
-                }}
-              />
-              <Text style={HomeScreenStyles.nuturitionTitle}>나트륨</Text>
-              <TextInput
-                style={HomeScreenStyles.nuturitionInput}
-                keyboardType="numeric"
-                value={String(nuturitionInput.sodium)}
-                onChangeText={(value) => {
-                  handleChangeNuturitionGoal(
-                    'sodium',
-                    value.replace(/[^0-9]/g, ''),
-                  );
-                }}
-              />
+              <View
+                style={{
+                  flex: Platform.OS === 'ios' ? 2 : 2,
+                  justifyContent: 'center',
+                }}>
+                <Text style={HomeScreenStyles.nuturitionInputSubject}>
+                  목표 섭취량 조절하기
+                </Text>
+              </View>
+
+              <View style={{flex: 8}}>
+                <ScrollView>
+                  <Text style={HomeScreenStyles.nuturitionTitle}>열량</Text>
+                  <TextInput
+                    style={HomeScreenStyles.nuturitionInput}
+                    keyboardType="numeric"
+                    value={String(nuturitionInput.calorie)}
+                    onChangeText={(value) => {
+                      handleChangeNuturitionGoal(
+                        'calorie',
+                        value.replace(/[^0-9]/g, ''),
+                      );
+                    }}
+                  />
+                  <Text style={HomeScreenStyles.nuturitionTitle}>단백질</Text>
+                  <TextInput
+                    style={HomeScreenStyles.nuturitionInput}
+                    keyboardType="numeric"
+                    value={String(nuturitionInput.protein)}
+                    onChangeText={(value) => {
+                      handleChangeNuturitionGoal(
+                        'protein',
+                        value.replace(/[^0-9]/g, ''),
+                      );
+                    }}
+                  />
+                  <Text style={HomeScreenStyles.nuturitionTitle}>인</Text>
+                  <TextInput
+                    style={HomeScreenStyles.nuturitionInput}
+                    keyboardType="numeric"
+                    value={String(nuturitionInput.phosphorus)}
+                    onChangeText={(value) => {
+                      handleChangeNuturitionGoal(
+                        'phosphorus',
+                        value.replace(/[^0-9]/g, ''),
+                      );
+                    }}
+                  />
+                  <Text style={HomeScreenStyles.nuturitionTitle}>칼륨</Text>
+                  <TextInput
+                    style={HomeScreenStyles.nuturitionInput}
+                    keyboardType="numeric"
+                    value={String(nuturitionInput.potassium)}
+                    onChangeText={(value) => {
+                      handleChangeNuturitionGoal(
+                        'potassium',
+                        value.replace(/[^0-9]/g, ''),
+                      );
+                    }}
+                  />
+                  <Text style={HomeScreenStyles.nuturitionTitle}>나트륨</Text>
+                  <TextInput
+                    style={HomeScreenStyles.nuturitionInput}
+                    keyboardType="numeric"
+                    value={String(nuturitionInput.sodium)}
+                    onChangeText={(value) => {
+                      handleChangeNuturitionGoal(
+                        'sodium',
+                        value.replace(/[^0-9]/g, ''),
+                      );
+                    }}
+                  />
+                </ScrollView>
+              </View>
             </View>
 
             <View style={FoodInformationModalStyles.modalButtonContainer}>

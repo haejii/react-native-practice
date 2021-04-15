@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Platform} from 'react-native';
 
 export default function NuturitionBarChart({nuturition, goal}) {
   return (
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   chartOutline: {
     marginLeft: 20,
     width: '70%',
-    height: 30,
+    height: Platform.OS === 'ios' ? 30 : 25,
     backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 2,

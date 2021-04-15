@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
 import NuturitionBarChart from '../../moduleComponent/NuturitionBarChart';
 import {FoodInformationModalStyles, DietModalStyles} from '../../style/styles';
@@ -145,24 +146,19 @@ export default function DietModal({mealTime, foods, nutrition, goal}) {
                     />
                   </View>
                 </ScrollView>
+              </View>
 
-                <View style={DietModalStyles.modalButtonContainer}>
-                  <Button
-                    textStyle={{color: 'white'}}
-                    title="음식 추가"
-                    onPress={() => {}}
-                  />
-                  <Button
-                    textStyle={{color: 'white'}}
-                    title="닫기"
-                    onPress={() => handlePressModal()}
-                  />
-                  <Button
-                    textStyle={{color: 'white'}}
-                    title="전체 삭제"
-                    onPress={() => {}}
-                  />
-                </View>
+              <View style={DietModalStyles.modalButtonContainer}>
+                <Button
+                  textStyle={{color: 'white'}}
+                  title="전체 삭제"
+                  onPress={() => {}}
+                />
+                <Button
+                  textStyle={{color: 'white'}}
+                  title="닫기"
+                  onPress={() => handlePressModal()}
+                />
               </View>
             </View>
           </View>
