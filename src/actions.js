@@ -432,6 +432,7 @@ export function requestFoodRecord() {
       const {isSuccess, diet, message} = result;
 
       if (isSuccess) {
+        console.log(diet);
         dispatch(setError());
         dispatch(setMeal(diet));
         console.log('성공');
@@ -441,6 +442,99 @@ export function requestFoodRecord() {
         console.log('실패');
         console.log(result);
         console.log(diet);
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(
+        setError({status: true, name: '식단 불러오기 에러', message: e}),
+      );
+    }
+  };
+}
+// date로 foodRecord 가져오기
+
+export function setDateMeal(dateMeal) {
+  return {
+    type: 'setDateMeal',
+    payload: {dateMeal},
+  };
+}
+
+export function requestFoodRecordWithDate(date) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+    console.log('requestFoodRecordWithDate들어감');
+
+    try {
+      const response = await fetch(SERVER_PATH + '/food-record/date', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        body: JSON.stringify({date}),
+      });
+      const result = await response.json();
+
+      const {isSuccess, diet, message} = result;
+
+      if (isSuccess) {
+        console.log(date);
+        console.log(diet);
+        dispatch(setError());
+        dispatch(setDateMeal(diet));
+        console.log('성공');
+      } else {
+        dispatch(setError({status: true, name: '식단 불러오기 실패', message}));
+        dispatch(setDateMeal([]));
+        console.log('실패');
+        console.log(result);
+        console.log(diet);
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(
+        setError({status: true, name: '식단 불러오기 에러', message: e}),
+      );
+    }
+  };
+}
+
+// nutrition 가져오기
+
+export function setNutrition(dateNutrition) {
+  return {
+    type: 'setNutrition',
+    payload: {dateNutrition},
+  };
+}
+
+export function requestFoodNutrition() {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(SERVER_PATH + '/food-record/date', {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+      });
+      const result = await response.json();
+
+      const {isSuccess, nutrition, message} = result;
+
+      if (isSuccess) {
+        console.log(nutrition);
+        dispatch(setError());
+        dispatch(setNutrition(nutrition));
+        console.log('성공');
+      } else {
+        dispatch(setError({status: true, name: '식단 불러오기 실패', message}));
+        dispatch(setNutrition([]));
+        console.log('실패');
+        console.log(result);
+        console.log(nutrition);
       }
     } catch (e) {
       console.log(e);

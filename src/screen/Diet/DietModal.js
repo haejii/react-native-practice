@@ -52,7 +52,7 @@ export default function DietModal({mealTime, foods, nutrition, goal}) {
                 <Text style={DietModalStyles.foodTitle}>{mealTime}</Text>
               </View>
 
-              <View style={{flex: 6}}>
+              <View style={{flex: 3}}>
                 <ScrollView>
                   <View style={{alignItems: 'center'}}>
                     <View

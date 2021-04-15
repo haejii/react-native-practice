@@ -47,6 +47,20 @@ const initialMeal = {
   snack: [],
 };
 
+const initialDateMeal = {
+  breakfast: [],
+  lunch: [],
+  dinner: [],
+  snack: [],
+};
+
+const initialNutrition = {
+  calorie: 0,
+  protein: 0,
+  phosphorus: 0,
+  potassium: 0,
+  sodium: 0,
+};
 const initialState = {
   isLoading: true,
   userToken: null,
@@ -74,6 +88,12 @@ const initialState = {
   },
   meal: {
     ...initialMeal,
+  },
+  dateMeal: {
+    ...initialDateMeal,
+  },
+  dateNutrition: {
+    ...initialNutrition,
   },
   storedFood: [],
   changePasswordFields: {
@@ -306,6 +326,29 @@ const reducers = {
       meal: {
         ...initialMeal,
         ...meal,
+      },
+    };
+  },
+  setDateMeal: (state, {payload: {dateMeal}}) => {
+    console.log('dateMeal', dateMeal);
+
+    return {
+      ...state,
+      dateMeal: {
+        ...initialDateMeal,
+        ...dateMeal,
+      },
+    };
+  },
+
+  setNutrition: (state, {payload: {dateNutrition}}) => {
+    console.log('setNutrition', dateNutrition);
+
+    return {
+      ...state,
+      nuturition: {
+        ...initialNutrition,
+        ...dateNutrition,
       },
     };
   },

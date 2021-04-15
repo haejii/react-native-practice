@@ -16,8 +16,12 @@ import {
 } from '../style/styles';
 import {useSelector, useDispatch} from 'react-redux';
 import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
-import {ScrollView, TextInput} from 'react-native-gesture-handler';
-import {changeNuturitionGoal, requestUpdateNuturitionGoal} from '../actions';
+import {TextInput, ScrollView} from 'react-native-gesture-handler';
+import {
+  changeNuturitionGoal,
+  requestUpdateNuturitionGoal,
+  requestFoodNutrition,
+} from '../actions';
 import SearchResult from './Search/firstTab/SearchResult';
 import {Route} from 'react-router';
 
@@ -41,7 +45,10 @@ export default function HomeScreen({navigation}) {
     sodium: goal.sodium,
   });
 
-  //const moring = meal.map((meals, key) =>meal.)
+  useEffect(() => {
+    dispatch(requestFoodNutrition());
+  }, []);
+
   const handlePressModal = () => {
     setIsOpen(!isOpen);
   };

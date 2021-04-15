@@ -11,13 +11,18 @@ import {
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useDispatch, useSelector} from 'react-redux';
 import NativeButton from 'apsl-react-native-button';
-import DietHeader from './DietHeader';
+import {
+  requestFoodRecord,
+  requestRemoveFood,
+  requestFoodRecordWithDate,
+} from '../actions';
+import DietHeader from './Diet/DietHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {requestFoodRecord, requestRemoveFood} from '../../actions';
+import {SERVER_PATH} from '../service/apis';
 
 const Tab = createMaterialTopTabNavigator();
 
-function MyDiet() {
+function MyDiet({navigation}) {
   const dispatch = useDispatch();
 
   const [date, setDate] = useState(new Date());
@@ -26,10 +31,12 @@ function MyDiet() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [day, setDay] = useState(new Date().getDate());
-  const meal = useSelector((state) => state.meal);
+  //const meal = useSelector((state) => state.meal);
   const goal = useSelector((state) => state.user.goal);
+  const dateMeal = useSelector((state) => state.dateMeal);
 
   let today = `${year}년 ${month}월 ${day}일`;
+  let today2 = `${year}-${month}-${day}`;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -37,11 +44,9 @@ function MyDiet() {
     setDate(currentDate);
     setYear(currentDate.getFullYear());
     setMonth(currentDate.getMonth() + 1);
-    setDay(currentDate.getDay());
-    console.log(currentDate);
-    console.log(currentDate.getFullYear());
-    console.log(currentDate.getMonth() + 1);
-    console.log(currentDate.getDay());
+    setDay(currentDate.getDate());
+    console.log(today2);
+    dispatch(requestFoodRecordWithDate(today2));
   };
 
   const showMode = (currentMode) => {
@@ -54,7 +59,7 @@ function MyDiet() {
   };
 
   useEffect(() => {
-    dispatch(requestFoodRecord());
+    dispatch(requestFoodRecordWithDate(today2));
   }, []);
 
   return (
@@ -82,13 +87,11 @@ function MyDiet() {
         style={{
           margin: 10,
         }}
-        onPress={() => {
-          // handlerequest();
-        }}>
+        onPress={() => navigation.navigate('검색')}>
         추가하기
       </NativeButton>
 
-      <DietHeader meal={meal} goal={goal} />
+      <DietHeader meal={dateMeal} goal={goal} />
     </View>
   );
 }
