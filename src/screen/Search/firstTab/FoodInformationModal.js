@@ -54,16 +54,18 @@ export default function FoodInformationModal({food, onPress, type}) {
   };
 
   function FoodCalc(inputMeal) {
-    let gram = 0.01 * inputMeal;
-    setCalorie((food.calorie * gram).toFixed(2));
-    setProtein((food.protein * gram).toFixed(2));
-    setPhosphorus((food.phosphorus * gram).toFixed(2));
-    setPotasium((food.potassium * gram).toFixed(2));
-    setSodium((food.sodium * gram).toFixed(2));
+    if (inputMeal <= 1000) {
+      let gram = 0.01 * inputMeal;
+      setCalorie((food.calorie * gram).toFixed(2));
+      setProtein((food.protein * gram).toFixed(2));
+      setPhosphorus((food.phosphorus * gram).toFixed(2));
+      setPotasium((food.potassium * gram).toFixed(2));
+      setSodium((food.sodium * gram).toFixed(2));
+    }
   }
 
   function handleChangeInput(inputMeal) {
-    setInputMeal(inputMeal);
+    inputMeal > 1000 ? setInputMeal('1000') : setInputMeal(inputMeal);
     FoodCalc(inputMeal);
     setChange(true);
   }

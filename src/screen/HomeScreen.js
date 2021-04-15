@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View, Modal, Button} from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  Modal,
+  Button,
+  Linking,
+} from 'react-native';
 
 import {
   FoodInformationModalStyles,
@@ -10,6 +17,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import NuturitionBarChart from '../moduleComponent/NuturitionBarChart';
 import {TextInput} from 'react-native-gesture-handler';
 import {changeNuturitionGoal, requestUpdateNuturitionGoal} from '../actions';
+import SearchResult from './Search/firstTab/SearchResult';
+import {Route} from 'react-router';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -17,6 +26,8 @@ export default function HomeScreen({navigation}) {
   const nuturition = useSelector((state) => state.nuturition);
   const {goal} = useSelector((state) => state.user);
   const meal = useSelector((state) => state.meal);
+
+  const [comp, setComp] = useState();
 
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState(null);
@@ -29,25 +40,31 @@ export default function HomeScreen({navigation}) {
     sodium: goal.sodium,
   });
 
+  //const moring = meal.map((meals, key) =>meal.)
   const handlePressModal = () => {
     setIsOpen(!isOpen);
   };
 
   const handlePressMealButton = (num) => {
     console.log(num);
-    let time = '';
-
-    if (num === 0) {
-      time = 'snack';
-    } else if (num === 1) {
-      time = 'breakfast';
+    if (num === 1) {
+      if (!meal.breakfast.length) {
+        navigation.navigate('검색');
+        console.log('breakfast size : ' + meal.breakfast.length); // 무언가 들어있으면 아무것도 안뜬다.. 즉 meal.breakfast.length !== null 일때 contentScreen으로 ...
+      }
     } else if (num === 2) {
-      time = 'lunch';
-    } else {
-      time = 'dinner';
+      if (!meal.lunch.length) {
+        console.log('lunch size : ' + meal.lunch.length);
+      }
+    } else if (num === 3) {
+      if (!meal.dinner.length) {
+        console.log('dinner size : ' + meal.dinner.length);
+      }
+    } else if (num === 4) {
+      if (!meal.snack.length) {
+        console.log('snack size : ' + meal.snack.length);
+      }
     }
-
-    setCurrent(time);
     navigation.navigate('식단');
   };
 
@@ -158,6 +175,7 @@ export default function HomeScreen({navigation}) {
           goal={goal?.sodium}
         />
       </TouchableOpacity>
+
       <View style={HomeScreenStyles.mealButtonView}>
         <View style={HomeScreenStyles.mealButtonContainer}>
           <TouchableOpacity
@@ -177,9 +195,10 @@ export default function HomeScreen({navigation}) {
             onPress={() => handlePressMealButton(3)}>
             <Text style={HomeScreenStyles.mealButtonText}>저녁</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={HomeScreenStyles.mealButton}
-            onPress={() => handlePressMealButton(0)}>
+            onPress={() => navigation.navigete('MyDiet')}>
             <Text style={HomeScreenStyles.mealButtonText}>간식</Text>
           </TouchableOpacity>
         </View>

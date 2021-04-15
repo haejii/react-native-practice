@@ -396,7 +396,7 @@ export function postAddMeal(foodIntakeRecordType, basketFoods) {
       });
       const {isSuccess, message} = await response.json();
 
-      console.log(message);
+      console.log('message : ' + message);
 
       if (isSuccess) {
         dispatch(requestFoodRecord());

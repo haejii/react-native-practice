@@ -33,6 +33,7 @@ const pickerItems = {
       {label: '아침', value: 1},
       {label: '점심', value: 2},
       {label: '저녁', value: 3},
+      {label: '간식', value: 4},
     ],
     placeholder: ({label, value, color} = {}) => ({
       label: label || '식사시기를 선택해주세요.',
