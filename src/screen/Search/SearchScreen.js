@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import SearchScreen2 from './firstTab/SearchScreen2';
+import Search from './firstTab/Search';
 import StoreScreen from './StoreScreen';
 import BasketScreen from './BasketScreen';
 
@@ -20,7 +20,7 @@ export default function SearchScreen() {
       }}>
       <Tab.Screen
         name="Search"
-        component={SearchScreen2}
+        component={Search}
         options={{tabBarLabel: '검색'}}
       />
       <Tab.Screen

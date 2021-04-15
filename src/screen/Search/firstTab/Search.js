@@ -1,9 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, TextInput, Button, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  TextInput,
+  Button,
+  ScrollView,
+  FlatList,
+  SafeAreaView,
+} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {requestFoods, setError} from '../../../actions';
 import SearchResult from './SearchResult';
+import FoodInformationModal from './FoodInformationModal';
+import {SearchResultStyles} from '../../../style/styles';
 
 export default function Search2() {
   const dispatch = useDispatch();
@@ -59,9 +69,22 @@ export default function Search2() {
         </View>
       ) : null}
       <View style={{flex: 3}}>
-        <ScrollView>
-          <SearchResult result={searchedFoodResults} />
-        </ScrollView>
+        <SafeAreaView>
+          <FlatList
+            data={searchedFoodResults}
+            keyExtractor={(item) => item.id}
+            renderItem={({item, index, separators}) => (
+              <View
+                style={SearchResultStyles.searchResultContainer}
+                key={index}>
+                <FoodInformationModal food={item} />
+              </View>
+            )}>
+            {/* <ScrollView> */}
+            {/* <SearchResult result={searchedFoodResults} /> */}
+            {/* </ScrollView> */}
+          </FlatList>
+        </SafeAreaView>
       </View>
     </View>
   );
