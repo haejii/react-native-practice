@@ -358,10 +358,11 @@ export function requestFoods(foodName) {
 
       console.log(result);
 
-      const {isSuccess, foods, message} = result;
+      const {isSuccess, foods, message, searchQuery} = result;
 
       if (isSuccess) {
         dispatch(setError());
+        dispatch(setLastSearchQuery(searchQuery));
         dispatch(setSearchedFoodResults(foods));
       } else {
         dispatch(setError({status: true, name: '검색 실패', message}));
@@ -383,7 +384,7 @@ export function setSearchedFoodResults(foods) {
 
 export function postAddMeal(foodIntakeRecordType, basketFoods) {
   return async (dispatch, getState) => {
-    const {userToken} = getState();
+    const {userToken, lastSearchQuery} = getState();
 
     try {
       const response = await fetch(SERVER_PATH + '/food-record', {
@@ -399,8 +400,13 @@ export function postAddMeal(foodIntakeRecordType, basketFoods) {
       console.log('message : ' + message);
 
       if (isSuccess) {
-        dispatch(requestFoodRecord());
-        // dispatch(requestFoods());
+        const date = new Date();
+        dispatch(
+          requestFoodRecordWithDate(
+            `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
+          ),
+        );
+        dispatch(requestFoods(lastSearchQuery));
       }
     } catch (e) {
       console.log(e);
@@ -579,5 +585,45 @@ export function requestRemoveFood(foodIntakeRecordTypeId, foodId) {
       console.log(e);
       dispatch(setError({status: true, name: '음식 삭제 에러', message: e}));
     }
+  };
+}
+
+export function requestRemoveFoodsByMealTime(foodIntakeRecordId, date) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(
+        SERVER_PATH + '/food-record/' + foodIntakeRecordId,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+        },
+      );
+      const result = await response.json();
+      console.log(result);
+
+      const {isSuccess, diet, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError());
+        dispatch(requestFoodRecordWithDate(date));
+      } else {
+        dispatch(setError({status: true, name: '식단 삭제 실패', message}));
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(setError({status: true, name: '식단 삭제 에러', message: e}));
+    }
+  };
+}
+
+export function setLastSearchQuery(lastSearchQuery) {
+  return {
+    type: 'setLastSearchQuery',
+    payload: {lastSearchQuery},
   };
 }

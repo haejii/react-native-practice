@@ -15,10 +15,10 @@ import {
   requestFoodRecord,
   requestRemoveFood,
   requestFoodRecordWithDate,
-} from '../actions';
-import DietHeader from './Diet/DietHeader';
+} from '../../actions';
+import DietHeader from './DietHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {SERVER_PATH} from '../service/apis';
+import {SERVER_PATH} from '../../service/apis';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -91,7 +91,7 @@ function MyDiet({navigation}) {
         추가하기
       </NativeButton>
 
-      <DietHeader meal={dateMeal} goal={goal} />
+      <DietHeader meal={dateMeal} goal={goal} date={today2} />
     </View>
   );
 }

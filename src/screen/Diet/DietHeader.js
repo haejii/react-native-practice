@@ -9,7 +9,7 @@ import {
 import DietDetail from './DietDetail';
 import DietModal from './DietModal';
 
-export default function DietHeader({meal, goal}) {
+export default function DietHeader({meal, goal, date}) {
   return (
     <View>
       {Object.keys(meal).map((key, i) => {
@@ -63,6 +63,7 @@ export default function DietHeader({meal, goal}) {
               mealTime={convertMealTimeEnglishToKorean(key)}
               nutrition={{calorie, protein, phosphorus, potassium, sodium}}
               goal={goal}
+              date={date}
             />
           </View>
         );

@@ -10,12 +10,20 @@ import {
 } from 'react-native';
 import NuturitionBarChart from '../../moduleComponent/NuturitionBarChart';
 import {FoodInformationModalStyles, DietModalStyles} from '../../style/styles';
+import {useDispatch} from 'react-redux';
+import {requestRemoveFoodsByMealTime} from '../../actions';
 
-export default function DietModal({mealTime, foods, nutrition, goal}) {
+export default function DietModal({mealTime, foods, nutrition, goal, date}) {
+  const dispatch = useDispatch();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handlePressDeleteMeal = (foodIntakeRecordId) => {
+    dispatch(requestRemoveFoodsByMealTime(foodIntakeRecordId, date));
   };
 
   return (
@@ -152,7 +160,9 @@ export default function DietModal({mealTime, foods, nutrition, goal}) {
                 <Button
                   textStyle={{color: 'white'}}
                   title="전체 삭제"
-                  onPress={() => {}}
+                  onPress={() =>
+                    handlePressDeleteMeal(foods[0].foodIntakeRecordId)
+                  }
                 />
                 <Button
                   textStyle={{color: 'white'}}
