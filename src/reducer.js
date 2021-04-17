@@ -107,6 +107,7 @@ const initialState = {
   foodCount: 0,
   basketFoods: [],
   searchedFoodResults: [],
+  lastSearchQuery: '',
 };
 
 const reducers = {
@@ -350,6 +351,13 @@ const reducers = {
         ...initialNutrition,
         ...dateNutrition,
       },
+    };
+  },
+
+  setLastSearchQuery: (state, {payload: {lastSearchQuery}}) => {
+    return {
+      ...state,
+      lastSearchQuery,
     };
   },
 };
