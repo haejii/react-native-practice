@@ -72,7 +72,7 @@ export default function Search2() {
         <SafeAreaView>
           <FlatList
             data={searchedFoodResults}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => String(item.foodId)}
             renderItem={({item, index, separators}) => (
               <View
                 style={SearchResultStyles.searchResultContainer}
