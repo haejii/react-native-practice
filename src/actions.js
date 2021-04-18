@@ -536,8 +536,14 @@ export function requestFoodNutrition() {
         dispatch(setNutrition(nutrition));
         console.log('성공');
       } else {
-        dispatch(setError({status: true, name: '식단 불러오기 실패', message}));
-        dispatch(setNutrition([]));
+        dispatch(
+          setError({
+            status: true,
+            name: '저장된 영양소 정보가 없습니다.',
+            message,
+          }),
+        );
+        dispatch(setNutrition(nutrition));
         console.log('실패');
         console.log(result);
         console.log(nutrition);
@@ -545,7 +551,7 @@ export function requestFoodNutrition() {
     } catch (e) {
       console.log(e);
       dispatch(
-        setError({status: true, name: '식단 불러오기 에러', message: e}),
+        setError({status: true, name: '영양소 정보 불러오기 에러', message: e}),
       );
     }
   };

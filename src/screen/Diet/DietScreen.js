@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   Platform,
+  ScrollView,
 } from 'react-native';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -31,12 +32,11 @@ function MyDiet({navigation}) {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [day, setDay] = useState(new Date().getDate());
-  //const meal = useSelector((state) => state.meal);
   const goal = useSelector((state) => state.user.goal);
   const dateMeal = useSelector((state) => state.dateMeal);
 
   let today = `${year}년 ${month}월 ${day}일`;
-  let today2 = `${year}-${month}-${day}`;
+  let formattedToday = `${year}-${month}-${day}`;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -45,12 +45,18 @@ function MyDiet({navigation}) {
     setYear(currentDate.getFullYear());
     setMonth(currentDate.getMonth() + 1);
     setDay(currentDate.getDate());
-    console.log(today2);
-    dispatch(requestFoodRecordWithDate(today2));
+
+    const formattedSelectedDate = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }-${currentDate.getDate()}`;
+
+    dispatch(requestFoodRecordWithDate(formattedSelectedDate));
+
+    setShow(!show);
   };
 
   const showMode = (currentMode) => {
-    setShow(true);
+    setShow(!show);
     setMode(currentMode);
   };
 
@@ -59,7 +65,7 @@ function MyDiet({navigation}) {
   };
 
   useEffect(() => {
-    dispatch(requestFoodRecordWithDate(today2));
+    dispatch(requestFoodRecordWithDate(formattedToday));
   }, []);
 
   return (
@@ -68,7 +74,7 @@ function MyDiet({navigation}) {
         <View>
           <Button
             style={{color: 'yellow'}}
-            onPress={showDatepicker}
+            onPress={() => showDatepicker()}
             title={today}
           />
         </View>
@@ -77,7 +83,7 @@ function MyDiet({navigation}) {
             testID="dateTimePicker"
             value={date}
             mode={mode}
-            display="default"
+            display="inline"
             onChange={onChange}
           />
         )}
@@ -91,7 +97,9 @@ function MyDiet({navigation}) {
         추가하기
       </NativeButton>
 
-      <DietHeader meal={dateMeal} goal={goal} date={today2} />
+      <ScrollView>
+        <DietHeader meal={dateMeal} goal={goal} date={formattedToday} />
+      </ScrollView>
     </View>
   );
 }
