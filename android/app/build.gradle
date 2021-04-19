@@ -131,7 +131,7 @@ android {
 
     defaultConfig {
         applicationId "com.kakaologin"
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true
         versionCode 1
