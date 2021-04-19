@@ -53,7 +53,7 @@ export default function DietHeader({meal, goal, date}) {
                 </CollapseHeader>
 
                 <CollapseBody>
-                  <DietDetail foods={meal[key]} />
+                  <DietDetail foods={meal[key]} date={date} />
                 </CollapseBody>
               </Collapse>
             </TouchableOpacity>

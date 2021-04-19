@@ -30,6 +30,7 @@ export default function BasketFood() {
   const basketFoods = useSelector((state) => state.basketFoods);
   const [mealTime, setMealTime] = useState('');
   const {goal} = useSelector((state) => state.user);
+  const err = useSelector((state) => state.error.status);
 
   const calorie = basketFoods
     .map((basketFood) => basketFood.calorie)
@@ -52,10 +53,14 @@ export default function BasketFood() {
     .reduce((acc, curr) => acc + curr, 0);
 
   const handleOnpress = () => {
-    // const basketIds = basketFoods.map((basketFood, index) => basketFood.foodId);
     dispatch(postAddMeal(mealTime, basketFoods));
-    dispatch(changeCount(0));
-    dispatch(resetBasket([]));
+
+    if (err === true) {
+      return Alert.alert('추가 오류', '버튼을 재 클릭해주세요.');
+    } else {
+      dispatch(changeCount(0));
+      dispatch(resetBasket([]));
+    }
   };
 
   const hadlePressRemove = (value) => {

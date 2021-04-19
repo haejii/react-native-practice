@@ -557,7 +557,7 @@ export function requestFoodNutrition() {
   };
 }
 
-export function requestRemoveFood(foodIntakeRecordTypeId, foodId) {
+export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
@@ -583,7 +583,7 @@ export function requestRemoveFood(foodIntakeRecordTypeId, foodId) {
 
       if (isSuccess) {
         dispatch(setError());
-        dispatch(requestFoodRecord());
+        dispatch(requestFoodRecordWithDate(date));
       } else {
         dispatch(setError({status: true, name: '음식 삭제 실패', message}));
       }

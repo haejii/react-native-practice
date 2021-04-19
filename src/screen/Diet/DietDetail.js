@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 import {requestRemoveFood} from '../../actions';
 import {DietScreenStyle} from '../../style/styles';
 
-export default function DietDetail({foods}) {
+export default function DietDetail({foods, date}) {
   const dispatch = useDispatch();
 
   const handlePressRemove = (foodIntakeRecordTypeId, foodId) => {
@@ -13,7 +13,7 @@ export default function DietDetail({foods}) {
       {
         text: '지우기',
         onPress: () => {
-          dispatch(requestRemoveFood(foodIntakeRecordTypeId, foodId));
+          dispatch(requestRemoveFood(foodIntakeRecordTypeId, foodId, date));
         },
       },
       {text: '취소'},
