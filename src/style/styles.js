@@ -411,6 +411,20 @@ const DietModalStyles = StyleSheet.create({
   },
 });
 
+const DialysisScreenStyle = StyleSheet.create({
+  basicTextInput: {
+    width: '20%',
+    backgroundColor: 'white',
+    height: 50,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    marginBottom: '1%',
+    marginRight: '5%',
+    borderBottomWidth: 2,
+    borderColor: 'blue',
+  },
+});
+
 export {
   ScreenStyles,
   SignInScreenStyles,
@@ -423,4 +437,5 @@ export {
   MyPageScreenStyles,
   DietScreenStyle,
   DietModalStyles,
+  DialysisScreenStyle,
 };
