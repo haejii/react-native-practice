@@ -17,6 +17,8 @@ import DatePicker from 'react-native-date-picker';
 import {pickerItems} from '../../assets/data/pickerData';
 import {getTwoDigits} from '../utils/functions';
 import {SERVER_PATH} from '../service/apis';
+import errors from '../utils/errors';
+import RNRestart from 'react-native-restart';
 
 export default function JoinScreen({
   navigation,
@@ -85,11 +87,17 @@ export default function JoinScreen({
         } else {
           return Alert.alert('사용가능', '사용가능 이메일 입니다.');
         }
+      })
+      .catch((fetchErr) => {
+        return Alert.alert(
+          '이메일 중복 확인 에러',
+          '이메일 중복 확인 중 에러가 발생했습니다. \n 잠시 후 다시 시도해주세요',
+        );
       });
   }
 
   function handelPressNickNameCheck() {
-    if (!email) {
+    if (!nickname) {
       return Alert.alert('닉네임 오류', '닉네임을 입력하세요.');
     }
     fetch(SERVER_PATH + '/nicknameCheck', {
@@ -108,6 +116,12 @@ export default function JoinScreen({
         } else {
           return Alert.alert('사용가능', '사용가능 닉네임 입니다.');
         }
+      })
+      .catch((fetchErr) => {
+        return Alert.alert(
+          '닉네임 중복 확인 에러',
+          '닉네임 중복 확인 중 에러가 발생했습니다. \n 잠시 후 다시 시도해주세요',
+        );
       });
   }
 
@@ -150,20 +164,19 @@ export default function JoinScreen({
         if (response.isSuccess === false) {
           return Alert.alert('오류', response.message);
         } else {
+          handleChangJoinField('email', '');
+          handleChangJoinField('password', '');
+          handleChangJoinField('password2', '');
+          handleChangJoinField('nickname', '');
+          handleChangJoinField('height', '');
+          handleChangJoinField('weight', '');
+          handleChangJoinField('gender', '');
+          handleChangJoinField('birth', '');
+          handleChangJoinField('kidneyType', '');
+          handleChangJoinField('activityId', '');
           return navigation.navigate('JoinCompleteScreen');
         }
       });
-
-    handleChangJoinField('email', null);
-    handleChangJoinField('password', null);
-    handleChangJoinField('password2', null);
-    handleChangJoinField('nickname', null);
-    handleChangJoinField('height', null);
-    handleChangJoinField('weight', null);
-    handleChangJoinField('gender', null);
-    handleChangJoinField('birth', null);
-    handleChangJoinField('kidneyType', null);
-    handleChangJoinField('activityId', null);
   }
 
   function handlePressKakaoJoin() {
@@ -204,26 +217,28 @@ export default function JoinScreen({
               activityId,
             }),
           );
+          handleChangJoinField('height', 0);
+          handleChangJoinField('weight', 0);
+          handleChangJoinField('gender', null);
+          handleChangJoinField('birth', null);
+          handleChangJoinField('kidneyType', null);
+          handleChangJoinField('activityId', null);
         }
       });
-
-    // handleChangJoinField('height', 0);
-    // handleChangJoinField('weight', 0);
-    // handleChangJoinField('gender', null);
-    // handleChangJoinField('birth', null);
-    // handleChangJoinField('kidneyType', null);
-    // handleChangJoinField('activityId', null);
   }
 
   useEffect(() => {
-    console.log('error', error);
-    if (error.status) {
-      // navigation.replace('SignIn');
-      // Alert.alert(error.name, error.message);
+    if (error.status && error.name === errors.GET_USER_INFO_ERROR) {
       dispatch(logout());
+      Alert.alert(error.name, error.message);
+      RNRestart.Restart();
     }
-    // dispatch(logout());
   }, [dispatch, error, navigation]);
+
+  useEffect(() => {
+    dispatch(changeJoinField('height', ''));
+    dispatch(changeJoinField('weight', ''));
+  }, []);
 
   return (
     <ScrollView>
@@ -311,7 +326,7 @@ export default function JoinScreen({
           ) : null}
 
           <View style={JoinScreenStyles.ViewContainer}>
-            <Text>키(cm) </Text>
+            <Text>키(cm)</Text>
             <TextInput
               autoCapitalize="none"
               keyboardType="number-pad"

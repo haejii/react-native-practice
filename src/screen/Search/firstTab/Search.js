@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   SafeAreaView,
+  Alert,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 
@@ -14,6 +15,7 @@ import {requestFoods, setError} from '../../../actions';
 import SearchResult from './SearchResult';
 import FoodInformationModal from './FoodInformationModal';
 import {SearchResultStyles} from '../../../style/styles';
+import errors from '../../../utils/errors';
 
 export default function Search2() {
   const dispatch = useDispatch();
@@ -22,6 +24,10 @@ export default function Search2() {
   const error = useSelector((state) => state.error);
 
   const handlePressSearch = () => {
+    if (!food.trim()) {
+      Alert.alert('검색오류', '음식이름을 입력해주세요.');
+      return;
+    }
     dispatch(requestFoods(food));
   };
 
@@ -63,9 +69,15 @@ export default function Search2() {
           style={{
             alignItems: 'center',
           }}>
-          <Text style={{fontSize: 20, color: 'hotpink'}}>
-            검색결과가 없습니다. 다시 검색해주세요.
-          </Text>
+          {error.name === errors.FOOD_NOT_FOUND ? (
+            <Text style={{fontSize: 20, color: 'hotpink'}}>
+              검색결과가 없습니다. {'\n'} 다시 검색해주세요.
+            </Text>
+          ) : error.name === errors.REQUEST_FOOD_ERROR ? (
+            <Text style={{fontSize: 20, color: 'hotpink'}}>
+              서버로 부터 응답이 없습니다. {'\n'} 잠시 후 다시 시도해주세요.
+            </Text>
+          ) : null}
         </View>
       ) : null}
       <View style={{flex: 3}}>

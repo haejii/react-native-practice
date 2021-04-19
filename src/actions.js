@@ -2,6 +2,7 @@ import {removeItem, saveItem} from './utils/asyncStorage';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 import {SERVER_PATH} from './service/apis';
 import Axios from 'axios';
+import errors from './utils/errors';
 
 export function changeLoginField(name, value) {
   return {
@@ -278,17 +279,27 @@ export function requestUserInfo() {
         },
       });
 
-      const {userInfo} = await response.json();
+      const {isSuccess, userInfo, message} = await response.json();
       console.log('requestUserInfo result', userInfo);
 
-      dispatch(setError({}));
-      dispatch(setUser(userInfo));
-      // await saveItem('userInfo', userInfo);
+      if (isSuccess) {
+        dispatch(setError({}));
+        dispatch(setUser(userInfo));
+        dispatch(setError());
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.USER_INFO_NOT_FOUND,
+            message,
+          }),
+        );
+      }
     } catch (e) {
       dispatch(
         setError({
           status: true,
-          name: '로그인 실패',
+          name: errors.GET_USER_INFO_ERROR,
           message: '네트워크 에러가 발생했습니다. 잠시 후 다시 시도해주세요!',
         }),
       );
@@ -365,12 +376,20 @@ export function requestFoods(foodName) {
         dispatch(setLastSearchQuery(searchQuery));
         dispatch(setSearchedFoodResults(foods));
       } else {
-        dispatch(setError({status: true, name: '검색 실패', message}));
+        dispatch(
+          setError({status: true, name: errors.FOOD_NOT_FOUND, message}),
+        );
         dispatch(setSearchedFoodResults([]));
       }
     } catch (e) {
       console.log(e);
-      dispatch(setError({status: true, name: '검색 에러', message: e}));
+      dispatch(
+        setError({
+          status: true,
+          name: errors.REQUEST_FOOD_ERROR,
+          message: '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        }),
+      );
     }
   };
 }
@@ -397,6 +416,7 @@ export function postAddMeal(foodIntakeRecordType, basketFoods) {
       });
       const {isSuccess, message} = await response.json();
 
+      console.log('isSuccess : ' + isSuccess);
       console.log('message : ' + message);
 
       if (isSuccess) {
@@ -407,10 +427,24 @@ export function postAddMeal(foodIntakeRecordType, basketFoods) {
           ),
         );
         dispatch(requestFoods(lastSearchQuery));
+        dispatch(requestFoodNutrition());
+        dispatch(setError());
+        dispatch(resetBasket([]));
+        dispatch(changeCount(0));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.ADD_MEAL_FAILED,
+            message,
+          }),
+        );
       }
     } catch (e) {
       console.log(e);
-      dispatch(setError({status: true, name: '식단 추가 에러', message: e}));
+      dispatch(
+        setError({status: true, name: errors.ADD_MEAL_ERROR, message: e}),
+      );
     }
   };
 }
@@ -445,7 +479,7 @@ export function requestFoodRecord() {
       } else {
         dispatch(setError({status: true, name: '식단 불러오기 실패', message}));
         dispatch(setMeal([]));
-        console.log('실패');
+        console.log('requestFoodRecord 실패');
         console.log(result);
         console.log(diet);
       }
@@ -493,7 +527,7 @@ export function requestFoodRecordWithDate(date) {
       } else {
         dispatch(setError({status: true, name: '식단 불러오기 실패', message}));
         dispatch(setDateMeal([]));
-        console.log('실패');
+        console.log('requestFoodRecordWithDate 실패');
         console.log(result);
         console.log(diet);
       }
@@ -539,12 +573,12 @@ export function requestFoodNutrition() {
         dispatch(
           setError({
             status: true,
-            name: '저장된 영양소 정보가 없습니다.',
+            name: errors.NUTRITION_NOT_FOUND,
             message,
           }),
         );
         dispatch(setNutrition(nutrition));
-        console.log('실패');
+        console.log('requestFoodNutrition 실패');
         console.log(result);
         console.log(nutrition);
       }
@@ -559,7 +593,7 @@ export function requestFoodNutrition() {
 
 export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
   return async (dispatch, getState) => {
-    const {userToken} = getState();
+    const {userToken, lastSearchQuery} = getState();
 
     try {
       const response = await fetch(
@@ -584,6 +618,8 @@ export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
       if (isSuccess) {
         dispatch(setError());
         dispatch(requestFoodRecordWithDate(date));
+        dispatch(requestFoods(lastSearchQuery));
+        dispatch(requestFoodNutrition());
       } else {
         dispatch(setError({status: true, name: '음식 삭제 실패', message}));
       }
@@ -596,7 +632,7 @@ export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
 
 export function requestRemoveFoodsByMealTime(foodIntakeRecordId, date) {
   return async (dispatch, getState) => {
-    const {userToken} = getState();
+    const {userToken, lastSearchQuery} = getState();
 
     try {
       const response = await fetch(
@@ -617,6 +653,8 @@ export function requestRemoveFoodsByMealTime(foodIntakeRecordId, date) {
       if (isSuccess) {
         dispatch(setError());
         dispatch(requestFoodRecordWithDate(date));
+        dispatch(requestFoods(lastSearchQuery));
+        dispatch(requestFoodNutrition());
       } else {
         dispatch(setError({status: true, name: '식단 삭제 실패', message}));
       }

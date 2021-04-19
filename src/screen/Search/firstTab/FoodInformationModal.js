@@ -32,6 +32,7 @@ export default function FoodInformationModal({food, onPress, type}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const {goal} = useSelector((state) => state.user);
+  const basketFoods = useSelector((state) => state.basketFoods);
 
   const [inputMeal, setInputMeal] = useState('100');
   const [change, setChange] = useState(false);
@@ -71,6 +72,12 @@ export default function FoodInformationModal({food, onPress, type}) {
   }
 
   function handlePressAdd() {
+    if (basketFoods.filter(({foodId}) => food.foodId === foodId).length) {
+      Alert.alert('음식 추가 오류', '이미 추가된 음식입니다.');
+      handlePressModal();
+      return;
+    }
+
     dispatch(changeCount(count + 1));
     dispatch(
       addBasket({

@@ -3,19 +3,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {
-  changeIsLoading,
-  requestUserInfo,
-  setUser,
-  setUserToken,
-} from '../actions';
-import {loadItem, saveItem} from '../utils/asyncStorage';
+import {changeIsLoading, requestUserInfo, setUserToken} from '../actions';
+import {loadItem} from '../utils/asyncStorage';
 import SplashScreen from '../screen/SplashScreen';
 import SignInScreen from '../screen/SignInScreen';
 import Main from '../screen/MainContainer';
 import {Button} from 'react-native';
 import JoinScreen from '../screen/JoinScreen';
 import JoinCompleteScreen from '../screen/JoinCompleteScreen';
+import errors from '../utils/errors';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +44,8 @@ export default function AuthenticationFlow() {
     }
 
     getToken();
+
+    console.log('auth');
   }, [dispatch]);
 
   return (
@@ -55,8 +53,8 @@ export default function AuthenticationFlow() {
       <Stack.Navigator>
         {isLoading ? (
           <Stack.Screen name="Splash" component={SplashScreen} />
-        ) : accessToken == null ||
-          (error.status && error.name === '로그인 실패') ? (
+        ) : accessToken === null ||
+          (error.status && error.name === errors.LOGIN_ERROR) ? (
           <>
             <Stack.Screen
               name="SignIn"
@@ -69,7 +67,7 @@ export default function AuthenticationFlow() {
             <Stack.Screen
               name="Join"
               component={JoinScreen}
-              initialParams={{error}}
+              initialParams={{}}
             />
             <Stack.Screen
               name="JoinCompleteScreen"
@@ -86,7 +84,7 @@ export default function AuthenticationFlow() {
           <Stack.Screen
             name="Join"
             component={JoinScreen}
-            initialParams={{userInfo: user, accessToken: userToken, error}}
+            initialParams={{userInfo: user, accessToken: userToken}}
           />
         ) : (
           <Stack.Screen

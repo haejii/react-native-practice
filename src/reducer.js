@@ -265,6 +265,7 @@ const reducers = {
   },
 
   setError: (state, {payload: {status = false, name = '', message = ''}}) => {
+    console.log('reducer setError', {status, name, message});
     return {
       ...state,
       error: {
@@ -343,7 +344,13 @@ const reducers = {
   },
 
   setNutrition: (state, {payload: {dateNutrition}}) => {
-    console.log('setNutrition', dateNutrition);
+    console.log('setNutrition', {
+      ...state,
+      nuturition: {
+        ...initialNutrition,
+        ...dateNutrition,
+      },
+    });
 
     return {
       ...state,

@@ -10,10 +10,13 @@ import {
   setUser,
   requestLoginWithKakao,
   requestUserInfo,
+  setError,
 } from '../actions';
 import {ScreenStyles, SignInScreenStyles} from '../style/styles';
 import {saveItem} from '../utils/asyncStorage';
 import {SERVER_PATH} from '../service/apis';
+import {useEffect} from 'react/cjs/react.development';
+import errors from '../utils/errors';
 
 export default function SignInScreen({navigation}) {
   const dispatch = useDispatch();
@@ -22,6 +25,8 @@ export default function SignInScreen({navigation}) {
 
   const username = useSelector((state) => state.loginFields.username);
   const password = useSelector((state) => state.loginFields.password);
+
+  const error = useSelector((state) => state.error);
 
   //const Tab = createBottomTabNavigator;
 
@@ -34,39 +39,52 @@ export default function SignInScreen({navigation}) {
       return Alert.alert('로그인 오류', '아이디 또는 패스워드가 비어있습니다');
     }
 
-    fetch(SERVER_PATH + '/login', {
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      body: JSON.stringify({
-        email: username,
-        password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        try {
+    try {
+      fetch(SERVER_PATH + '/login', {
+        headers: {'Content-Type': 'application/json'},
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify({
+          email: username,
+          password,
+        }),
+      })
+        .then((res) => res.json())
+        .then((response) => {
           const {jwt: accessToken, userInfo, isSuccess, message} = response;
-
-          // console.log(response);
 
           if (isSuccess) {
             dispatch(setUserToken(accessToken));
-            // dispatch(setUser(userInfo));
             saveItem('userToken', accessToken);
-            // saveItem('userInfo', userInfo);
 
             dispatch(requestUserInfo());
-
             dispatch(changeIsLoading(false));
           } else {
             return Alert.alert('로그인 오류', message);
           }
-        } catch (e) {
-          console.log('로그인 오류', e);
-        }
-      });
+        })
+        .catch((fetchErr) => {
+          dispatch(
+            setError({
+              status: true,
+              name: errors.LOGIN_ERROR,
+              message:
+                '네트워크 에러가 발생했습니다. 잠시 후 다시 시도해주세요!',
+            }),
+          );
+          console.log('fetch 오류', fetchErr);
+        });
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.LOGIN_ERROR,
+          message: '로그인 중 에러가 발생했습니다. 잠시 후 다시 시도해주세요!',
+        }),
+      );
+      console.log('로그인 중 오류', err);
+    }
   }
 
   const handlePressSignInWithKakao = () => {
@@ -74,6 +92,12 @@ export default function SignInScreen({navigation}) {
     dispatch(changeIsLoading(true));
     dispatch(requestLoginWithKakao());
   };
+
+  useEffect(() => {
+    if (error.status && error.name === errors.LOGIN_ERROR) {
+      Alert.alert('네트워크 에러', error.message);
+    }
+  }, [error]);
 
   return (
     <View style={ScreenStyles.container}>
