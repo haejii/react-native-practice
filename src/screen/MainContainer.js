@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -9,10 +9,14 @@ import RecipeScreen from './RecipeScreen';
 import SearchScreen from './Search/SearchScreen';
 import DietScreen from './Diet/DietScreen';
 import HomeScreen from './HomeScreen';
+import DialysisScreen from './Dialysis/DialysisScreen';
+import {TabView} from 'react-native-tab-view';
+import {useDispatch, useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
+  const kidneyType = useSelector((state) => state.JoinFields.kidneyType);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -59,6 +63,16 @@ export default function Main() {
                 color={color}
               />
             );
+          } else if (route.name === '투석 일지') {
+            return (
+              <Icon
+                name={
+                  focused ? 'ios-person-circle' : 'ios-person-circle-outline'
+                }
+                size={size}
+                color={color}
+              />
+            );
           }
         },
       })}
@@ -71,7 +85,9 @@ export default function Main() {
         component={HomeScreen}
         options={{headerShown: false}}
       />
-      <Tab.Screen name="커뮤니티" component={RecipeScreen} />
+      {kidneyType === 5 && (
+        <Tab.Screen name="투석 일지" component={DialysisScreen} />
+      )}
       <Tab.Screen name="검색" component={SearchScreen} />
       <Tab.Screen name="식단" component={DietScreen} />
       <Tab.Screen name="내 정보" component={MyPageScreen} />
