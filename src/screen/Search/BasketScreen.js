@@ -1,10 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
   ScrollView,
   TouchableOpacity,
-  Modal,
   Alert,
   StyleSheet,
 } from 'react-native';
@@ -19,15 +18,18 @@ import {
   postAddMeal,
   removeBasket,
   resetBasket,
+  setError,
 } from '../../actions';
 import {DietScreenStyle} from '../../style/styles';
 import NuturitionBarChart from '../../moduleComponent/NuturitionBarChart';
+import errors from '../../utils/errors';
 
 export default function BasketFood() {
   const dispatch = useDispatch();
-  const meal = useSelector((state) => state.meal);
   const count = useSelector((state) => state.foodCount);
   const basketFoods = useSelector((state) => state.basketFoods);
+  const error = useSelector((state) => state.error);
+
   const [mealTime, setMealTime] = useState('');
   const {goal} = useSelector((state) => state.user);
   const err = useSelector((state) => state.error.status);
@@ -52,21 +54,29 @@ export default function BasketFood() {
     .map((basketFood) => basketFood.sodium)
     .reduce((acc, curr) => acc + curr, 0);
 
-  const handleOnpress = () => {
-    dispatch(postAddMeal(mealTime, basketFoods));
-
-    if (err === true) {
-      return Alert.alert('추가 오류', '버튼을 재 클릭해주세요.');
-    } else {
-      dispatch(changeCount(0));
-      dispatch(resetBasket([]));
+  const handlePressAddMeal = () => {
+    if (!mealTime) {
+      Alert.alert('식단 추가 오류', '식사 시기를 선택해주세요!');
+      return;
     }
+    dispatch(postAddMeal(mealTime, basketFoods));
   };
 
-  const hadlePressRemove = (value) => {
+  const handlePressRemove = (value) => {
     dispatch(changeCount(count - 1));
     dispatch(removeBasket(value));
   };
+
+  useEffect(() => {
+    if (
+      error.status &&
+      (error.name === errors.ADD_MEAL_FAILED ||
+        error.name === errors.ADD_MEAL_ERROR)
+    ) {
+      Alert.alert('식단 추가에 실패하였습니다.', '잠시 후 다시 시도해주세요');
+      dispatch(setError());
+    }
+  }, [error, dispatch]);
 
   return (
     <View>
@@ -95,7 +105,7 @@ export default function BasketFood() {
               <NativeButton
                 style={DietScreenStyle.removeBtn}
                 textStyle={{color: 'white'}}
-                onPress={() => hadlePressRemove(basketFood.foodId)}>
+                onPress={() => handlePressRemove(basketFood.foodId)}>
                 -
               </NativeButton>
             </View>
@@ -179,7 +189,7 @@ export default function BasketFood() {
               }}
               onPress={() => {
                 console.log('추가하기 버튼 클릭됨');
-                handleOnpress();
+                handlePressAddMeal();
               }}>
               추가하기
             </NativeButton>
