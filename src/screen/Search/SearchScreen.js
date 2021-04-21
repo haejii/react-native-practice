@@ -9,7 +9,7 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function SearchScreen() {
   const count = useSelector((state) => state.foodCount);
-  let basketName = count === 0 ? '담기(0)' : `담기( ${count})`;
+  let basketName = count === 0 ? '담기(0)' : `담기( ${count} )`;
   return (
     <Tab.Navigator
       initialRouteName="Feed"

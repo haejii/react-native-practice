@@ -139,9 +139,11 @@ export default function FoodInformationModal({food, onPress, type}) {
           <View style={FoodInformationModalStyles.modalViewContainer}>
             <View style={FoodInformationModalStyles.modalView}>
               <View style={FoodInformationModalStyles.textContainer}>
-                <Text style={FoodInformationModalStyles.foodTitle}>
-                  {food.name}
-                </Text>
+                <View>
+                  <Text style={FoodInformationModalStyles.foodTitle}>
+                    {food.foodName}
+                  </Text>
+                </View>
                 <View
                   style={{
                     width: 100,
@@ -178,8 +180,8 @@ export default function FoodInformationModal({food, onPress, type}) {
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  열량 ({change ? calorie : food.calorie}
-                  g/ {goal?.calorie} g)
+                  열량 ({change ? calorie : food.calorie} kcal / {goal?.calorie}{' '}
+                  kcal)
                 </Text>
                 <NuturitionBarChart
                   nuturition={change ? calorie : food.calorie}
@@ -191,7 +193,7 @@ export default function FoodInformationModal({food, onPress, type}) {
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  단백질 ({change ? protein : food.protein} g/ {goal?.protein}{' '}
+                  단백질 ({change ? protein : food.protein} g / {goal?.protein}{' '}
                   g)
                 </Text>
                 <NuturitionBarChart
@@ -203,8 +205,8 @@ export default function FoodInformationModal({food, onPress, type}) {
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  인 ({change ? phosphorus : food.phosphorus} g/{' '}
-                  {goal?.phosphorus} g)
+                  인 ({change ? phosphorus : food.phosphorus} mg /{' '}
+                  {goal?.phosphorus} mg)
                 </Text>
                 <NuturitionBarChart
                   nuturition={change ? phosphorus : food.phosphorus}
@@ -215,8 +217,8 @@ export default function FoodInformationModal({food, onPress, type}) {
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  칼륨 ({change ? potassium : food.potassium} g/{' '}
-                  {goal?.potassium} g)
+                  칼륨 ({change ? potassium : food.potassium} mg /{' '}
+                  {goal?.potassium} mg)
                 </Text>
                 <NuturitionBarChart
                   nuturition={change ? potassium : food.potassium}
@@ -227,7 +229,8 @@ export default function FoodInformationModal({food, onPress, type}) {
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  나트륨 ({change ? sodium : food.sodium} g/ {goal?.sodium} g)
+                  나트륨 ({change ? sodium : food.sodium} mg / {goal?.sodium}{' '}
+                  mg)
                 </Text>
                 <NuturitionBarChart
                   nuturition={change ? sodium : food.sodium}

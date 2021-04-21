@@ -83,7 +83,7 @@ function MyDiet({navigation}) {
             testID="dateTimePicker"
             value={date}
             mode={mode}
-            //display=
+            display={Platform.OS === 'ios' ? 'inline' : 'default'}
             onChange={onChange}
           />
         )}

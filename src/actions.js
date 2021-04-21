@@ -601,7 +601,9 @@ export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
           '/food-record?foodIntakeRecordTypeId=' +
           foodIntakeRecordTypeId +
           '&foodId=' +
-          foodId,
+          foodId +
+          '&date=' +
+          date,
         {
           method: 'DELETE',
           headers: {

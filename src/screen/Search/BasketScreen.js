@@ -35,23 +35,23 @@ export default function BasketFood() {
   const err = useSelector((state) => state.error.status);
 
   const calorie = basketFoods
-    .map((basketFood) => basketFood.calorie)
+    .map((basketFood) => +basketFood.calorie)
     .reduce((acc, curr) => acc + curr, 0);
 
   const protein = basketFoods
-    .map((basketFood) => basketFood.protein)
+    .map((basketFood) => +basketFood.protein)
     .reduce((acc, curr) => acc + curr, 0);
 
   const phosphorus = basketFoods
-    .map((basketFood) => basketFood.phosphorus)
+    .map((basketFood) => +basketFood.phosphorus)
     .reduce((acc, curr) => acc + curr, 0);
 
   const potassium = basketFoods
-    .map((basketFood) => basketFood.potassium)
+    .map((basketFood) => +basketFood.potassium)
     .reduce((acc, curr) => acc + curr, 0);
 
   const sodium = basketFoods
-    .map((basketFood) => basketFood.sodium)
+    .map((basketFood) => +basketFood.sodium)
     .reduce((acc, curr) => acc + curr, 0);
 
   const handlePressAddMeal = () => {
@@ -68,6 +68,8 @@ export default function BasketFood() {
   };
 
   useEffect(() => {
+    console.log(basketFoods);
+
     if (
       error.status &&
       (error.name === errors.ADD_MEAL_FAILED ||
@@ -128,28 +130,28 @@ export default function BasketFood() {
             margin: 10,
           }}>
           <Text>
-            열량 ({calorie} kcal / {goal?.calorie} kcal)
+            열량 ({+calorie} kcal / {goal?.calorie} kcal)
           </Text>
           <NuturitionBarChart nuturition={calorie} goal={goal?.calorie} />
 
           <Text>
-            단백질 ({protein} g/ {goal?.protein} g)
+            단백질 ({+protein} g/ {goal?.protein} g)
           </Text>
           <NuturitionBarChart nuturition={protein} goal={goal?.protein} />
 
           <Text>
-            인 ({phosphorus} mg / {goal?.phosphorus} mg)
+            인 ({+phosphorus} mg / {goal?.phosphorus} mg)
           </Text>
           <NuturitionBarChart nuturition={phosphorus} goal={goal?.phosphorus} />
 
           <Text>
-            칼륨 ({potassium} mg / {goal?.potassium} mg)
+            칼륨 ({+potassium} mg / {goal?.potassium} mg)
           </Text>
 
           <NuturitionBarChart nuturition={potassium} goal={goal?.potassium} />
 
           <Text>
-            나트륨 ({sodium} mg / {goal?.sodium} mg)
+            나트륨 ({+sodium} mg / {goal?.sodium} mg)
           </Text>
           <NuturitionBarChart nuturition={sodium} goal={goal?.sodium} />
         </View>

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import NuturitionBarChart from '../../moduleComponent/NuturitionBarChart';
 import {FoodInformationModalStyles, DietModalStyles} from '../../style/styles';
@@ -23,7 +24,16 @@ export default function DietModal({mealTime, foods, nutrition, goal, date}) {
   };
 
   const handlePressDeleteMeal = (foodIntakeRecordId) => {
-    dispatch(requestRemoveFoodsByMealTime(foodIntakeRecordId, date));
+    Alert.alert('전체 삭제', `${mealTime} 메뉴를 전부 삭제하시겠습니까?`, [
+      {
+        text: '지우기',
+        onPress: () => {
+          // dispatch(requestRemoveFood(foodIntakeRecordTypeId, foodId, date));
+          dispatch(requestRemoveFoodsByMealTime(foodIntakeRecordId, date));
+        },
+      },
+      {text: '취소'},
+    ]);
   };
 
   return (
@@ -161,7 +171,7 @@ export default function DietModal({mealTime, foods, nutrition, goal, date}) {
                   textStyle={{color: 'white'}}
                   title="전체 삭제"
                   onPress={() =>
-                    handlePressDeleteMeal(foods[0].foodIntakeRecordId)
+                    handlePressDeleteMeal(foods[0]?.foodIntakeRecordId)
                   }
                 />
                 <Button
