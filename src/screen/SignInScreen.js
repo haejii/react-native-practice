@@ -61,6 +61,14 @@ export default function SignInScreen({navigation}) {
             dispatch(requestUserInfo());
             dispatch(changeIsLoading(false));
           } else {
+            dispatch(
+              setError({
+                status: true,
+                name: errors.LOGIN_FAILED,
+                message:
+                  '네트워크 에러가 발생했습니다. 잠시 후 다시 시도해주세요!',
+              }),
+            );
             return Alert.alert('로그인 오류', message);
           }
         })
@@ -94,6 +102,10 @@ export default function SignInScreen({navigation}) {
   };
 
   useEffect(() => {
+    if (error.status && error.name === errors.LOGIN_FAILED) {
+      Alert.alert('로그인 실패', error.message);
+    }
+
     if (error.status && error.name === errors.LOGIN_ERROR) {
       Alert.alert('네트워크 에러', error.message);
     }
