@@ -90,12 +90,14 @@ export default function AuthenticationFlow() {
           <Stack.Screen
             name="Kidneys"
             component={Main}
-            options={{
-              headerLeft: (props) => {
-                // console.log(props);
-                return <Button title="달력" />;
-              },
-            }}
+            options={
+              {
+                // headerLeft: (props) => {
+                //   // console.log(props);
+                //   return <Button title="달력" />;
+                // },
+              }
+            }
           />
         )}
       </Stack.Navigator>
