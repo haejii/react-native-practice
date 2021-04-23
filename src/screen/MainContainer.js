@@ -12,11 +12,13 @@ import HomeScreen from './HomeScreen';
 import DialysisScreen from './Dialysis/DialysisScreen';
 import {TabView} from 'react-native-tab-view';
 import {useDispatch, useSelector} from 'react-redux';
+import kidneyTypes from '../utils/kidneyType';
 
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
   const kidneyType = useSelector((state) => state.user.kidneyType);
+
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -85,7 +87,8 @@ export default function Main() {
         component={HomeScreen}
         options={{headerShown: false}}
       />
-      {kidneyType === 5 && (
+      {(kidneyTypes[kidneyType] === '복막투석' ||
+        kidneyTypes[kidneyType] === '혈액투석') && (
         <Tab.Screen name="투석 일지" component={DialysisScreen} />
       )}
       <Tab.Screen name="검색" component={SearchScreen} />
