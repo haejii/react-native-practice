@@ -22,10 +22,10 @@ const Stack = createStackNavigator();
 function InputMemo({
   navigation,
   route: {
-    params: {date},
+    params: {date, userToken},
   },
 }) {
-  const userToken = useSelector((state) => state.userToken);
+  // const userToken = useSelector((state) => state.userToken);
 
   const [photo, setPhoto] = useState(null);
   const [memo, setMemo] = useState('');
@@ -124,7 +124,8 @@ function InputMemo({
         const {isSuccess, message} = res;
 
         if (isSuccess) {
-          navigation.goBack();
+          // navigation.goBack();
+          navigation.navigate('Calendar', {isSaveSuccess: true});
         } else {
           Alert.alert('오류 발생', message);
         }
@@ -196,10 +197,20 @@ function InputMemo({
 }
 
 export default function Hemodialysis() {
+  const userToken = useSelector((state) => state.userToken);
+
   return (
     <Stack.Navigator headerMode={'none'}>
-      <Stack.Screen name="Calendar" component={AgendaScreen} />
-      <Stack.Screen name="InputMemo" component={InputMemo} />
+      <Stack.Screen
+        name="Calendar"
+        component={AgendaScreen}
+        initialParams={{userToken: userToken}}
+      />
+      <Stack.Screen
+        name="InputMemo"
+        component={InputMemo}
+        initialParams={{userToken: userToken}}
+      />
     </Stack.Navigator>
   );
 }

@@ -8,8 +8,10 @@ import {
   Image,
 } from 'react-native';
 import {Agenda} from 'react-native-calendars';
+import moment from 'moment';
 
 import no_user from '../../assets/image/no_user.png';
+import {SERVER_PATH} from '../service/apis';
 
 const testIDs = {
   menu: {
@@ -41,26 +43,23 @@ export default class AgendaScreen extends Component {
     super(props);
 
     this.state = {
-      items: {
-        // '2012-05-22': [
-        //   {
-        //     name: 'item 1 - any js object',
-        //     image: Image.resolveAssetSource(no_user).uri,
-        //   },
-        // ],
-        // '2012-05-23': [{name: 'item 2 - any js object'}],
-        // '2012-05-24': [],
-        // '2012-05-25': [
-        //   {name: 'item 3 - any js object'},
-        //   {name: 'any js object'},
-        // ],
-      },
+      items: {},
     };
   }
-
   render() {
     return (
       <Agenda
+        theme={{
+          agendaDayNumColor: 'green',
+          agendaTodayColor: 'red',
+          agendaKnobColor: 'blue',
+        }}
+        // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
+        // onRefresh={() => console.log('refreshing...')}
+        // Set this true while waiting for new data from a refresh
+        // refreshing={false}
+        // Add a custom RefreshControl component, used to provide pull-to-refresh functionality for the ScrollView.
+        // refreshControl={null}
         // testID={testIDs.agenda.CONTAINER}
         items={this.state.items}
         loadItemsForMonth={this.loadItems.bind(this)}
@@ -80,50 +79,122 @@ export default class AgendaScreen extends Component {
         //    '2017-05-26': {endingDay: true, color: 'gray'}}}
         // monthFormat={'yyyy'}
         // theme={{calendarBackground: 'red', agendaKnobColor: 'green'}}
-        // renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
+        // renderDay={(day, item) => <Text>{day ? day.day : 'item'}</Text>}
         // hideExtraDays={false}
       />
     );
   }
 
   loadItems(day) {
-    fetch('https://google.com').then((res) => console.log(res));
+    const {year, month} = day;
+    const yearMonth = month < 10 ? `${year}-0${month}` : `${year}-${month}`;
+    console.log(yearMonth);
 
-    setTimeout(() => {
-      for (let i = -15; i < 85; i++) {
-        const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-        const strTime = this.timeToString(time);
-        if (!this.state.items[strTime]) {
-          this.state.items[strTime] = [];
-          // const numItems = Math.floor(Math.random() * 3 + 1);
-
-          const date = new Date();
-
-          for (let j = 0; j < 1; j++) {
-            if (
-              strTime ==
-              `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-            ) {
-              this.state.items[strTime].push({
-                name: 'Item for ' + strTime + ' #' + j,
-                // height: Math.max(50, Math.floor(Math.random() * 150)),
-                height: 200,
-                image: Image.resolveAssetSource(no_user).uri,
-              });
-            }
-          }
+    Array(moment(yearMonth).daysInMonth())
+      .fill()
+      .forEach((_, i) => {
+        if (i + 1 < 10) {
+          this.state.items[`${yearMonth}-0${i + 1}`] = [];
+        } else {
+          this.state.items[`${yearMonth}-${i + 1}`] = [];
         }
-      }
-
-      const newItems = {};
-      Object.keys(this.state.items).forEach((key) => {
-        newItems[key] = this.state.items[key];
       });
 
-      this.setState({
-        items: newItems,
-      });
-    }, 1000);
+    fetch(SERVER_PATH + '/hemodialysis-memo?date=' + day.dateString, {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-access-token': this.props.route.params.userToken,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        const {isSuccess, hemodialysisMemos} = res;
+
+        if (isSuccess) {
+          hemodialysisMemos.forEach((hemodialysisMemo) => {
+            const {dialysisId, recordDate, memo, photo} = hemodialysisMemo;
+            const date = new Date(recordDate);
+            const formattedDate = `${date.getFullYear()}-0${
+              date.getMonth() + 1
+            }-${date.getDate()}`;
+
+            this.state.items[formattedDate] = [];
+            this.state.items[formattedDate].push({
+              dialysisId,
+              name: memo,
+              image: photo,
+            });
+          });
+
+          setTimeout(() => {
+            // for (let i = -15; i < 85; i++) {
+            //   const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+            //   const strTime = this.timeToString(time);
+            //   if (!this.state.items[strTime]) {
+            //     this.state.items[strTime] = [];
+            //     // const numItems = Math.floor(Math.random() * 3 + 1);
+
+            //     hemodialysisMemos.forEach((hemodialysisMemo) => {
+            //       const {
+            //         dialysisId,
+            //         recordDate,
+            //         memo,
+            //         photo,
+            //       } = hemodialysisMemo;
+            //       const date = new Date(recordDate);
+
+            //       if (
+            //         strTime ===
+            //         `${date.getFullYear()}-0${
+            //           date.getMonth() + 1
+            //         }-${date.getDate()}`
+            //       ) {
+            //         this.state.items[strTime].push({
+            //           dialysisId,
+            //           name: memo,
+            //           // height: Math.max(50, Math.floor(Math.random() * 150)),
+            //           height: 200,
+            //           image: photo,
+            //         });
+            //       }
+            //     });
+
+            //     // const date = new Date();
+            //     // for (let j = 0; j < 1; j++) {
+            //     //   if (
+            //     //     strTime ==
+            //     //     `${date.getFullYear()}-${
+            //     //       date.getMonth() + 1
+            //     //     }-${date.getDate()}`
+            //     //   ) {
+            //     //     this.state.items[strTime].push({
+            //     //       name: 'Item for ' + strTime + ' #' + j,
+            //     //       // height: Math.max(50, Math.floor(Math.random() * 150)),
+            //     //       height: 200,
+            //     //       image: Image.resolveAssetSource(no_user).uri,
+            //     //     });
+            //     //   }
+            //     // }
+            //   }
+            // }
+
+            // console.log(
+            //   Object.keys(this.state.items)[0],
+            //   Object.keys(this.state.items).length,
+            // );
+
+            const newItems = {};
+            Object.keys(this.state.items).forEach((key) => {
+              newItems[key] = this.state.items[key];
+            });
+
+            this.setState({
+              items: newItems,
+            });
+          }, 1000);
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   renderItem(item) {
@@ -136,8 +207,8 @@ export default class AgendaScreen extends Component {
         <Image
           source={{uri: item.image}}
           style={{
-            width: 100,
-            height: 100,
+            width: '100%',
+            height: 300,
           }}
         />
         <Text>{item.name}</Text>
