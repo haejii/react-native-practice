@@ -191,7 +191,12 @@ function InputMemo({
 
       {/* <Button title="이미지" onPress={() => handlePressShowImagePicker()} /> */}
       <Button title="저장하기" onPress={() => sendPhoto()} />
-      <Button title="뒤로가기" onPress={() => navigation.goBack()} />
+      <Button
+        title="뒤로가기"
+        onPress={() => {
+          navigation.goBack();
+        }}
+      />
     </View>
   );
 }
