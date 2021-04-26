@@ -15,17 +15,23 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 
 import no_user from '../../../../assets/image/no_user.png';
 import {SERVER_PATH} from '../../../service/apis';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {addHemodialysisMemo, fetchMemos, setError} from '../../../actions';
+import {useEffect} from 'react/cjs/react.development';
+import errors from '../../../utils/errors';
+import SplashScreen from '../../SplashScreen';
 
 const Stack = createStackNavigator();
 
 function InputMemo({
   navigation,
   route: {
-    params: {date, userToken},
+    params: {date},
   },
 }) {
-  // const userToken = useSelector((state) => state.userToken);
+  const dispatch = useDispatch();
+
+  const error = useSelector((state) => state.error);
 
   const [photo, setPhoto] = useState(null);
   const [memo, setMemo] = useState('');
@@ -89,55 +95,42 @@ function InputMemo({
     // });
   };
 
-  const createFormData = (image, body) => {
-    const data = new FormData();
-
-    data.append('image', {
-      name: image.fileName,
-      type: image.type,
-      uri: Platform.OS === 'ios' ? image.uri.replace('file://', '') : image.uri,
-    });
-
-    console.log(body);
-
-    Object.keys(body).forEach((key) => {
-      data.append(key, body[key]);
-    });
-
-    console.log(data);
-
-    return data;
+  const handlePressAddMemo = () => {
+    if (!memo) {
+      Alert.alert('메모 작성 실패', '메모를 입력해주세요');
+      return;
+    }
+    dispatch(addHemodialysisMemo(photo, memo, date));
   };
 
-  const sendPhoto = () => {
-    fetch(SERVER_PATH + '/hemodialysis-memo', {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-access-token': userToken,
-      },
-      method: 'POST',
-      body: createFormData(photo, {memo, date}),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-        const {isSuccess, message} = res;
+  useEffect(() => {
+    if (error.status && error.name === errors.ADD_DIALYSIS_MEMOS_FAILED) {
+      Alert.alert('메모 작성 실패', errors.message);
+      dispatch(setError());
+    }
 
-        if (isSuccess) {
-          // navigation.goBack();
-          navigation.navigate('Calendar', {isSaveSuccess: true});
-        } else {
-          Alert.alert('오류 발생', message);
-        }
-      })
-      .catch((err) => {
-        Alert.alert(
-          '오류 발생',
-          '메모 작성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요',
-        );
-        console.log(err);
-      });
-  };
+    if (error.status && error.name === errors.ADD_DIALYSIS_MEMOS_ERROR) {
+      Alert.alert(
+        '오류 발생',
+        '메모 작성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요',
+      );
+      dispatch(setError());
+    }
+
+    if (!error.status && error.name === errors.LOADING) {
+      Alert.alert('로딩 중', '사진이 업로드될때까지 잠시 기다려주세요...');
+    }
+
+    if (!error.status && error.name === errors.ADD_DIALYSIS_MEMOS_SUCCESS) {
+      navigation.navigate('Calendar');
+      dispatch(fetchMemos(date));
+      dispatch(setError());
+    }
+  }, [error]);
+
+  if (!error.status && error.name === errors.LOADING) {
+    return <SplashScreen />;
+  }
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -189,33 +182,30 @@ function InputMemo({
         )}
       </TouchableOpacity>
 
-      {/* <Button title="이미지" onPress={() => handlePressShowImagePicker()} /> */}
-      <Button title="저장하기" onPress={() => sendPhoto()} />
-      <Button
-        title="뒤로가기"
-        onPress={() => {
-          navigation.goBack();
-        }}
-      />
+      <View
+        style={{
+          top: 20,
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'space-around',
+        }}>
+        <Button title="저장하기" onPress={() => handlePressAddMemo()} />
+        <Button
+          title="뒤로가기"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      </View>
     </View>
   );
 }
 
 export default function Hemodialysis() {
-  const userToken = useSelector((state) => state.userToken);
-
   return (
     <Stack.Navigator headerMode={'none'}>
-      <Stack.Screen
-        name="Calendar"
-        component={AgendaScreen}
-        initialParams={{userToken: userToken}}
-      />
-      <Stack.Screen
-        name="InputMemo"
-        component={InputMemo}
-        initialParams={{userToken: userToken}}
-      />
+      <Stack.Screen name="Calendar" component={AgendaScreen} />
+      <Stack.Screen name="InputMemo" component={InputMemo} />
     </Stack.Navigator>
   );
 }

@@ -8,76 +8,19 @@ import {
   Image,
 } from 'react-native';
 import {Agenda} from 'react-native-calendars';
-import moment from 'moment';
 
-import {SERVER_PATH} from '../service/apis';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchMemos} from '../actions';
+import {getFormattedDate} from '../utils/functions';
 
-export default function AgendaScreen({
-  navigation,
-  route: {
-    params: {userToken},
-  },
-}) {
-  const [items, setItems] = useState({});
-  async function fetchMemos(dateValue) {
-    const response = await fetch(
-      SERVER_PATH + '/hemodialysis-memo?date=' + dateValue,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': userToken,
-        },
-      },
-    );
-    const result = await response.json();
-    return result;
-  }
+function AgendaScreen({navigation}) {
+  const dispatch = useDispatch();
 
-  const loadItems = async (selectedDate) => {
-    const {year, month} = selectedDate;
-    const yearMonth = month < 10 ? `${year}-0${month}` : `${year}-${month}`;
+  const dialysisMemos = useSelector((state) => state.dialysisMemos);
 
-    let tempItems = {};
-
-    Array(moment(yearMonth).daysInMonth())
-      .fill()
-      .forEach((_, i) => {
-        if (i + 1 < 10) {
-          tempItems[`${yearMonth}-0${i + 1}`] = [];
-        } else {
-          tempItems[`${yearMonth}-${i + 1}`] = [];
-        }
-      });
-
-    const {isSuccess, hemodialysisMemos} = await fetchMemos(yearMonth);
-
-    if (isSuccess) {
-      hemodialysisMemos.forEach((hemodialysisMemo) => {
-        const {dialysisId, recordDate, memo, photo} = hemodialysisMemo;
-        const recordedDate = new Date(recordDate);
-        const formattedDate = `${recordedDate.getFullYear()}-0${
-          recordedDate.getMonth() + 1
-        }-${recordedDate.getDate()}`;
-
-        tempItems[formattedDate] = [
-          {
-            dialysisId,
-            name: memo,
-            image: photo,
-          },
-        ];
-      });
-
-      setTimeout(() => {
-        const newItems = {};
-        Object.keys(tempItems).forEach((key) => {
-          newItems[key] = tempItems[key];
-        });
-
-        setItems(newItems);
-      }, 1000);
-    }
-  };
+  useEffect(() => {
+    dispatch(fetchMemos(new Date()));
+  }, []);
 
   const renderItem = (item) => {
     return (
@@ -97,9 +40,7 @@ export default function AgendaScreen({
   };
 
   const renderEmptyDate = (emptyDate) => {
-    const formattedDate = `${emptyDate.getFullYear()}-${
-      emptyDate.getMonth() + 1
-    }-${emptyDate.getDate()}`;
+    const formattedDate = getFormattedDate(emptyDate);
 
     const handlePressInputMemo = () => {
       navigation.navigate('InputMemo', {date: formattedDate});
@@ -136,6 +77,11 @@ export default function AgendaScreen({
     return date.toISOString().split('T')[0];
   };
 
+  const loadItems = (dateString) => {
+    // console.log('dateString', dateString);
+    dispatch(fetchMemos(dateString));
+  };
+
   return (
     <Agenda
       theme={{
@@ -143,8 +89,9 @@ export default function AgendaScreen({
         agendaTodayColor: 'red',
         agendaKnobColor: 'blue',
       }}
-      items={items}
-      loadItemsForMonth={(selectedDate) => loadItems(selectedDate)}
+      items={dialysisMemos}
+      // loadItemsForMonth={({dateString}) => loadItems(dateString)}
+      onDayPress={({dateString}) => loadItems(dateString)}
       selected={new Date()}
       renderItem={(item) => renderItem(item)}
       renderEmptyDate={(emptyDate) => renderEmptyDate(emptyDate)}
@@ -176,3 +123,5 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
 });
+
+export default React.memo(AgendaScreen);

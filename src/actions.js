@@ -1,8 +1,9 @@
 import {removeItem, saveItem} from './utils/asyncStorage';
 import KakaoLogins, {KAKAO_AUTH_TYPES} from '@react-native-seoul/kakao-login';
 import {SERVER_PATH} from './service/apis';
-import Axios from 'axios';
+import moment from 'moment';
 import errors from './utils/errors';
+import {createImageFormData, getFormattedDate} from './utils/functions';
 
 export function changeLoginField(name, value) {
   return {
@@ -676,7 +677,6 @@ export function setLastSearchQuery(lastSearchQuery) {
 }
 
 // 일반 투석
-
 export function requestGeneralDialysis(
   exchangeTime,
   injectionConcentration,
@@ -696,10 +696,6 @@ export function requestGeneralDialysis(
     try {
       const response = await fetch(SERVER_PATH + '/user/saveKidney01', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': userToken,
-        },
         body: JSON.stringify({
           exchangeTime,
           injectionConcentration,
@@ -726,12 +722,11 @@ export function requestGeneralDialysis(
 }
 
 // 기계투석
-
 export function requestMachinedialysis(
   exchangeTime,
   injectionConcentration,
   injectionAmount,
-  drainage,
+  initialDrainage,
   dehydration,
   weight,
   edema,
@@ -766,5 +761,128 @@ export function requestMachinedialysis(
 
       console.log(e);
     }
+  };
+}
+
+export function addHemodialysisMemo(photo, memo, date) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    dispatch(setError({name: errors.LOADING}));
+
+    try {
+      const response = await fetch(SERVER_PATH + '/hemodialysis-memo', {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        method: 'POST',
+        body: createImageFormData(photo, {memo, date}),
+      });
+
+      const result = await response.json();
+
+      const {isSuccess, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError({name: errors.ADD_DIALYSIS_MEMOS_SUCCESS}));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.ADD_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.ADD_DIALYSIS_MEMOS_ERROR,
+          message: err,
+        }),
+      );
+      console.log(err);
+    }
+  };
+}
+
+export function fetchMemos(date) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(
+        SERVER_PATH + '/hemodialysis-memo?date=' + date,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+        },
+      );
+      const result = await response.json();
+      const {isSuccess, hemodialysisMemos, message} = result;
+
+      let tempItems = {};
+
+      const selectedDate = new Date(date);
+      const year = selectedDate.getFullYear();
+      const month = selectedDate.getMonth() + 1;
+      const yearMonth = month < 10 ? `${year}-0${month}` : `${year}-${month}`;
+
+      Array(moment(yearMonth).daysInMonth())
+        .fill()
+        .forEach((_, i) => {
+          if (i + 1 < 10) {
+            tempItems[`${yearMonth}-0${i + 1}`] = [];
+          } else {
+            tempItems[`${yearMonth}-${i + 1}`] = [];
+          }
+        });
+
+      if (isSuccess) {
+        hemodialysisMemos.forEach((hemodialysisMemo) => {
+          const {dialysisId, recordDate, memo, photo} = hemodialysisMemo;
+          const formattedDate = getFormattedDate(recordDate);
+
+          tempItems[formattedDate] = [
+            {
+              dialysisId,
+              name: memo,
+              image: photo,
+            },
+          ];
+        });
+
+        dispatch(setError());
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.FETCH_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+      dispatch(setDialysisMemos(tempItems));
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.FETCH_DIALYSIS_MEMOS_ERROR,
+          message: '네트워크 에러가 발생했습니다. 잠시 후 다시 시도해주세요!',
+        }),
+      );
+      console.log(errors.FETCH_DIALYSIS_MEMOS_ERROR, err);
+    }
+  };
+}
+
+export function setDialysisMemos(dialysisMemos) {
+  return {
+    type: 'setDialysisMemos',
+    payload: {dialysisMemos},
   };
 }

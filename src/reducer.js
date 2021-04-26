@@ -121,6 +121,7 @@ const initialState = {
   Dialysis: {
     ...initialDialysis,
   },
+  dialysisMemos: {},
 };
 
 const reducers = {
@@ -378,6 +379,13 @@ const reducers = {
     return {
       ...state,
       lastSearchQuery,
+    };
+  },
+
+  setDialysisMemos: (state, {payload: {dialysisMemos}}) => {
+    return {
+      ...state,
+      dialysisMemos,
     };
   },
 };
