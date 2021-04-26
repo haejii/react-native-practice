@@ -415,13 +415,34 @@ const DialysisScreenStyle = StyleSheet.create({
   basicTextInput: {
     width: '20%',
     backgroundColor: 'white',
-    height: 50,
+    height: 40,
     paddingHorizontal: 10,
     fontSize: 16,
     marginBottom: '1%',
     marginRight: '5%',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderColor: 'blue',
+  },
+  basicView: {
+    alignItems: 'center',
+    width: '100%',
+    flexDirection: 'row',
+  },
+  buttonContent: (edema) => {
+    return {
+      marginTop: 18,
+      width: 30,
+      height: 30,
+      backgroundColor: edema === '1' ? 'skyblue' : 'white',
+    };
+  },
+  buttonContent2: (edema) => {
+    return {
+      marginTop: 18,
+      width: 30,
+      height: 30,
+      backgroundColor: edema === '2' ? 'skyblue' : 'white',
+    };
   },
 });
 

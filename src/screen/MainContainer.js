@@ -16,7 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
-  const kidneyType = useSelector((state) => state.JoinFields.kidneyType);
+  const kidneyType = useSelector((state) => state.user.kidneyType);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
