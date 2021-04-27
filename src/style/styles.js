@@ -141,6 +141,11 @@ const JoinScreenStyles = StyleSheet.create({
 });
 
 const SplashScreenStyles = StyleSheet.create({
+  text: {
+    top: 10,
+    fontSize: 16,
+    fontWeight: '800',
+  },
   loading: {
     fontSize: 24,
     fontWeight: '800',

@@ -768,7 +768,12 @@ export function addHemodialysisMemo(photo, memo, date) {
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
-    dispatch(setError({name: errors.LOADING}));
+    dispatch(
+      setError({
+        name: errors.LOADING,
+        message: '메모 업로드 중입니다. 잠시만 기다려주세요.',
+      }),
+    );
 
     try {
       const response = await fetch(SERVER_PATH + '/hemodialysis-memo', {
@@ -777,7 +782,9 @@ export function addHemodialysisMemo(photo, memo, date) {
           'x-access-token': userToken,
         },
         method: 'POST',
-        body: createImageFormData(photo, {memo, date}),
+        body: photo
+          ? createImageFormData(photo, {memo, date})
+          : JSON.stringify({memo, date}),
       });
 
       const result = await response.json();
@@ -852,6 +859,7 @@ export function fetchMemos(date) {
               dialysisId,
               name: memo,
               image: photo,
+              date: formattedDate,
             },
           ];
         });
@@ -866,6 +874,8 @@ export function fetchMemos(date) {
           }),
         );
       }
+
+      dispatch(setDialysisMemos({}));
       dispatch(setDialysisMemos(tempItems));
     } catch (err) {
       dispatch(
@@ -884,5 +894,57 @@ export function setDialysisMemos(dialysisMemos) {
   return {
     type: 'setDialysisMemos',
     payload: {dialysisMemos},
+  };
+}
+
+export function updateHemodialysisMemo({dialysisId, image, name}) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    dispatch(
+      setError({
+        name: errors.LOADING,
+        message: '메모 수정 중입니다. 잠시만 기다려주세요.',
+      }),
+    );
+
+    try {
+      const response = await fetch(SERVER_PATH + '/hemodialysis-memo', {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        method: 'PUT',
+        body:
+          image && image.uri
+            ? createImageFormData(image, {name, dialysisId})
+            : JSON.stringify({name, dialysisId}),
+      });
+
+      const result = await response.json();
+
+      const {isSuccess, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError({name: errors.UPDATE_DIALYSIS_MEMOS_SUCCESS}));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.UPDATE_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.UPDATE_DIALYSIS_MEMOS_ERROR,
+          message: err,
+        }),
+      );
+      console.log(err);
+    }
   };
 }

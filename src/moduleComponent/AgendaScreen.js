@@ -22,19 +22,32 @@ function AgendaScreen({navigation}) {
     dispatch(fetchMemos(new Date()));
   }, []);
 
+  useEffect(() => {
+    // Object.keys(dialysisMemos).forEach((k1) => {
+    //   dialysisMemos[k1].length
+    //     ? console.log(
+    //         `${dialysisMemos[k1][0].name}: ${dialysisMemos[k1][0].image}`,
+    //       )
+    //     : '';
+    // });
+  }, [dialysisMemos]);
+
   const renderItem = (item) => {
     return (
       <TouchableOpacity
         style={[styles.item]}
-        onPress={() => Alert.alert(item.name)}>
-        <Image
-          source={{uri: item.image}}
-          style={{
-            width: '100%',
-            height: 300,
-          }}
-        />
-        <Text>{item.name}</Text>
+        onPress={() => navigation.navigate('UpdateMemo', {item})}>
+        {item.image ? (
+          <Image
+            source={{uri: item.image}}
+            style={{
+              width: '100%',
+              height: 300,
+            }}
+          />
+        ) : null}
+        <Text style={{paddingVertical: 10}}>{item.name}</Text>
+        {/* <Text>{JSON.stringify(item)}</Text> */}
       </TouchableOpacity>
     );
   };
@@ -96,11 +109,15 @@ function AgendaScreen({navigation}) {
       renderItem={(item) => renderItem(item)}
       renderEmptyDate={(emptyDate) => renderEmptyDate(emptyDate)}
       rowHasChanged={(r1, r2) => rowHasChanged(r1, r2)}
+
       // If provided, a standard RefreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the refreshing prop correctly.
-      // onRefresh={() => console.log('refreshing...')}
+      // onRefresh={() => {
+      //   console.log('refreshing...');
+      //   dispatch(fetchMemos(new Date()));
+      // }}
 
       // Set this true while waiting for new data from a refresh
-      // refreshing={false}
+      // refreshing={true}
 
       // Add a custom RefreshControl component, used to provide pull-to-refresh functionality for the ScrollView.
       // refreshControl={null}
@@ -110,6 +127,8 @@ function AgendaScreen({navigation}) {
 
 const styles = StyleSheet.create({
   item: {
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: 'white',
     flex: 1,
     borderRadius: 5,
@@ -124,4 +143,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(AgendaScreen);
+// export default React.memo(AgendaScreen);
+export default AgendaScreen;
