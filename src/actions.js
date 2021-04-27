@@ -187,6 +187,7 @@ export function requestUpdateNuturitionGoal({
         }),
       });
 
+      console.log('body', response);
       const result = await response.json();
       console.log('영양소 변경 성공', result);
 
@@ -671,5 +672,99 @@ export function setLastSearchQuery(lastSearchQuery) {
   return {
     type: 'setLastSearchQuery',
     payload: {lastSearchQuery},
+  };
+}
+
+// 일반 투석
+
+export function requestGeneralDialysis(
+  exchangeTime,
+  injectionConcentration,
+  injectionAmount,
+  drainage,
+  dehydration,
+  weight,
+  bloodPressure,
+  bloodSugar,
+  edema,
+  memo,
+) {
+  console.log('3');
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+    console.log(userToken + '----------- ');
+    try {
+      const response = await fetch(SERVER_PATH + '/user/saveKidney01', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        body: JSON.stringify({
+          exchangeTime,
+          injectionConcentration,
+          injectionAmount,
+          drainage,
+          dehydration,
+          weight,
+          bloodPressure,
+          bloodSugar,
+          edema,
+          memo,
+        }),
+      });
+
+      console.log(response);
+      const result = await response.json();
+      console.log('일반 투석일지 저장 성공', result);
+    } catch (e) {
+      console.log('일반 투석일지 실패');
+
+      console.log(e);
+    }
+  };
+}
+
+// 기계투석
+
+export function requestMachinedialysis(
+  exchangeTime,
+  injectionConcentration,
+  injectionAmount,
+  drainage,
+  dehydration,
+  weight,
+  edema,
+  memo,
+) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(SERVER_PATH + '/user/saveKidney02', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        body: JSON.stringify({
+          exchangeTime,
+          injectionConcentration,
+          injectionAmount,
+          initialDrainage,
+          dehydration,
+          weight,
+          edema,
+          memo,
+        }),
+      });
+
+      const result = await response.json();
+      console.log('기계 투석일지 저장 성공', result);
+    } catch (e) {
+      console.log('기계 투석일지 실패');
+
+      console.log(e);
+    }
   };
 }

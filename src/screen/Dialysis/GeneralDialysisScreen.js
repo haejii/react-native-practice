@@ -16,7 +16,7 @@ import {DialysisScreenStyle, JoinScreenStyles} from '../../style/styles';
 import * as ImagePicker from 'react-native-image-picker';
 import no_user from '../../../assets/image/no_user.png';
 import NativeButton from 'apsl-react-native-button';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {requestGeneralDialysis} from '../../actions';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -25,20 +25,20 @@ export default function GeneralDialysis() {
   const dispatch = useDispatch();
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [count, setCount] = useState(''); // 차수
+  const [degree, setDegree] = useState(''); // 차수
   const [month, setMonth] = useState(new Date().getMonth() + 1); //교환시간 월
   const [day, setDay] = useState(new Date().getDate()); //교환시간 일
   const [injectionConcentration, setInjectionConcentration] = useState(''); //주입액농도
-  const [injectionVolum, setInjectionVolum] = useState(''); //주입량
-  const [chestVolum, setChestVolum] = useState(''); //배액량
-  const [divisor, setDivisor] = useState(''); //제수량
+  const [injectionAmount, setInjectionAmount] = useState(''); //주입량
+  const [drainage, setChestVolum] = useState(''); //배액량
+  const [dehydration, setDivisor] = useState(''); //제수량
   const [weight, setWeight] = useState(''); //몸무게
   const [bloodPressure, setBloodPressure] = useState(''); //혈압
   const [bloodSugar, setBloodSugar] = useState(''); //혈당
   const [edema, setEdema] = useState('1'); //부종
   const [memo, setMemo] = useState(''); //메모
   const [photo, setPhoto] = useState(noUserImage);
-  const [date, setDate] = useState(new Date());
+  const [exchangeTime, setExchangeTime] = useState(new Date());
   const [hour, setHour] = useState(new Date().getHours());
   const [min, setMin] = useState(new Date().getMinutes());
 
@@ -59,21 +59,33 @@ export default function GeneralDialysis() {
   const AddBtn = () => {
     if (
       !injectionConcentration ||
-      !injectionVolum ||
-      !chestVolum ||
-      !divisor ||
+      !injectionAmount ||
+      !drainage ||
+      !dehydration ||
       !weight
     ) {
       return Alert.alert('기입확인', '기입하지 않은 부분 존재');
     } else {
       console.log('2. action으로 감');
+      console.log(
+        exchangeTime,
+        injectionConcentration,
+        injectionAmount,
+        drainage,
+        dehydration,
+        weight,
+        bloodPressure,
+        bloodSugar,
+        edema,
+        memo,
+      );
       dispatch(
         requestGeneralDialysis(
-          date,
+          exchangeTime,
           injectionConcentration,
-          injectionVolum,
-          chestVolum,
-          divisor,
+          injectionAmount,
+          drainage,
+          dehydration,
           weight,
           bloodPressure,
           bloodSugar,
@@ -87,13 +99,13 @@ export default function GeneralDialysis() {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
+    setExchangeTime(currentDate);
     setMonth(currentDate.getMonth() + 1);
     setDay(currentDate.getDate());
     setHour(currentDate.getHours());
     setMin(currentDate.getMinutes());
 
-    console.log(date);
+    console.log(exchangeTime);
   };
 
   const showMode = (currentMode) => {
@@ -151,8 +163,8 @@ export default function GeneralDialysis() {
                   borderColor: 'blue',
                 }}
                 keyboardType="numeric"
-                value={String(count)}
-                onChangeText={(value) => setCount(value)}
+                value={String(degree)}
+                onChangeText={(value) => setDegree(value)}
               />
               <Text>차</Text>
             </View>
@@ -160,7 +172,7 @@ export default function GeneralDialysis() {
               {show && (
                 <DateTimePicker
                   testID="dateTimePicker"
-                  value={date}
+                  value={exchangeTime}
                   mode={mode}
                   is24Hour={true}
                   display="default"
@@ -200,8 +212,8 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(injectionVolum)}
-                onChangeText={(value) => setInjectionVolum(value)}
+                value={String(injectionAmount)}
+                onChangeText={(value) => setInjectionAmount(value)}
               />
               <Text>g</Text>
             </View>
@@ -211,7 +223,7 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(chestVolum)}
+                value={String(drainage)}
                 onChangeText={(value) => setChestVolum(value)}
               />
               <Text>g</Text>
@@ -222,7 +234,7 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(divisor)}
+                value={String(dehydration)}
                 onChangeText={(value) => setDivisor(value)}
               />
               <Text>g</Text>

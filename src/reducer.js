@@ -61,6 +61,16 @@ const initialNutrition = {
   potassium: 0,
   sodium: 0,
 };
+
+const initialDialysis = {
+  injectionConcentration: 0,
+  injectionAmount: 0,
+  initialDrainage: 0,
+  dehydration: 0,
+  weight: 0,
+  edema: 0,
+  memo: 0,
+};
 const initialState = {
   isLoading: true,
   userToken: null,
@@ -108,6 +118,9 @@ const initialState = {
   basketFoods: [],
   searchedFoodResults: [],
   lastSearchQuery: '',
+  Dialysis: {
+    ...initialDialysis,
+  },
 };
 
 const reducers = {
