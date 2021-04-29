@@ -122,6 +122,7 @@ const initialState = {
     ...initialDialysis,
   },
   dialysisMemos: {},
+  foodCategories: [],
 };
 
 const reducers = {
@@ -386,6 +387,13 @@ const reducers = {
     return {
       ...state,
       dialysisMemos,
+    };
+  },
+
+  setFoodCategories: (state, {payload: {foodCategories}}) => {
+    return {
+      ...state,
+      foodCategories,
     };
   },
 };

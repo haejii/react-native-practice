@@ -8,20 +8,22 @@ import {
   FlatList,
   SafeAreaView,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {requestFoods, setError} from '../../../actions';
+import {requestFoodCategory, requestFoods, setError} from '../../../actions';
 import SearchResult from './SearchResult';
 import FoodInformationModal from './FoodInformationModal';
 import {SearchResultStyles} from '../../../style/styles';
 import errors from '../../../utils/errors';
 
-export default function Search2() {
+export default function Search() {
   const dispatch = useDispatch();
 
   const searchedFoodResults = useSelector((state) => state.searchedFoodResults);
   const error = useSelector((state) => state.error);
+  const foodCategories = useSelector((state) => state.foodCategories);
 
   const handlePressSearch = () => {
     if (!food.trim()) {
@@ -37,11 +39,21 @@ export default function Search2() {
 
   const [food, setFood] = useState('');
 
+  const handlePressSelectCategory = (category) => {
+    console.log('handlePressSelectCategory', category);
+    // dispatch()
+  };
+
+  useEffect(() => {
+    // 음식 카테고리 호출
+    dispatch(requestFoodCategory());
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <View
         style={{
-          flex: 1,
+          flex: 2,
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
@@ -64,6 +76,52 @@ export default function Search2() {
         />
         <Button title="검색" onPress={() => handlePressSearch()} />
       </View>
+
+      {foodCategories ? (
+        <View
+          style={{
+            flex: 4,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 16, fontWeight: 'bold', marginBottom: 5}}>
+            카테고리를 선택하면 하위 메뉴를 볼 수 있습니다.
+          </Text>
+          <ScrollView style={{width: '80%'}}>
+            {foodCategories.map((category, idx) => (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: 'hotpink',
+                  width: '100%',
+                  padding: 10,
+                  borderRadius: 10,
+                  marginBottom: 5,
+                }}
+                key={idx}
+                onPress={() => handlePressSelectCategory(category)}>
+                <Text
+                  style={{
+                    color: 'white',
+                    width: '100%',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                  }}>
+                  {category}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      ) : null}
+
+      <View
+        style={{
+          borderBottomColor: 'black',
+          borderBottomWidth: 1,
+          marginVertical: 10,
+        }}
+      />
+
       {error.status ? (
         <View
           style={{
@@ -79,8 +137,24 @@ export default function Search2() {
             </Text>
           ) : null}
         </View>
-      ) : null}
-      <View style={{flex: 3}}>
+      ) : (
+        <View
+          style={{
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: 'black',
+              marginBottom: 5,
+            }}>
+            검색 결과
+          </Text>
+        </View>
+      )}
+
+      <View style={{flex: 4}}>
         <SafeAreaView>
           <FlatList
             data={searchedFoodResults}
