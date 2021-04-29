@@ -948,3 +948,95 @@ export function updateHemodialysisMemo({dialysisId, image, name}) {
     }
   };
 }
+
+export function deleteHemodialysisMemo(dialysisId) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(
+        SERVER_PATH + '/hemodialysis-memo/' + dialysisId,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+          method: 'DELETE',
+        },
+      );
+
+      const result = await response.json();
+
+      const {isSuccess, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError({name: errors.DELETE_DIALYSIS_MEMOS_SUCCESS}));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.DELETE_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.DELETE_DIALYSIS_MEMOS_ERROR,
+          message: err,
+        }),
+      );
+      console.log(err);
+    }
+  };
+}
+
+export function requestFoodCategory() {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(SERVER_PATH + '/food-category', {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+      });
+
+      const result = await response.json();
+
+      const {isSuccess, message, foodCategories} = result;
+
+      if (isSuccess) {
+        console.log(foodCategories);
+        dispatch(setFoodCategories(foodCategories));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.DELETE_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.DELETE_DIALYSIS_MEMOS_ERROR,
+          message: err,
+        }),
+      );
+      console.log(err);
+    }
+  };
+}
+
+export function setFoodCategories(foodCategories) {
+  return {
+    type: 'setFoodCategories',
+    payload: {foodCategories},
+  };
+}

@@ -20,6 +20,7 @@ import {
   updateHemodialysisMemo,
   fetchMemos,
   setError,
+  deleteHemodialysisMemo,
 } from '../../../actions';
 import {useEffect} from 'react/cjs/react.development';
 import errors from '../../../utils/errors';
@@ -121,10 +122,6 @@ function InputMemo({
       dispatch(setError());
     }
 
-    if (!error.status && error.name === errors.LOADING) {
-      // Alert.alert('로딩 중', '사진이 업로드될때까지 잠시 기다려주세요...');
-    }
-
     if (!error.status && error.name === errors.ADD_DIALYSIS_MEMOS_SUCCESS) {
       navigation.navigate('Calendar');
       dispatch(fetchMemos(date));
@@ -133,7 +130,7 @@ function InputMemo({
   }, [error]);
 
   if (!error.status && error.name === errors.LOADING) {
-    return <SplashScreen />;
+    return <SplashScreen text={error.message} />;
   }
 
   return (
@@ -274,25 +271,40 @@ function UpdateMemo({
     );
   };
 
+  const handlePressDeleteMemo = () => {
+    Alert.alert('삭제', '정말 삭제하시겠습니까?', [
+      {
+        text: '삭제',
+        onPress: () => {
+          dispatch(deleteHemodialysisMemo(item.dialysisId));
+        },
+      },
+      {text: '취소'},
+    ]);
+  };
+
   useEffect(() => {
-    if (error.status && error.name === errors.UPDATE_DIALYSIS_MEMOS_FAILED) {
-      Alert.alert('메모 수정 실패', errors.message);
+    if (
+      (error.status && error.name === errors.UPDATE_DIALYSIS_MEMOS_FAILED) ||
+      error.name === errors.DELETE_DIALYSIS_MEMOS_FAILED
+    ) {
+      Alert.alert('메모 수정 / 삭제 실패', errors.message);
       dispatch(setError());
     }
 
     if (error.status && error.name === errors.UPDATE_DIALYSIS_MEMOS_ERROR) {
       Alert.alert(
         '오류 발생',
-        '메모 작성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요',
+        '메모 수정 / 삭제 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요',
       );
       dispatch(setError());
     }
 
-    if (!error.status && error.name === errors.LOADING) {
-      // Alert.alert('로딩 중', '사진이 업로드될때까지 잠시 기다려주세요...');
-    }
-
-    if (!error.status && error.name === errors.UPDATE_DIALYSIS_MEMOS_SUCCESS) {
+    if (
+      !error.status &&
+      (error.name === errors.UPDATE_DIALYSIS_MEMOS_SUCCESS ||
+        error.name === errors.DELETE_DIALYSIS_MEMOS_SUCCESS)
+    ) {
       navigation.navigate('Calendar');
       dispatch(fetchMemos(item.date));
       dispatch(setError());
@@ -367,6 +379,7 @@ function UpdateMemo({
           justifyContent: 'space-around',
         }}>
         <Button title="수정하기" onPress={() => handlePressUpdateMemo()} />
+        <Button title="삭제하기" onPress={() => handlePressDeleteMemo()} />
         <Button
           title="뒤로가기"
           onPress={() => {
