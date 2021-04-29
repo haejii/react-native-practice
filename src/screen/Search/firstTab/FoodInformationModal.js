@@ -35,7 +35,6 @@ export default function FoodInformationModal({food, onPress, type}) {
   const basketFoods = useSelector((state) => state.basketFoods);
 
   const [inputMeal, setInputMeal] = useState('100');
-  const [change, setChange] = useState(false);
   const [calorie, setCalorie] = useState(food.calorie);
   const [protein, setProtein] = useState(food.protein);
   const [phosphorus, setPhosphorus] = useState(food.phosphorus);
@@ -46,12 +45,13 @@ export default function FoodInformationModal({food, onPress, type}) {
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
-    setInputMeal('100');
-    setCalorie(food.calorie);
-    setProtein(food.protein);
-    setPhosphorus(food.phosphorus);
-    setPotasium(food.potassium);
-    setSodium(food.sodium);
+    setInputMeal(food.foodAmount);
+    setCalorie(((food.calorie * food.foodAmount) / 100).toFixed(3));
+    setProtein(((food.protein * food.foodAmount) / 100).toFixed(3));
+    setPhosphorus(((food.phosphorus * food.foodAmount) / 100).toFixed(3));
+    setPotasium(((food.potassium * food.foodAmount) / 100).toFixed(3));
+    setSodium(((food.sodium * food.foodAmount) / 100).toFixed(3));
+    console.log(food.comment);
   };
 
   function FoodCalc(inputMeal) {
@@ -68,7 +68,6 @@ export default function FoodInformationModal({food, onPress, type}) {
   function handleChangeInput(inputMeal) {
     inputMeal > 1000 ? setInputMeal('1000') : setInputMeal(inputMeal);
     FoodCalc(inputMeal);
-    setChange(true);
   }
 
   function handlePressAdd() {
@@ -180,36 +179,27 @@ export default function FoodInformationModal({food, onPress, type}) {
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  열량 ({change ? calorie : food.calorie} kcal / {goal?.calorie}{' '}
-                  kcal)
+                  열량 ({+calorie} kcal / {goal?.calorie} kcal)
                 </Text>
-                <NuturitionBarChart
-                  nuturition={change ? calorie : food.calorie}
-                  goal={goal?.calorie}
-                />
+                <NuturitionBarChart nuturition={calorie} goal={goal?.calorie} />
 
                 <Text
                   style={{
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  단백질 ({change ? protein : food.protein} g / {goal?.protein}{' '}
-                  g)
+                  단백질 ({+protein} g / {goal?.protein} g)
                 </Text>
-                <NuturitionBarChart
-                  nuturition={change ? protein : food.protein}
-                  goal={goal?.protein}
-                />
+                <NuturitionBarChart nuturition={protein} goal={goal?.protein} />
                 <Text
                   style={{
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  인 ({change ? phosphorus : food.phosphorus} mg /{' '}
-                  {goal?.phosphorus} mg)
+                  인 ({+phosphorus} mg / {goal?.phosphorus} mg)
                 </Text>
                 <NuturitionBarChart
-                  nuturition={change ? phosphorus : food.phosphorus}
+                  nuturition={phosphorus}
                   goal={goal?.phosphorus}
                 />
                 <Text
@@ -217,11 +207,11 @@ export default function FoodInformationModal({food, onPress, type}) {
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  칼륨 ({change ? potassium : food.potassium} mg /{' '}
-                  {goal?.potassium} mg)
+                  칼륨 ({+potassium}
+                  mg / {goal?.potassium} mg)
                 </Text>
                 <NuturitionBarChart
-                  nuturition={change ? potassium : food.potassium}
+                  nuturition={potassium}
                   goal={goal?.potassium}
                 />
                 <Text
@@ -229,14 +219,29 @@ export default function FoodInformationModal({food, onPress, type}) {
                     ...HomeScreenStyles.textDetail,
                     ...HomeScreenStyles.textInterval,
                   }}>
-                  나트륨 ({change ? sodium : food.sodium} mg / {goal?.sodium}{' '}
-                  mg)
+                  나트륨 ({+sodium} mg / {goal?.sodium} mg)
                 </Text>
-                <NuturitionBarChart
-                  nuturition={change ? sodium : food.sodium}
-                  goal={goal?.sodium}
-                />
+                <NuturitionBarChart nuturition={sodium} goal={goal?.sodium} />
               </View>
+
+              {food.comment ? (
+                <View
+                  style={{
+                    width: '90%',
+                    borderWidth: 1,
+                    borderRadius: 15,
+                    padding: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      color: 'black',
+                    }}>
+                    {food.comment}
+                  </Text>
+                </View>
+              ) : null}
 
               <View style={FoodInformationModalStyles.modalButtonContainer}>
                 <Button title="추가" onPress={() => handlePressAdd()} />
