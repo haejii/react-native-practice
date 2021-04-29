@@ -143,5 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// export default React.memo(AgendaScreen);
-export default AgendaScreen;
+export default React.memo(AgendaScreen);
