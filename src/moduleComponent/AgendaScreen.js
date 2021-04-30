@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Platform,
   Image,
 } from 'react-native';
 import {Agenda} from 'react-native-calendars';
@@ -17,26 +18,22 @@ function AgendaScreen({navigation}) {
   const dispatch = useDispatch();
 
   const dialysisMemos = useSelector((state) => state.dialysisMemos);
+  const kidneyType = useSelector((state) => state.user.kidneyType);
 
   useEffect(() => {
-    dispatch(fetchMemos(new Date()));
+    console.log('1. useState', kidneyType);
+    dispatch(fetchMemos(new Date()), kidneyType);
   }, []);
-
-  useEffect(() => {
-    // Object.keys(dialysisMemos).forEach((k1) => {
-    //   dialysisMemos[k1].length
-    //     ? console.log(
-    //         `${dialysisMemos[k1][0].name}: ${dialysisMemos[k1][0].image}`,
-    //       )
-    //     : '';
-    // });
-  }, [dialysisMemos]);
 
   const renderItem = (item) => {
     return (
       <TouchableOpacity
         style={[styles.item]}
-        onPress={() => navigation.navigate('UpdateMemo', {item})}>
+        onPress={() =>
+          item.dialysisTypeId === 1
+            ? navigation.navigate('UpdateMemo2', {item})
+            : navigation.navigate('UpdateMemo', {item})
+        }>
         {item.image ? (
           <Image
             source={{uri: item.image}}
@@ -92,7 +89,7 @@ function AgendaScreen({navigation}) {
 
   const loadItems = (dateString) => {
     // console.log('dateString', dateString);
-    dispatch(fetchMemos(dateString));
+    dispatch(fetchMemos(dateString, kidneyType));
   };
 
   return (

@@ -37,7 +37,7 @@ function InputMemo({
   const dispatch = useDispatch();
 
   const error = useSelector((state) => state.error);
-
+  const kidneyType = useSelector((state) => state.user.kidneyType);
   const [photo, setPhoto] = useState(null);
   const [memo, setMemo] = useState('');
 
@@ -105,7 +105,7 @@ function InputMemo({
       Alert.alert('메모 작성 실패', '메모를 입력해주세요');
       return;
     }
-    dispatch(addHemodialysisMemo(photo, memo, date));
+    dispatch(addHemodialysisMemo(photo, memo, date, kidneyType));
   };
 
   useEffect(() => {
@@ -123,7 +123,7 @@ function InputMemo({
     }
 
     if (!error.status && error.name === errors.ADD_DIALYSIS_MEMOS_SUCCESS) {
-      navigation.navigate('Calendar');
+      navigation.goBack();
       dispatch(fetchMemos(date));
       dispatch(setError());
     }

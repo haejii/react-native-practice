@@ -11,110 +11,133 @@ import {
 } from 'react-native';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import {useState} from 'react/cjs/react.development';
-import {DialysisScreenStyle, JoinScreenStyles} from '../../style/styles';
-//import ImagePicker from 'react-native-image-picker';
-import * as ImagePicker from 'react-native-image-picker';
-import no_user from '../../../assets/image/no_user.png';
+import {DialysisScreenStyle} from '../../../style/styles';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import NativeButton from 'apsl-react-native-button';
 import {useDispatch, useSelector} from 'react-redux';
-import {requestGeneralDialysis} from '../../actions';
+import {
+  addGeneralDialysis,
+  changeDialysis,
+  setError,
+  fetchMemos,
+  clearDialysis,
+} from '../../../actions';
+import {useEffect} from 'react/cjs/react.development';
+import errors from '../../../utils/errors';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import SplashScreen from '../../SplashScreen';
 
-export default function GeneralDialysis() {
-  const noUserImage = Image.resolveAssetSource(no_user).uri;
+export default function GeneralDialysis({
+  navigation,
+  route: {
+    params: {date},
+  },
+}) {
   const dispatch = useDispatch();
+
+  const kidneyType = useSelector((state) => state.user.kidneyType);
+  const error = useSelector((state) => state.error);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [degree, setDegree] = useState(''); // 차수
-  const [month, setMonth] = useState(new Date().getMonth() + 1); //교환시간 월
-  const [day, setDay] = useState(new Date().getDate()); //교환시간 일
-  const [injectionConcentration, setInjectionConcentration] = useState(''); //주입액농도
-  const [injectionAmount, setInjectionAmount] = useState(''); //주입량
-  const [drainage, setChestVolum] = useState(''); //배액량
-  const [dehydration, setDivisor] = useState(''); //제수량
-  const [weight, setWeight] = useState(''); //몸무게
-  const [bloodPressure, setBloodPressure] = useState(''); //혈압
-  const [bloodSugar, setBloodSugar] = useState(''); //혈당
-  const [edema, setEdema] = useState('1'); //부종
-  const [memo, setMemo] = useState(''); //메모
-  const [photo, setPhoto] = useState(noUserImage);
-  const [exchangeTime, setExchangeTime] = useState(new Date());
-  const [hour, setHour] = useState(new Date().getHours());
-  const [min, setMin] = useState(new Date().getMinutes());
+  const [photo, setPhoto] = useState(null);
+  const [exchangeTime, setExchangeTime] = useState(new Date(date));
+  const [hour, setHour] = useState(exchangeTime.getHours());
+  const [min, setMin] = useState(exchangeTime.getMinutes());
 
-  let today = ` ${month}월 ${day}일`;
+  const dialysis = useSelector((state) => state.dialysis);
+
+  const dialysisType = 2;
+
   let time = `${hour}시 ${min}분`;
 
-  const addImage = () => {
-    ImagePicker.launchImageLibrary(
+  function handleChangDialysis(name, value) {
+    dispatch(changeDialysis(name, value));
+  }
+
+  const handlePressShowImagePicker = () => {
+    Alert.alert('선택해주세요', '', [
       {
-        //title: 'Chooser your phote',
+        text: '사진 찍기',
+        onPress: () => Alert.alert('Cancel Pressed'),
+        style: 'cancel',
       },
-      (response) => {
-        setPhoto(response.uri);
+      {
+        text: '갤러리에서 불러오기',
+        onPress: () => {
+          launchImageLibrary({}, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+              Alert.alert(response.customButton);
+            } else {
+              setPhoto(response);
+            }
+          });
+        },
+        style: 'cancel',
       },
-    );
+      {
+        text: '닫기',
+        style: 'cancel',
+      },
+    ]);
   };
 
   const AddBtn = () => {
-    if (
-      !injectionConcentration ||
-      !injectionAmount ||
-      !drainage ||
-      !dehydration ||
-      !weight
-    ) {
+    if (dialysis.exchangeTime === null || !dialysis.degrees === null) {
       return Alert.alert('기입확인', '기입하지 않은 부분 존재');
     } else {
-      console.log('2. action으로 감');
-      console.log(
-        exchangeTime,
-        injectionConcentration,
-        injectionAmount,
-        drainage,
-        dehydration,
-        weight,
-        bloodPressure,
-        bloodSugar,
-        edema,
-        memo,
-      );
-      dispatch(
-        requestGeneralDialysis(
-          exchangeTime,
-          injectionConcentration,
-          injectionAmount,
-          drainage,
-          dehydration,
-          weight,
-          bloodPressure,
-          bloodSugar,
-          edema,
-          memo,
-        ),
-      );
+      dialysis.exchangeTime = exchangeTime;
+      dispatch(addGeneralDialysis(dialysis, date, dialysisType, photo));
     }
   };
+
+  useEffect(() => {
+    if (error.status && error.name === errors.ADD_DIALYSIS_MEMOS_FAILED) {
+      Alert.alert('메모 작성 실패', errors.message);
+      dispatch(setError());
+    }
+
+    if (error.status && error.name === errors.ADD_DIALYSIS_MEMOS_ERROR) {
+      Alert.alert(
+        '오류 발생',
+        '메모 작성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요',
+      );
+      dispatch(setError());
+    }
+
+    if (!error.status && error.name === errors.LOADING) {
+      // Alert.alert('로딩 중', '사진이 업로드될때까지 잠시 기다려주세요...');
+    }
+
+    if (!error.status && error.name === errors.ADD_DIALYSIS_MEMOS_SUCCESS) {
+      navigation.navigate('Calendar');
+      dispatch(fetchMemos(date, kidneyType));
+      dispatch(clearDialysis());
+      dispatch(setError());
+    }
+  }, [error]);
+
+  if (!error.status && error.name === errors.LOADING) {
+    return <SplashScreen />;
+  }
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setExchangeTime(currentDate);
-    setMonth(currentDate.getMonth() + 1);
-    setDay(currentDate.getDate());
     setHour(currentDate.getHours());
     setMin(currentDate.getMinutes());
-
-    console.log(exchangeTime);
   };
 
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
   };
 
   const showTimepicker = () => {
@@ -133,6 +156,7 @@ export default function GeneralDialysis() {
             alignItems: 'center',
             padding: 25,
           }}>
+          <Text>{date}</Text>
           <Text
             style={{
               fontSize: 25,
@@ -163,8 +187,8 @@ export default function GeneralDialysis() {
                   borderColor: 'blue',
                 }}
                 keyboardType="numeric"
-                value={String(degree)}
-                onChangeText={(value) => setDegree(value)}
+                value={String(dialysis.degrees)}
+                onChangeText={(value) => handleChangDialysis('degrees', value)}
               />
               <Text>차</Text>
             </View>
@@ -185,14 +209,6 @@ export default function GeneralDialysis() {
 
               <NativeButton
                 style={{backgroundColor: 'white', width: 100}}
-                onPress={showDatepicker}>
-                {today}
-              </NativeButton>
-
-              <Text>&nbsp;&nbsp;&nbsp;&nbsp;</Text>
-
-              <NativeButton
-                style={{backgroundColor: 'white', width: 100}}
                 onPress={showTimepicker}>
                 {time}
               </NativeButton>
@@ -202,8 +218,10 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(injectionConcentration)}
-                onChangeText={(value) => setInjectionConcentration(value)}
+                value={String(dialysis.injectionConcentration)}
+                onChangeText={(value) =>
+                  handleChangDialysis('injectionConcentration', value)
+                }
               />
               <Text>%</Text>
             </View>
@@ -212,8 +230,10 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(injectionAmount)}
-                onChangeText={(value) => setInjectionAmount(value)}
+                value={String(dialysis.injectionAmount)}
+                onChangeText={(value) =>
+                  handleChangDialysis('injectionAmount', value)
+                }
               />
               <Text>g</Text>
             </View>
@@ -223,8 +243,8 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(drainage)}
-                onChangeText={(value) => setChestVolum(value)}
+                value={String(dialysis.drainage)}
+                onChangeText={(value) => handleChangDialysis('drainage', value)}
               />
               <Text>g</Text>
             </View>
@@ -234,8 +254,10 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(dehydration)}
-                onChangeText={(value) => setDivisor(value)}
+                value={String(dialysis.dehydration)}
+                onChangeText={(value) =>
+                  handleChangDialysis('dehydration', value)
+                }
               />
               <Text>g</Text>
             </View>
@@ -245,8 +267,8 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(weight)}
-                onChangeText={(value) => setWeight(value)}
+                value={String(dialysis.weight)}
+                onChangeText={(value) => handleChangDialysis('weight', value)}
               />
               <Text>kg</Text>
             </View>
@@ -255,8 +277,10 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(bloodPressure)}
-                onChangeText={(value) => setBloodPressure(value)}
+                value={String(dialysis.bloodPressure)}
+                onChangeText={(value) =>
+                  handleChangDialysis('bloodPressure', value)
+                }
               />
               <Text>g</Text>
             </View>
@@ -266,8 +290,10 @@ export default function GeneralDialysis() {
               <TextInput
                 style={DialysisScreenStyle.basicTextInput}
                 keyboardType="numeric"
-                value={String(bloodSugar)}
-                onChangeText={(value) => setBloodSugar(value)}
+                value={String(dialysis.bloodSugar)}
+                onChangeText={(value) =>
+                  handleChangDialysis('bloodSugar', value)
+                }
               />
               <Text>g</Text>
             </View>
@@ -275,18 +301,18 @@ export default function GeneralDialysis() {
             <View style={DialysisScreenStyle.basicView}>
               <Text>부종 : </Text>
               <NativeButton
-                style={DialysisScreenStyle.buttonContent(edema)}
+                style={DialysisScreenStyle.buttonContent(dialysis.edema)}
                 onPress={() => {
-                  setEdema('1');
-                  console.log(edema);
+                  handleChangDialysis('edema', '1');
+                  console.log(dialysis.edema);
                 }}>
                 O
               </NativeButton>
               <NativeButton
-                style={DialysisScreenStyle.buttonContent2(edema)}
+                style={DialysisScreenStyle.buttonContent2(dialysis.edema)}
                 onPress={() => {
-                  setEdema('2');
-                  console.log(edema);
+                  handleChangDialysis('edema', '2');
+                  //console.log(edema);
                 }}>
                 X
               </NativeButton>
@@ -296,16 +322,33 @@ export default function GeneralDialysis() {
               <Text>갤러리</Text>
 
               <TouchableOpacity
-                onPress={() => {
-                  addImage();
-                }}>
-                <Image
-                  source={{uri: photo}}
-                  style={{
-                    width: '50%',
-                    height: 200,
-                  }}
-                />
+                style={{
+                  width: '80%',
+                  borderRadius: 20,
+                  height: 300,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: 'skyblue',
+                }}
+                onPress={() => handlePressShowImagePicker()}>
+                {photo ? (
+                  <Image
+                    source={{
+                      uri: photo && photo.uri ? photo.uri : photo,
+                    }}
+                    style={{
+                      resizeMode: 'stretch',
+                      borderRadius: 20,
+                      width: '100%',
+                      height: 300,
+                    }}
+                  />
+                ) : (
+                  <Text
+                    style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>
+                    사진 첨부하기
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
 
@@ -323,9 +366,8 @@ export default function GeneralDialysis() {
                   borderWidth: 1,
                   borderColor: 'black',
                 }}
-                keyboardType="numeric"
-                value={String(memo)}
-                onChangeText={(value) => setMemo(value)}
+                value={String(dialysis.memo)}
+                onChangeText={(value) => handleChangDialysis('memo', value)}
               />
             </View>
             <NativeButton
@@ -334,10 +376,18 @@ export default function GeneralDialysis() {
               }}
               onPress={() => {
                 console.log('1. 추가하기 버튼 클릭됨');
+                dispatch(clearDialysis());
                 AddBtn();
               }}>
               추가하기
             </NativeButton>
+            <Button
+              title="뒤로가기"
+              onPress={() => {
+                dispatch(clearDialysis());
+                navigation.navigate('Calendar');
+              }}
+            />
           </View>
         </ScrollView>
       </View>

@@ -4,6 +4,7 @@ import {SERVER_PATH} from './service/apis';
 import moment from 'moment';
 import errors from './utils/errors';
 import {createImageFormData, getFormattedDate} from './utils/functions';
+import {resolvePlugin} from '@babel/core';
 
 export function changeLoginField(name, value) {
   return {
@@ -19,6 +20,12 @@ export function changeJoinField(name, value) {
   };
 }
 
+export function changeDialysis(name, value) {
+  return {
+    type: 'changeDialysis',
+    payload: {name, value},
+  };
+}
 export function requestLoginWithKakao() {
   return async (dispatch) => {
     try {
@@ -688,90 +695,61 @@ export function setLastSearchQuery(lastSearchQuery) {
   };
 }
 
-// 일반 투석
-export function requestGeneralDialysis(
-  exchangeTime,
-  injectionConcentration,
-  injectionAmount,
-  drainage,
-  dehydration,
-  weight,
-  bloodPressure,
-  bloodSugar,
-  edema,
-  memo,
-) {
-  console.log('3');
-  return async (dispatch, getState) => {
-    const {userToken} = getState();
-    console.log(userToken + '----------- ');
-    try {
-      const response = await fetch(SERVER_PATH + '/user/saveKidney01', {
-        method: 'POST',
-        body: JSON.stringify({
-          exchangeTime,
-          injectionConcentration,
-          injectionAmount,
-          drainage,
-          dehydration,
-          weight,
-          bloodPressure,
-          bloodSugar,
-          edema,
-          memo,
-        }),
-      });
-
-      console.log(response);
-      const result = await response.json();
-      console.log('일반 투석일지 저장 성공', result);
-    } catch (e) {
-      console.log('일반 투석일지 실패');
-
-      console.log(e);
-    }
-  };
-}
-
-// 기계투석
-export function requestMachinedialysis(
-  exchangeTime,
-  injectionConcentration,
-  injectionAmount,
-  initialDrainage,
-  dehydration,
-  weight,
-  edema,
-  memo,
-) {
+// 복막 투석
+export function addGeneralDialysis(dialysis, date, dialysisType, photo) {
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
+    dispatch(
+      setError({
+        name: errors.LOADING,
+        message: '메모 업로드 중입니다. 잠시만 기다려주세요.',
+      }),
+    );
+
     try {
-      const response = await fetch(SERVER_PATH + '/user/saveKidney02', {
+      const response = await fetch(SERVER_PATH + '/peritoneum-memo', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': photo ? 'multipart/form-data' : 'application/json',
           'x-access-token': userToken,
         },
-        body: JSON.stringify({
-          exchangeTime,
-          injectionConcentration,
-          injectionAmount,
-          initialDrainage,
-          dehydration,
-          weight,
-          edema,
-          memo,
-        }),
+        body: photo
+          ? createImageFormData(photo, {
+              dialysis,
+              date,
+              dialysisType,
+            })
+          : JSON.stringify({
+              dialysis,
+              date,
+              dialysisType,
+            }),
       });
 
       const result = await response.json();
-      console.log('기계 투석일지 저장 성공', result);
-    } catch (e) {
-      console.log('기계 투석일지 실패');
+      const {isSuccess, message} = result;
 
-      console.log(e);
+      if (isSuccess) {
+        dispatch(setError({name: errors.ADD_DIALYSIS_MEMOS_SUCCESS}));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.ADD_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.ADD_DIALYSIS_MEMOS_ERROR,
+          message: err,
+        }),
+      );
+      console.log(err);
     }
   };
 }
@@ -790,7 +768,7 @@ export function addHemodialysisMemo(photo, memo, date) {
     try {
       const response = await fetch(SERVER_PATH + '/hemodialysis-memo', {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': photo ? 'multipart/form-data' : 'application/json',
           'x-access-token': userToken,
         },
         method: 'POST',
@@ -827,20 +805,21 @@ export function addHemodialysisMemo(photo, memo, date) {
   };
 }
 
-export function fetchMemos(date) {
+export function fetchMemos(date, kidneyType) {
+  console.log('fetchMemos', kidneyType);
+  const url =
+    kidneyType === 6 ? '/peritoneum-memo?date=' : '/hemodialysis-memo?date=';
+  console.log('url' + url);
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
     try {
-      const response = await fetch(
-        SERVER_PATH + '/hemodialysis-memo?date=' + date,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': userToken,
-          },
+      const response = await fetch(SERVER_PATH + url + date, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
         },
-      );
+      });
       const result = await response.json();
       const {isSuccess, hemodialysisMemos, message} = result;
 
@@ -863,14 +842,41 @@ export function fetchMemos(date) {
 
       if (isSuccess) {
         hemodialysisMemos.forEach((hemodialysisMemo) => {
-          const {dialysisId, recordDate, memo, photo} = hemodialysisMemo;
+          const {
+            dialysisId,
+            recordDate,
+            dialysisTypeId,
+            degrees,
+            exchangeTime,
+            injectionConcentration,
+            injectionAmount,
+            drainage,
+            dehydration,
+            weight,
+            bloodPressure,
+            bloodSugar,
+            edema,
+            memo,
+            photo,
+          } = hemodialysisMemo;
           const formattedDate = getFormattedDate(recordDate);
 
           tempItems[formattedDate] = [
             {
               dialysisId,
+              dialysisTypeId,
               name: memo,
               image: photo,
+              degrees,
+              exchangeTime,
+              injectionConcentration,
+              injectionAmount,
+              drainage,
+              dehydration,
+              weight,
+              bloodPressure,
+              bloodSugar,
+              edema,
               date: formattedDate,
             },
           ];
@@ -939,6 +945,7 @@ export function updateHemodialysisMemo({dialysisId, image, name}) {
 
       if (isSuccess) {
         dispatch(setError({name: errors.UPDATE_DIALYSIS_MEMOS_SUCCESS}));
+        dispatch(clearDialysis());
       } else {
         dispatch(
           setError({
@@ -1002,6 +1009,65 @@ export function deleteHemodialysisMemo(dialysisId) {
       );
       console.log(err);
     }
+  };
+}
+
+export function updateGeneralDialysisMemo({dialysisId, image, dialysis}) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    dispatch(
+      setError({
+        name: errors.LOADING,
+        message: '메모 수정 중입니다. 잠시만 기다려주세요.',
+      }),
+    );
+
+    try {
+      const response = await fetch(SERVER_PATH + '/peritoneum-memo', {
+        headers: {
+          'Content-Type':
+            image && image.uri ? 'multipart/form-data' : 'application/json',
+          'x-access-token': userToken,
+        },
+        method: 'PUT',
+        body:
+          image && image.uri
+            ? createImageFormData(image, {dialysis, dialysisId})
+            : JSON.stringify({dialysis, dialysisId}),
+      });
+
+      const result = await response.json();
+
+      const {isSuccess, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError({name: errors.UPDATE_DIALYSIS_MEMOS_SUCCESS}));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.UPDATE_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.UPDATE_DIALYSIS_MEMOS_ERROR,
+          message: err,
+        }),
+      );
+      console.log(err);
+    }
+  };
+}
+
+export function clearDialysis() {
+  return {
+    type: 'clearDialysis',
   };
 }
 
