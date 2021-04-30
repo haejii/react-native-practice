@@ -1,4 +1,5 @@
 import {Platform} from 'react-native';
+import {cos} from 'react-native-reanimated';
 
 const koreanMealTimes = {
   breakfast: '아침',
@@ -19,6 +20,7 @@ export function convertMealTime(mealTime) {
 }
 
 export function createImageFormData(image, body) {
+  console.log(image);
   const data = new FormData();
 
   data.append('image', {
@@ -26,13 +28,33 @@ export function createImageFormData(image, body) {
     type: image.type,
     uri: Platform.OS === 'ios' ? image.uri.replace('file://', '') : image.uri,
   });
+
+  const array = new FormData();
+
   Object.keys(body).forEach((key) => {
-    data.append(key, body[key]);
+    // if (key === 'dialysis') {
+    //   Object.keys(body[key]).forEach((key) => {
+    //     array.append(key, body['dialysis'][key]);
+    //   });
+
+    //   var arr = '';
+    //   Object.keys(array).forEach((d) => {
+    //     let i = 0;
+    //     while (i < 11) {
+    //       arr += `${array[d][i][1]}, `;
+    //       i++;
+    //     }
+    //   });
+    //   data.append('dialysis', arr);
+    // } else {
+
+    data.append(key, JSON.stringify(body[key]));
+    // }
   });
 
+  console.log(data);
   return data;
 }
-
 export function getFormattedDate(date) {
   let dateObject;
   if (typeof date === 'object') {
