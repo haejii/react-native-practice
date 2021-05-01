@@ -4,7 +4,7 @@ import {SERVER_PATH} from './service/apis';
 import moment from 'moment';
 import errors from './utils/errors';
 import {createImageFormData, getFormattedDate} from './utils/functions';
-import {resolvePlugin} from '@babel/core';
+//import {resolvePlugin} from '@babel/core';
 
 export function changeLoginField(name, value) {
   return {
