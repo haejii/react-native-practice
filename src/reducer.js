@@ -73,8 +73,9 @@ const initialDialysis = {
   bloodPressure: 0,
   bloodSugar: 0,
   edema: 0,
-  memo: 0,
+  memo: '',
 };
+
 const initialState = {
   isLoading: true,
   userToken: null,
@@ -123,7 +124,7 @@ const initialState = {
   searchedFoodResults: [],
   lastSearchQuery: '',
   lastSearchCategory: '',
-  Dialysis: {
+  dialysis: {
     ...initialDialysis,
   },
   dialysisMemos: {},
@@ -408,6 +409,23 @@ const reducers = {
       ...state,
       lastSearchQuery: '',
       lastSearchCategory,
+    };
+  },
+
+  changeDialysis: (state, {payload: {name, value}}) => {
+    return {
+      ...state,
+      dialysis: {
+        ...state.dialysis,
+        [name]: value,
+      },
+    };
+  },
+
+  clearDialysis: (state) => {
+    return {
+      ...state,
+      dialysis: initialDialysis,
     };
   },
 };

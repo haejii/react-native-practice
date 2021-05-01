@@ -49,9 +49,8 @@ export default function GeneralDialysis({
   const dialysisType = 2;
 
   let time = `${hour}시 ${min}분`;
-
   function handleChangDialysis(name, value) {
-    dispatch(changeDialysis(name, value));
+    dispatch(changeDialysis(name, typeof value === 'number' ? +value : value));
   }
 
   const handlePressShowImagePicker = () => {
@@ -150,8 +149,8 @@ export default function GeneralDialysis({
           style={{
             margin: 20,
             borderColor: 'red',
-            borderWidth: 2,
             flex: 1,
+            borderWidth: 2,
             justifyContent: 'center',
             alignItems: 'center',
             padding: 25,
@@ -165,231 +164,241 @@ export default function GeneralDialysis({
             총 제수량 차트
           </Text>
         </View>
-        <ScrollView>
-          <View style={{justifyContent: 'center', marginLeft: 20}}>
-            <View
-              style={{
-                alignItems: 'center',
-                width: '100%',
-                flexDirection: 'row',
-              }}>
-              <TextInput
+        <View style={{flex: 10}}>
+          <ScrollView>
+            <View style={{justifyContent: 'center', marginLeft: 20}}>
+              <View
                 style={{
-                  width: '10%',
-                  backgroundColor: 'white',
-                  height: 35,
-                  paddingHorizontal: 10,
-                  fontSize: 10,
-                  fontWeight: 'bold',
-                  marginBottom: '1%',
-                  marginRight: '5%',
-                  borderWidth: 1,
-                  borderColor: 'blue',
-                }}
-                keyboardType="numeric"
-                value={String(dialysis.degrees)}
-                onChangeText={(value) => handleChangDialysis('degrees', value)}
-              />
-              <Text>차</Text>
-            </View>
-            <View>
-              {show && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={exchangeTime}
-                  mode={mode}
-                  is24Hour={true}
-                  display="default"
-                  onChange={onChange}
-                />
-              )}
-            </View>
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>교환시간 : </Text>
-
-              <NativeButton
-                style={{backgroundColor: 'white', width: 100}}
-                onPress={showTimepicker}>
-                {time}
-              </NativeButton>
-            </View>
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>주입액 농도: </Text>
-              <TextInput
-                style={DialysisScreenStyle.basicTextInput}
-                keyboardType="numeric"
-                value={String(dialysis.injectionConcentration)}
-                onChangeText={(value) =>
-                  handleChangDialysis('injectionConcentration', value)
-                }
-              />
-              <Text>%</Text>
-            </View>
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>주입량 : </Text>
-              <TextInput
-                style={DialysisScreenStyle.basicTextInput}
-                keyboardType="numeric"
-                value={String(dialysis.injectionAmount)}
-                onChangeText={(value) =>
-                  handleChangDialysis('injectionAmount', value)
-                }
-              />
-              <Text>g</Text>
-            </View>
-
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>배액량 : </Text>
-              <TextInput
-                style={DialysisScreenStyle.basicTextInput}
-                keyboardType="numeric"
-                value={String(dialysis.drainage)}
-                onChangeText={(value) => handleChangDialysis('drainage', value)}
-              />
-              <Text>g</Text>
-            </View>
-
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>제수량 : </Text>
-              <TextInput
-                style={DialysisScreenStyle.basicTextInput}
-                keyboardType="numeric"
-                value={String(dialysis.dehydration)}
-                onChangeText={(value) =>
-                  handleChangDialysis('dehydration', value)
-                }
-              />
-              <Text>g</Text>
-            </View>
-
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>몸무게 : </Text>
-              <TextInput
-                style={DialysisScreenStyle.basicTextInput}
-                keyboardType="numeric"
-                value={String(dialysis.weight)}
-                onChangeText={(value) => handleChangDialysis('weight', value)}
-              />
-              <Text>kg</Text>
-            </View>
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>혈압 : </Text>
-              <TextInput
-                style={DialysisScreenStyle.basicTextInput}
-                keyboardType="numeric"
-                value={String(dialysis.bloodPressure)}
-                onChangeText={(value) =>
-                  handleChangDialysis('bloodPressure', value)
-                }
-              />
-              <Text>g</Text>
-            </View>
-
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>혈당 : </Text>
-              <TextInput
-                style={DialysisScreenStyle.basicTextInput}
-                keyboardType="numeric"
-                value={String(dialysis.bloodSugar)}
-                onChangeText={(value) =>
-                  handleChangDialysis('bloodSugar', value)
-                }
-              />
-              <Text>g</Text>
-            </View>
-
-            <View style={DialysisScreenStyle.basicView}>
-              <Text>부종 : </Text>
-              <NativeButton
-                style={DialysisScreenStyle.buttonContent(dialysis.edema)}
-                onPress={() => {
-                  handleChangDialysis('edema', '1');
-                  console.log(dialysis.edema);
-                }}>
-                O
-              </NativeButton>
-              <NativeButton
-                style={DialysisScreenStyle.buttonContent2(dialysis.edema)}
-                onPress={() => {
-                  handleChangDialysis('edema', '2');
-                  //console.log(edema);
-                }}>
-                X
-              </NativeButton>
-            </View>
-
-            <View style={{marginTop: 30, marginBottom: 30}}>
-              <Text>갤러리</Text>
-
-              <TouchableOpacity
-                style={{
-                  width: '80%',
-                  borderRadius: 20,
-                  height: 300,
-                  justifyContent: 'center',
                   alignItems: 'center',
-                  backgroundColor: 'skyblue',
-                }}
-                onPress={() => handlePressShowImagePicker()}>
-                {photo ? (
-                  <Image
-                    source={{
-                      uri: photo && photo.uri ? photo.uri : photo,
-                    }}
-                    style={{
-                      resizeMode: 'stretch',
-                      borderRadius: 20,
-                      width: '100%',
-                      height: 300,
-                    }}
+                  width: '100%',
+                  flexDirection: 'row',
+                }}>
+                <TextInput
+                  style={{
+                    width: '10%',
+                    backgroundColor: 'white',
+                    height: 35,
+                    paddingHorizontal: 10,
+                    fontSize: 10,
+                    fontWeight: 'bold',
+                    marginBottom: '1%',
+                    marginRight: '5%',
+                    borderWidth: 1,
+                    borderColor: 'blue',
+                  }}
+                  keyboardType="numeric"
+                  value={String(dialysis.degrees)}
+                  onChangeText={(value) =>
+                    handleChangDialysis('degrees', value)
+                  }
+                />
+                <Text>차</Text>
+              </View>
+              <View>
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={exchangeTime}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
                   />
-                ) : (
-                  <Text
-                    style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>
-                    사진 첨부하기
-                  </Text>
                 )}
-              </TouchableOpacity>
-            </View>
+              </View>
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>교환시간 : </Text>
 
-            <Text>메모 </Text>
-            <View style={DialysisScreenStyle.basicView}>
-              <TextInput
+                <NativeButton
+                  style={{backgroundColor: 'white', width: 100}}
+                  onPress={showTimepicker}>
+                  {time}
+                </NativeButton>
+              </View>
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>주입액 농도: </Text>
+                <TextInput
+                  style={DialysisScreenStyle.basicTextInput}
+                  keyboardType="numeric"
+                  value={String(dialysis.injectionConcentration)}
+                  onChangeText={(value) =>
+                    handleChangDialysis('injectionConcentration', value)
+                  }
+                />
+                <Text>%</Text>
+              </View>
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>주입량 : </Text>
+                <TextInput
+                  style={DialysisScreenStyle.basicTextInput}
+                  keyboardType="numeric"
+                  value={String(dialysis.injectionAmount)}
+                  onChangeText={(value) =>
+                    handleChangDialysis('injectionAmount', value)
+                  }
+                />
+                <Text>g</Text>
+              </View>
+
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>배액량 : </Text>
+                <TextInput
+                  style={DialysisScreenStyle.basicTextInput}
+                  keyboardType="numeric"
+                  value={String(dialysis.drainage)}
+                  onChangeText={(value) =>
+                    handleChangDialysis('drainage', value)
+                  }
+                />
+                <Text>g</Text>
+              </View>
+
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>제수량 : </Text>
+                <TextInput
+                  style={DialysisScreenStyle.basicTextInput}
+                  keyboardType="numeric"
+                  value={String(dialysis.dehydration)}
+                  onChangeText={(value) =>
+                    handleChangDialysis('dehydration', value)
+                  }
+                />
+                <Text>g</Text>
+              </View>
+
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>몸무게 : </Text>
+                <TextInput
+                  style={DialysisScreenStyle.basicTextInput}
+                  keyboardType="numeric"
+                  value={String(dialysis.weight)}
+                  onChangeText={(value) => handleChangDialysis('weight', value)}
+                />
+                <Text>kg</Text>
+              </View>
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>혈압 : </Text>
+                <TextInput
+                  style={DialysisScreenStyle.basicTextInput}
+                  keyboardType="numeric"
+                  value={String(dialysis.bloodPressure)}
+                  onChangeText={(value) =>
+                    handleChangDialysis('bloodPressure', value)
+                  }
+                />
+                <Text>g</Text>
+              </View>
+
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>혈당 : </Text>
+                <TextInput
+                  style={DialysisScreenStyle.basicTextInput}
+                  keyboardType="numeric"
+                  value={String(dialysis.bloodSugar)}
+                  onChangeText={(value) =>
+                    handleChangDialysis('bloodSugar', value)
+                  }
+                />
+                <Text>g</Text>
+              </View>
+
+              <View style={DialysisScreenStyle.basicView}>
+                <Text>부종 : </Text>
+                <NativeButton
+                  style={DialysisScreenStyle.buttonContent(dialysis.edema)}
+                  onPress={() => {
+                    handleChangDialysis('edema', '1');
+                    console.log(dialysis.edema);
+                  }}>
+                  O
+                </NativeButton>
+                <NativeButton
+                  style={DialysisScreenStyle.buttonContent2(dialysis.edema)}
+                  onPress={() => {
+                    handleChangDialysis('edema', '2');
+                    //console.log(edema);
+                  }}>
+                  X
+                </NativeButton>
+              </View>
+
+              <View style={{marginTop: 30, marginBottom: 30}}>
+                <Text>갤러리</Text>
+
+                <TouchableOpacity
+                  style={{
+                    width: '80%',
+                    borderRadius: 20,
+                    height: 300,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'skyblue',
+                  }}
+                  onPress={() => handlePressShowImagePicker()}>
+                  {photo ? (
+                    <Image
+                      source={{
+                        uri: photo && photo.uri ? photo.uri : photo,
+                      }}
+                      style={{
+                        resizeMode: 'stretch',
+                        borderRadius: 20,
+                        width: '100%',
+                        height: 300,
+                      }}
+                    />
+                  ) : (
+                    <Text
+                      style={{
+                        fontSize: 24,
+                        fontWeight: 'bold',
+                        color: 'white',
+                      }}>
+                      사진 첨부하기
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+
+              <Text>메모 </Text>
+              <View style={DialysisScreenStyle.basicView}>
+                <TextInput
+                  style={{
+                    width: '95%',
+                    backgroundColor: 'white',
+                    height: 100,
+                    paddingHorizontal: 10,
+                    fontSize: 16,
+                    marginBottom: '1%',
+                    marginRight: '5%',
+                    borderWidth: 1,
+                    borderColor: 'black',
+                  }}
+                  value={String(dialysis.memo)}
+                  onChangeText={(value) => handleChangDialysis('memo', value)}
+                />
+              </View>
+              <NativeButton
                 style={{
-                  width: '95%',
-                  backgroundColor: 'white',
-                  height: 100,
-                  paddingHorizontal: 10,
-                  fontSize: 16,
-                  marginBottom: '1%',
-                  marginRight: '5%',
-                  borderWidth: 1,
-                  borderColor: 'black',
+                  margin: 10,
                 }}
-                value={String(dialysis.memo)}
-                onChangeText={(value) => handleChangDialysis('memo', value)}
+                onPress={() => {
+                  console.log('1. 추가하기 버튼 클릭됨');
+                  dispatch(clearDialysis());
+                  AddBtn();
+                }}>
+                추가하기
+              </NativeButton>
+              <Button
+                title="뒤로가기"
+                onPress={() => {
+                  dispatch(clearDialysis());
+                  navigation.navigate('Calendar');
+                }}
               />
             </View>
-            <NativeButton
-              style={{
-                margin: 10,
-              }}
-              onPress={() => {
-                console.log('1. 추가하기 버튼 클릭됨');
-                dispatch(clearDialysis());
-                AddBtn();
-              }}>
-              추가하기
-            </NativeButton>
-            <Button
-              title="뒤로가기"
-              onPress={() => {
-                dispatch(clearDialysis());
-                navigation.navigate('Calendar');
-              }}
-            />
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </View>
     </View>
   );
