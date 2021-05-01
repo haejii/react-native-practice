@@ -405,7 +405,7 @@ export function setSearchedFoodResults(foods) {
 
 export function postAddMeal(foodIntakeRecordType, basketFoods) {
   return async (dispatch, getState) => {
-    const {userToken, lastSearchQuery} = getState();
+    const {userToken, lastSearchQuery, lastSearchCategory} = getState();
 
     try {
       const response = await fetch(SERVER_PATH + '/food-record', {
@@ -428,7 +428,11 @@ export function postAddMeal(foodIntakeRecordType, basketFoods) {
             `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
           ),
         );
-        dispatch(requestFoods(lastSearchQuery));
+        dispatch(
+          lastSearchQuery
+            ? requestFoods(lastSearchQuery)
+            : requestFoodsByCategory(lastSearchCategory),
+        );
         dispatch(requestFoodNutrition());
         dispatch(setError());
         dispatch(resetBasket([]));
@@ -595,7 +599,7 @@ export function requestFoodNutrition() {
 
 export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
   return async (dispatch, getState) => {
-    const {userToken, lastSearchQuery} = getState();
+    const {userToken, lastSearchQuery, lastSearchCategory} = getState();
 
     try {
       const response = await fetch(
@@ -622,7 +626,11 @@ export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
       if (isSuccess) {
         dispatch(setError());
         dispatch(requestFoodRecordWithDate(date));
-        dispatch(requestFoods(lastSearchQuery));
+        dispatch(
+          lastSearchQuery
+            ? requestFoods(lastSearchQuery)
+            : requestFoodsByCategory(lastSearchCategory),
+        );
         dispatch(requestFoodNutrition());
       } else {
         dispatch(setError({status: true, name: '음식 삭제 실패', message}));
@@ -636,7 +644,7 @@ export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
 
 export function requestRemoveFoodsByMealTime(foodIntakeRecordId, date) {
   return async (dispatch, getState) => {
-    const {userToken, lastSearchQuery} = getState();
+    const {userToken, lastSearchQuery, lastSearchCategory} = getState();
 
     try {
       const response = await fetch(
@@ -657,7 +665,11 @@ export function requestRemoveFoodsByMealTime(foodIntakeRecordId, date) {
       if (isSuccess) {
         dispatch(setError());
         dispatch(requestFoodRecordWithDate(date));
-        dispatch(requestFoods(lastSearchQuery));
+        dispatch(
+          lastSearchQuery
+            ? requestFoods(lastSearchQuery)
+            : requestFoodsByCategory(lastSearchCategory),
+        );
         dispatch(requestFoodNutrition());
       } else {
         dispatch(setError({status: true, name: '식단 삭제 실패', message}));
@@ -1038,5 +1050,55 @@ export function setFoodCategories(foodCategories) {
   return {
     type: 'setFoodCategories',
     payload: {foodCategories},
+  };
+}
+
+export function requestFoodsByCategory(category) {
+  return async (dispatch, getState) => {
+    try {
+      const {userToken} = getState();
+
+      const response = await fetch(
+        SERVER_PATH + '/foods/category?category=' + category,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+        },
+      );
+      const result = await response.json();
+
+      console.log(result);
+
+      const {isSuccess, foods, message, searchCategory} = result;
+
+      if (isSuccess) {
+        dispatch(setError());
+        dispatch(setLastSearchCategory(searchCategory));
+        dispatch(setSearchedFoodResults(foods));
+      } else {
+        dispatch(
+          setError({status: true, name: errors.FOOD_NOT_FOUND, message}),
+        );
+        dispatch(setSearchedFoodResults([]));
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(
+        setError({
+          status: true,
+          name: errors.REQUEST_FOOD_ERROR,
+          message: '네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        }),
+      );
+    }
+  };
+}
+
+export function setLastSearchCategory(lastSearchCategory) {
+  return {
+    type: 'setLastSearchCategory',
+    payload: {lastSearchCategory},
   };
 }

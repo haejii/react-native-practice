@@ -118,6 +118,7 @@ const initialState = {
   basketFoods: [],
   searchedFoodResults: [],
   lastSearchQuery: '',
+  lastSearchCategory: '',
   Dialysis: {
     ...initialDialysis,
   },
@@ -380,6 +381,7 @@ const reducers = {
     return {
       ...state,
       lastSearchQuery,
+      lastSearchCategory: '',
     };
   },
 
@@ -394,6 +396,14 @@ const reducers = {
     return {
       ...state,
       foodCategories,
+    };
+  },
+
+  setLastSearchCategory: (state, {payload: {lastSearchCategory}}) => {
+    return {
+      ...state,
+      lastSearchQuery: '',
+      lastSearchCategory,
     };
   },
 };

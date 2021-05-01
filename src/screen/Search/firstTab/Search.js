@@ -12,7 +12,12 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {requestFoodCategory, requestFoods, setError} from '../../../actions';
+import {
+  requestFoodCategory,
+  requestFoods,
+  requestFoodsByCategory,
+  setError,
+} from '../../../actions';
 import SearchResult from './SearchResult';
 import FoodInformationModal from './FoodInformationModal';
 import {SearchResultStyles} from '../../../style/styles';
@@ -40,8 +45,7 @@ export default function Search() {
   const [food, setFood] = useState('');
 
   const handlePressSelectCategory = (category) => {
-    console.log('handlePressSelectCategory', category);
-    // dispatch()
+    dispatch(requestFoodsByCategory(category));
   };
 
   useEffect(() => {
