@@ -22,7 +22,7 @@ function AgendaScreen({navigation}) {
 
   useEffect(() => {
     console.log('1. useState', kidneyType);
-    dispatch(fetchMemos(new Date()), kidneyType);
+    dispatch(fetchMemos(new Date(), kidneyType));
   }, []);
 
   const renderItem = (item) => {
