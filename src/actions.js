@@ -969,7 +969,6 @@ export function updateHemodialysisMemo({dialysisId, image, name}) {
 }
 
 export function removeDialysisMemo(dialysisId) {
-  console.log('delete 01', dialysisId);
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
