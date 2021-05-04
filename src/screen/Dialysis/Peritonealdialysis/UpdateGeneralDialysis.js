@@ -19,7 +19,7 @@ import {
   changeDialysis,
   setError,
   fetchMemos,
-  deleteHemodialysisMemo,
+  removeDialysisMemo,
   updateGeneralDialysisMemo,
   clearDialysis,
   getItem,
@@ -120,7 +120,8 @@ export default function UpdateGeneralDialysis({
       {
         text: '삭제',
         onPress: () => {
-          dispatch(deleteHemodialysisMemo(item.dialysisId));
+          const dialysisId = item.dialysisId;
+          dispatch(removeDialysisMemo(dialysisId));
         },
       },
       {text: '취소'},
@@ -132,7 +133,7 @@ export default function UpdateGeneralDialysis({
 
     if (!error.status && error.name === errors.DELETE_DIALYSIS_MEMOS_SUCCESS) {
       dispatch(clearDialysis());
-      dispatch(fetchMemos(kidneyType, item.date));
+      dispatch(fetchMemos(item.date, kidneyType));
       navigation.navigate('Calendar');
       dispatch(setError());
     }
@@ -163,7 +164,7 @@ export default function UpdateGeneralDialysis({
 
     if (!error.status && error.name === errors.UPDATE_DIALYSIS_MEMOS_SUCCESS) {
       navigation.navigate('Calendar');
-      dispatch(fetchMemos(item.date));
+      dispatch(fetchMemos(item.date, kidneyType));
       dispatch(setError());
     }
   }, [error]);

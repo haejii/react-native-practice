@@ -46,6 +46,9 @@ export default function Machinedialysis({
 
   const dialysis = useSelector((state) => state.dialysis);
   const dialysisType = 1;
+  dialysis.degrees = '0';
+  dialysis.bloodPressure = '0';
+  dialysis.bloodSugar = '0';
 
   const [isLoding, setIsLoding] = useState(true);
 

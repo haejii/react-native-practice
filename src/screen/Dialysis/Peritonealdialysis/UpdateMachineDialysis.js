@@ -22,7 +22,7 @@ import {
   fetchMemos,
   updateGeneralDialysisMemo,
   clearDialysis,
-  updateMachineDialysisMemo,
+  removeDialysisMemo,
 } from '../../../actions';
 import {useEffect} from 'react/cjs/react.development';
 import errors from '../../../utils/errors';
@@ -141,11 +141,35 @@ export default function UpdateMachineDialysis({
 
     if (!error.status && error.name === errors.UPDATE_DIALYSIS_MEMOS_SUCCESS) {
       navigation.navigate('Calendar');
-      dispatch(fetchMemos(kidneyType, item.date));
+      dispatch(fetchMemos(item.date, kidneyType));
       dispatch(clearDialysis());
       dispatch(setError());
     }
   }, [error]);
+
+  const handlePressDeleteMemo = () => {
+    Alert.alert('삭제', '정말 삭제하시겠습니까?', [
+      {
+        text: '삭제',
+        onPress: () => {
+          const dialysisId = item.dialysisId;
+          dispatch(removeDialysisMemo(dialysisId));
+        },
+      },
+      {text: '취소'},
+    ]);
+    if (error.status && error.name === errors.DELETE_DIALYSIS_MEMOS_FAILED) {
+      Alert.alert('메모 삭제 실패! 다시 시도해주세요. ', errors.message);
+      dispatch(setError());
+    }
+
+    if (!error.status && error.name === errors.DELETE_DIALYSIS_MEMOS_SUCCESS) {
+      dispatch(clearDialysis());
+      dispatch(fetchMemos(item.date, kidneyType));
+      navigation.navigate('Calendar');
+      dispatch(setError());
+    }
+  };
 
   // useEffect(() => {
   //   dialysis.injectionConcentration = item.injectionConcentration;
@@ -374,7 +398,7 @@ export default function UpdateMachineDialysis({
                 }}
                 onPress={() => {
                   console.log('1. 지우기 버튼 클릭됨');
-                  handlePressUpdateMemo();
+                  handlePressDeleteMemo();
                 }}>
                 지우기
               </NativeButton>
