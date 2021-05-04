@@ -438,7 +438,7 @@ const DialysisScreenStyle = StyleSheet.create({
       marginTop: 18,
       width: 30,
       height: 30,
-      backgroundColor: edema === 1 ? 'skyblue' : 'white',
+      backgroundColor: edema === '1' ? 'skyblue' : 'white',
     };
   },
   buttonContent2: (edema) => {
@@ -446,7 +446,7 @@ const DialysisScreenStyle = StyleSheet.create({
       marginTop: 18,
       width: 30,
       height: 30,
-      backgroundColor: edema === 2 ? 'skyblue' : 'white',
+      backgroundColor: edema === '2' ? 'skyblue' : 'white',
     };
   },
 });
