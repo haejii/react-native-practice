@@ -25,6 +25,7 @@ import {
 import {useEffect} from 'react/cjs/react.development';
 import errors from '../../../utils/errors';
 import SplashScreen from '../../SplashScreen';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
@@ -134,71 +135,74 @@ function InputMemo({
   }
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>{date}</Text>
-      <Text>메모 및 사진</Text>
-      <TextInput
-        style={{
-          marginVertical: 20,
-          borderRadius: 20,
-          height: 200,
-          width: '80%',
-          backgroundColor: 'white',
-          fontSize: 20,
-          paddingTop: 20,
-          paddingHorizontal: 20,
-          paddingBottom: 20,
-        }}
-        multiline={true}
-        placeholder={'메모를 입력해주세요'}
-        value={memo}
-        onChangeText={(value) => handleChangeMemo(value)}
-      />
-      <TouchableOpacity
-        style={{
-          width: '80%',
-          borderRadius: 20,
-          height: 300,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'skyblue',
-        }}
-        onPress={() => handlePressShowImagePicker()}>
-        {photo ? (
-          <Image
-            source={{
-              uri: photo ? photo.uri : Image.resolveAssetSource(no_user).uri,
-            }}
-            style={{
-              resizeMode: 'stretch',
-              borderRadius: 20,
-              width: '100%',
-              height: 300,
+    <ScrollView>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>{date}</Text>
+        <Text>메모 및 사진</Text>
+        <TextInput
+          style={{
+            marginVertical: 20,
+            borderRadius: 20,
+            height: 200,
+            width: '80%',
+            backgroundColor: 'white',
+            fontSize: 20,
+            paddingTop: 20,
+            paddingHorizontal: 20,
+            paddingBottom: 20,
+          }}
+          multiline={true}
+          placeholder={'메모를 입력해주세요'}
+          value={memo}
+          onChangeText={(value) => handleChangeMemo(value)}
+        />
+        <TouchableOpacity
+          style={{
+            width: '80%',
+            borderRadius: 20,
+            height: 300,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'skyblue',
+          }}
+          onPress={() => handlePressShowImagePicker()}>
+          {photo ? (
+            <Image
+              source={{
+                uri: photo ? photo.uri : Image.resolveAssetSource(no_user).uri,
+              }}
+              style={{
+                resizeMode: 'stretch',
+                borderRadius: 20,
+                width: '100%',
+                height: 300,
+              }}
+            />
+          ) : (
+            <Text style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>
+              사진 첨부하기
+            </Text>
+          )}
+        </TouchableOpacity>
+
+        <View
+          style={{
+            top: 20,
+            flexDirection: 'row',
+            width: '100%',
+            height: 50,
+            justifyContent: 'space-around',
+          }}>
+          <Button title="저장하기" onPress={() => handlePressAddMemo()} />
+          <Button
+            title="뒤로가기"
+            onPress={() => {
+              navigation.goBack();
             }}
           />
-        ) : (
-          <Text style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>
-            사진 첨부하기
-          </Text>
-        )}
-      </TouchableOpacity>
-
-      <View
-        style={{
-          top: 20,
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'space-around',
-        }}>
-        <Button title="저장하기" onPress={() => handlePressAddMemo()} />
-        <Button
-          title="뒤로가기"
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -322,72 +326,74 @@ function UpdateMemo({
   }
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>{item.date}</Text>
-      <Text>메모 및 사진 수정하기</Text>
-      <TextInput
-        style={{
-          marginVertical: 20,
-          borderRadius: 20,
-          height: 200,
-          width: '80%',
-          backgroundColor: 'white',
-          fontSize: 20,
-          paddingTop: 20,
-          paddingHorizontal: 20,
-          paddingBottom: 20,
-        }}
-        multiline={true}
-        placeholder={'메모를 입력해주세요'}
-        value={memo}
-        onChangeText={(value) => handleChangeMemo(value)}
-      />
-      <TouchableOpacity
-        style={{
-          width: '80%',
-          borderRadius: 20,
-          height: 300,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'skyblue',
-        }}
-        onPress={() => handlePressShowImagePicker()}>
-        {photo ? (
-          <Image
-            source={{
-              uri: photo && photo.uri ? photo.uri : photo,
-            }}
-            style={{
-              resizeMode: 'stretch',
-              borderRadius: 20,
-              width: '100%',
-              height: 300,
+    <ScrollView>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>{item.date}</Text>
+        <Text>메모 및 사진 수정하기</Text>
+        <TextInput
+          style={{
+            marginVertical: 20,
+            borderRadius: 20,
+            height: 200,
+            width: '80%',
+            backgroundColor: 'white',
+            fontSize: 20,
+            paddingTop: 20,
+            paddingHorizontal: 20,
+            paddingBottom: 20,
+          }}
+          multiline={true}
+          placeholder={'메모를 입력해주세요'}
+          value={memo}
+          onChangeText={(value) => handleChangeMemo(value)}
+        />
+        <TouchableOpacity
+          style={{
+            width: '80%',
+            borderRadius: 20,
+            height: 300,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'skyblue',
+          }}
+          onPress={() => handlePressShowImagePicker()}>
+          {photo ? (
+            <Image
+              source={{
+                uri: photo && photo.uri ? photo.uri : photo,
+              }}
+              style={{
+                resizeMode: 'stretch',
+                borderRadius: 20,
+                width: '100%',
+                height: 300,
+              }}
+            />
+          ) : (
+            <Text style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>
+              사진 첨부하기
+            </Text>
+          )}
+        </TouchableOpacity>
+
+        <View
+          style={{
+            top: 20,
+            flexDirection: 'row',
+            width: '100%',
+            justifyContent: 'space-around',
+          }}>
+          <Button title="수정하기" onPress={() => handlePressUpdateMemo()} />
+          <Button title="삭제하기" onPress={() => handlePressDeleteMemo()} />
+          <Button
+            title="뒤로가기"
+            onPress={() => {
+              navigation.goBack();
             }}
           />
-        ) : (
-          <Text style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>
-            사진 첨부하기
-          </Text>
-        )}
-      </TouchableOpacity>
-
-      <View
-        style={{
-          top: 20,
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'space-around',
-        }}>
-        <Button title="수정하기" onPress={() => handlePressUpdateMemo()} />
-        <Button title="삭제하기" onPress={() => handlePressDeleteMemo()} />
-        <Button
-          title="뒤로가기"
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 export default function Hemodialysis() {
