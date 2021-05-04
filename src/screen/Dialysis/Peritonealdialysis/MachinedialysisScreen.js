@@ -53,7 +53,6 @@ export default function Machinedialysis({
     dispatch(clearDialysis());
     setIsLoding(false);
   }
-  s;
 
   let time = `${hour}시 ${min}분`;
 
