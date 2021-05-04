@@ -63,16 +63,16 @@ const initialNutrition = {
 };
 
 const initialDialysis = {
-  degrees: 0,
-  exchangeTime: 0,
-  injectionConcentration: 0,
-  injectionAmount: 0,
-  drainage: 0,
-  dehydration: 0,
-  weight: 0,
-  bloodPressure: 0,
-  bloodSugar: 0,
-  edema: 0,
+  degrees: '',
+  exchangeTime: '',
+  injectionConcentration: '',
+  injectionAmount: '',
+  drainage: '',
+  dehydration: '',
+  weight: '',
+  bloodPressure: '',
+  bloodSugar: '',
+  edema: '',
   memo: '',
 };
 
@@ -423,9 +423,10 @@ const reducers = {
   },
 
   clearDialysis: (state) => {
+    console.log('clearDialysis');
     return {
       ...state,
-      dialysis: initialDialysis,
+      dialysis: {...initialDialysis},
     };
   },
 };
