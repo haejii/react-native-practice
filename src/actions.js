@@ -968,13 +968,15 @@ export function updateHemodialysisMemo({dialysisId, image, name}) {
   };
 }
 
-export function deleteHemodialysisMemo(dialysisId) {
+export function removeDialysisMemo(dialysisId) {
+  console.log('delete 01', dialysisId);
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
     try {
+      console.log('delete 02');
       const response = await fetch(
-        SERVER_PATH + '/hemodialysis-memo/' + dialysisId,
+        SERVER_PATH + '/dialysis-memo?dialysisId=' + dialysisId,
         {
           headers: {
             'Content-Type': 'application/json',
