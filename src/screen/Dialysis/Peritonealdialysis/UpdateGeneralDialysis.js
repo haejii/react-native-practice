@@ -16,13 +16,13 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import NativeButton from 'apsl-react-native-button';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  addGeneralDialysis,
   changeDialysis,
   setError,
   fetchMemos,
-  updateHemodialysisMemo,
+  deleteHemodialysisMemo,
   updateGeneralDialysisMemo,
   clearDialysis,
+  getItem,
 } from '../../../actions';
 import {useEffect} from 'react/cjs/react.development';
 import errors from '../../../utils/errors';
@@ -42,11 +42,28 @@ export default function UpdateGeneralDialysis({
 
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState(item.image);
   const [exchangeTime, setExchangeTime] = useState(new Date(item.exchangeTime));
+  const kidneyType = useSelector((state) => state.user.kidneyType);
 
   const [hour, setHour] = useState(exchangeTime.getHours());
   const [min, setMin] = useState(exchangeTime.getMinutes());
+  const [isLoding, setIsLoding] = useState(true);
+
+  if (isLoding) {
+    dialysis.degrees = item.degrees;
+    dialysis.exchangeTime = item.exchangeTime;
+    dialysis.injectionConcentration = item.injectionConcentration;
+    dialysis.injectionAmount = item.injectionAmount;
+    dialysis.drainage = item.drainage;
+    dialysis.dehydration = item.dehydration;
+    dialysis.weight = item.weight;
+    dialysis.bloodPressure = item.bloodPressure;
+    dialysis.bloodSugar = item.bloodSugar;
+    dialysis.edema = item.edema;
+    dialysis.memo = item.name;
+    setIsLoding(false);
+  }
 
   let time = `${hour}시 ${min}분`;
 
@@ -98,6 +115,34 @@ export default function UpdateGeneralDialysis({
     );
   };
 
+  const handlePressDeleteMemo = () => {
+    Alert.alert('삭제', '정말 삭제하시겠습니까?', [
+      {
+        text: '삭제',
+        onPress: () => {
+          dispatch(deleteHemodialysisMemo(item.dialysisId));
+        },
+      },
+      {text: '취소'},
+    ]);
+    if (error.status && error.name === errors.DELETE_DIALYSIS_MEMOS_FAILED) {
+      Alert.alert('메모 삭제 실패! 다시 시도해주세요. ', errors.message);
+      dispatch(setError());
+    }
+
+    if (!error.status && error.name === errors.DELETE_DIALYSIS_MEMOS_SUCCESS) {
+      dispatch(clearDialysis());
+      dispatch(fetchMemos(kidneyType, item.date));
+      navigation.navigate('Calendar');
+      dispatch(setError());
+    }
+  };
+
+  function handleBack() {
+    dispatch(clearDialysis());
+    navigation.navigate('Calendar');
+  }
+
   useEffect(() => {
     if (error.status && error.name === errors.UPDATE_DIALYSIS_MEMOS_FAILED) {
       Alert.alert('메모 수정 실패', errors.message);
@@ -123,21 +168,6 @@ export default function UpdateGeneralDialysis({
     }
   }, [error]);
 
-  useEffect(() => {
-    dialysis.degrees = item.degrees;
-    dialysis.exchangeTime = item.exchangeTime;
-    dialysis.injectionConcentration = item.injectionConcentration;
-    dialysis.injectionAmount = item.injectionAmount;
-    dialysis.drainage = item.drainage;
-    dialysis.dehydration = item.dehydration;
-    dialysis.weight = item.weight;
-    dialysis.bloodPressure = item.bloodPressure;
-    dialysis.bloodSugar = item.bloodSugar;
-    dialysis.edema = item.edema;
-    dialysis.memo = item.name;
-    setPhoto(item.image);
-  }, []);
-
   if (!error.status && error.name === errors.LOADING) {
     return <SplashScreen />;
   }
@@ -158,6 +188,7 @@ export default function UpdateGeneralDialysis({
   const showTimepicker = () => {
     showMode('time');
   };
+
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
       <View style={{flex: 1}}>
@@ -360,7 +391,11 @@ export default function UpdateGeneralDialysis({
                   />
                 ) : (
                   <Text
-                    style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>
+                    style={{
+                      fontSize: 24,
+                      fontWeight: 'bold',
+                      color: 'white',
+                    }}>
                     사진 첨부하기
                   </Text>
                 )}
@@ -381,6 +416,7 @@ export default function UpdateGeneralDialysis({
                   borderWidth: 1,
                   borderColor: 'black',
                 }}
+                placeholder={item.memo}
                 value={String(dialysis.memo)}
                 onChangeText={(value) => handleChangDialysis('memo', value)}
               />
@@ -404,7 +440,7 @@ export default function UpdateGeneralDialysis({
                 }}
                 onPress={() => {
                   console.log('1. 지우기 버튼 클릭됨');
-                  handlePressUpdateMemo();
+                  handlePressDeleteMemo();
                 }}>
                 지우기
               </NativeButton>
@@ -412,8 +448,7 @@ export default function UpdateGeneralDialysis({
             <Button
               title="뒤로가기"
               onPress={() => {
-                dispatch(clearDialysis());
-                navigation.navigate('Calendar');
+                handleBack();
               }}
             />
           </View>

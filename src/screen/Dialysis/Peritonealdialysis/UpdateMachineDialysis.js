@@ -42,15 +42,34 @@ export default function UpdateMachineDialysis({
 
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState(item.image);
   const [exchangeTime, setExchangeTime] = useState(new Date(item.date));
   const [hour, setHour] = useState(exchangeTime.getHours());
   const [min, setMin] = useState(exchangeTime.getMinutes());
+  const kidneyType = useSelector((state) => state.user.kidneyType);
+  const [isLoding, setIsLoding] = useState(true);
+
+  if (isLoding) {
+    dialysis.exchangeTime = item.exchangeTime;
+    dialysis.injectionConcentration = item.injectionConcentration;
+    dialysis.injectionAmount = item.injectionAmount;
+    dialysis.drainage = item.drainage;
+    dialysis.dehydration = item.dehydration;
+    dialysis.weight = item.weight;
+    dialysis.edema = item.edema;
+    dialysis.memo = item.name;
+    setIsLoding(false);
+  }
 
   let time = `${hour}시 ${min}분`;
 
   function handleChangDialysis(name, value) {
     dispatch(changeDialysis(name, value));
+  }
+
+  function handleBack() {
+    dispatch(clearDialysis());
+    navigation.navigate('Calendar');
   }
 
   const handlePressShowImagePicker = () => {
@@ -122,22 +141,22 @@ export default function UpdateMachineDialysis({
 
     if (!error.status && error.name === errors.UPDATE_DIALYSIS_MEMOS_SUCCESS) {
       navigation.navigate('Calendar');
-      dispatch(fetchMemos(item.date));
+      dispatch(fetchMemos(kidneyType, item.date));
       dispatch(clearDialysis());
       dispatch(setError());
     }
   }, [error]);
 
-  useEffect(() => {
-    dialysis.injectionConcentration = item.injectionConcentration;
-    dialysis.injectionAmount = item.injectionAmount;
-    dialysis.drainage = item.drainage;
-    dialysis.dehydration = item.dehydration;
-    dialysis.weight = item.weight;
-    dialysis.edema = item.edema;
-    dialysis.memo = item.name;
-    setPhoto(item.image);
-  }, []);
+  // useEffect(() => {
+  //   dialysis.injectionConcentration = item.injectionConcentration;
+  //   dialysis.injectionAmount = item.injectionAmount;
+  //   dialysis.drainage = item.drainage;
+  //   dialysis.dehydration = item.dehydration;
+  //   dialysis.weight = item.weight;
+  //   dialysis.edema = item.edema;
+  //   dialysis.memo = item.name;
+  //   setPhoto(item.image);
+  // }, []);
 
   if (!error.status && error.name === errors.LOADING) {
     return <SplashScreen />;
@@ -363,8 +382,7 @@ export default function UpdateMachineDialysis({
             <Button
               title="뒤로가기"
               onPress={() => {
-                dispatch(clearDialysis());
-                navigation.navigate('Calendar');
+                handleBack();
               }}
             />
           </View>

@@ -47,6 +47,14 @@ export default function Machinedialysis({
   const dialysis = useSelector((state) => state.dialysis);
   const dialysisType = 1;
 
+  const [isLoding, setIsLoding] = useState(true);
+
+  if (isLoding) {
+    dispatch(clearDialysis());
+    setIsLoding(false);
+  }
+  s;
+
   let time = `${hour}시 ${min}분`;
 
   function handleChangDialysis(name, value) {

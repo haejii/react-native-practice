@@ -48,6 +48,13 @@ export default function GeneralDialysis({
 
   const dialysisType = 2;
 
+  const [isLoding, setIsLoding] = useState(true);
+
+  if (isLoding) {
+    dispatch(clearDialysis());
+    setIsLoding(false);
+  }
+
   let time = `${hour}시 ${min}분`;
   function handleChangDialysis(name, value) {
     dispatch(changeDialysis(name, typeof value === 'number' ? +value : value));
@@ -88,7 +95,7 @@ export default function GeneralDialysis({
   };
 
   const AddBtn = () => {
-    if (dialysis.exchangeTime === null || !dialysis.degrees === null) {
+    if (!dialysis.degrees === null) {
       return Alert.alert('기입확인', '기입하지 않은 부분 존재');
     } else {
       dialysis.exchangeTime = exchangeTime;
@@ -392,7 +399,9 @@ export default function GeneralDialysis({
               <Button
                 title="뒤로가기"
                 onPress={() => {
+                  console.log('2. 뒤로가기 버튼 클릭됨');
                   dispatch(clearDialysis());
+                  console.log('degrees', dialysis.degrees);
                   navigation.navigate('Calendar');
                 }}
               />
