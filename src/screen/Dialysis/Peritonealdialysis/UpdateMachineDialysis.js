@@ -43,7 +43,7 @@ export default function UpdateMachineDialysis({
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [photo, setPhoto] = useState(item.image);
-  const [exchangeTime, setExchangeTime] = useState(new Date(item.date));
+  const [exchangeTime, setExchangeTime] = useState(new Date(item.exchangeTime));
   const [hour, setHour] = useState(exchangeTime.getHours());
   const [min, setMin] = useState(exchangeTime.getMinutes());
   const kidneyType = useSelector((state) => state.user.kidneyType);
@@ -111,6 +111,10 @@ export default function UpdateMachineDialysis({
       Alert.alert('메모 수정 실패', '메모를 입력해주세요');
       return;
     }
+
+    dialysis.degrees = 0;
+    dialysis.bloodPressure = 0;
+    dialysis.bloodSugar = 0;
 
     dispatch(
       updateGeneralDialysisMemo({
