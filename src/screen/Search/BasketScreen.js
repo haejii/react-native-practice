@@ -36,23 +36,28 @@ export default function BasketFood() {
 
   const calorie = basketFoods
     .map((basketFood) => +basketFood.calorie)
-    .reduce((acc, curr) => acc + curr, 0);
+    .reduce((acc, curr) => acc + curr, 0)
+    .toFixed(3);
 
   const protein = basketFoods
     .map((basketFood) => +basketFood.protein)
-    .reduce((acc, curr) => acc + curr, 0);
+    .reduce((acc, curr) => acc + curr, 0)
+    .toFixed(3);
 
   const phosphorus = basketFoods
     .map((basketFood) => +basketFood.phosphorus)
-    .reduce((acc, curr) => acc + curr, 0);
+    .reduce((acc, curr) => acc + curr, 0)
+    .toFixed(3);
 
   const potassium = basketFoods
     .map((basketFood) => +basketFood.potassium)
-    .reduce((acc, curr) => acc + curr, 0);
+    .reduce((acc, curr) => acc + curr, 0)
+    .toFixed(3);
 
   const sodium = basketFoods
     .map((basketFood) => +basketFood.sodium)
-    .reduce((acc, curr) => acc + curr, 0);
+    .reduce((acc, curr) => acc + curr, 0)
+    .toFixed(3);
 
   const handlePressAddMeal = () => {
     if (!mealTime) {

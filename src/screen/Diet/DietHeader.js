@@ -8,6 +8,7 @@ import {
 } from 'accordion-collapse-react-native';
 import DietDetail from './DietDetail';
 import DietModal from './DietModal';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default function DietHeader({meal, goal, date}) {
   return (
@@ -15,23 +16,28 @@ export default function DietHeader({meal, goal, date}) {
       {Object.keys(meal).map((key, i) => {
         const calorie = meal[key]
           .map((food) => food.calorie)
-          .reduce((acc, curr) => acc + curr, 0);
+          .reduce((acc, curr) => acc + curr, 0)
+          .toFixed(3);
 
         const protein = meal[key]
           .map((food) => food.protein)
-          .reduce((acc, curr) => acc + curr, 0);
+          .reduce((acc, curr) => acc + curr, 0)
+          .toFixed(3);
 
         const phosphorus = meal[key]
           .map((food) => food.phosphorus)
-          .reduce((acc, curr) => acc + curr, 0);
+          .reduce((acc, curr) => acc + curr, 0)
+          .toFixed(3);
 
         const potassium = meal[key]
           .map((food) => food.potassium)
-          .reduce((acc, curr) => acc + curr, 0);
+          .reduce((acc, curr) => acc + curr, 0)
+          .toFixed(3);
 
         const sodium = meal[key]
           .map((food) => food.sodium)
-          .reduce((acc, curr) => acc + curr, 0);
+          .reduce((acc, curr) => acc + curr, 0)
+          .toFixed(3);
 
         return (
           <View style={{flexDirection: 'row'}} key={i + key}>
