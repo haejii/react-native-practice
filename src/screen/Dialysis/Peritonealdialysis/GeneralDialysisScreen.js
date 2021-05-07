@@ -50,10 +50,10 @@ export default function GeneralDialysis({
 
   const [isLoding, setIsLoding] = useState(true);
 
-  if (isLoding) {
-    dispatch(clearDialysis());
-    setIsLoding(false);
-  }
+  //  if (isLoding) {
+  //    dispatch(clearDialysis());
+  //    setIsLoding(false);
+  //  }
 
   let time = `${hour}시 ${min}분`;
   function handleChangDialysis(name, value) {
