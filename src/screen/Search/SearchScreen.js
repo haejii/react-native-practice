@@ -2,7 +2,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Search from './firstTab/Search';
-import StoreScreen from './StoreScreen';
+import StoreScreen from './Store/StoreScreen';
 import BasketScreen from './BasketScreen';
 
 const Tab = createMaterialTopTabNavigator();
