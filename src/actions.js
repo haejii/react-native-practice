@@ -325,6 +325,7 @@ export function setError({status, name, message} = {}) {
 }
 
 export function changeCount(foodCount) {
+  console.log('2');
   return {
     type: 'changeCount',
     payload: {
@@ -334,6 +335,7 @@ export function changeCount(foodCount) {
 }
 
 export function addBasket(newBasketFood) {
+  console.log('3');
   return {
     type: 'addBasket',
     payload: {
@@ -342,6 +344,98 @@ export function addBasket(newBasketFood) {
   };
 }
 
+// StoreFood
+export function storeFood(newBasketFood) {
+  return {
+    type: 'storeFood',
+    payload: {
+      newBasketFood,
+    },
+  };
+}
+
+export function postStoreFood(basketName, storedFood) {
+  console.log(storeFood);
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(SERVER_PATH + '/food-store', {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+        method: 'POST',
+        body: JSON.stringify({basketName, storedFood}),
+      });
+
+      const result = await response.json();
+
+      const {isSuccess, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError({name: errors.ADD_STOREFOOD_SUCESS}));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.ADD_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.ADD_DIALYSIS_MEMOS_ERROR,
+          message: err,
+        }),
+      );
+      console.log(err);
+    }
+  };
+}
+
+export function requestFoodStored() {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(SERVER_PATH + '/food-store', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+      });
+
+      const {isSuccess, userInfo, message} = await response.json();
+      console.log('requestUserInfo result', userInfo);
+
+      if (isSuccess) {
+        dispatch(setUser(userInfo));
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.USER_INFO_NOT_FOUND,
+            message,
+          }),
+        );
+      }
+    } catch (e) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.GET_USER_INFO_ERROR,
+          message: '네트워크 에러가 발생했습니다. 잠시 후 다시 시도해주세요!',
+        }),
+      );
+      console.log('유저정보 가져오기 실패!', e);
+    }
+  };
+}
 export function removeBasket(value) {
   return {
     type: 'removeBasket',
@@ -581,7 +675,7 @@ export function requestFoodNutrition() {
         console.log(nutrition);
         dispatch(setError());
         dispatch(setNutrition(nutrition));
-        console.log('성공');
+        console.log('set nutrition 성공');
       } else {
         dispatch(
           setError({

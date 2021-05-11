@@ -314,6 +314,16 @@ const reducers = {
     };
   },
 
+  storeFood: (state, {payload: {newBasketFood}}) => {
+    const {storedFood} = state;
+
+    console.log({storedFood: [...storedFood, newBasketFood]});
+    return {
+      ...state,
+      storedFood: [...storedFood, newBasketFood],
+    };
+  },
+
   removeBasket: (state, {payload: {value}}) => {
     const {basketFoods} = state;
     console.log('basketFoods : ' + basketFoods);
