@@ -374,6 +374,17 @@ const reducers = {
     };
   },
 
+  setMyStore: (state, {payload: {Mystore}}) => {
+    console.log('Mystore', Mystore);
+
+    return {
+      ...state,
+      storeFood: {
+        ...Mystore,
+      },
+    };
+  },
+
   setNutrition: (state, {payload: {dateNutrition}}) => {
     console.log('setNutrition', {
       ...state,
