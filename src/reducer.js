@@ -344,6 +344,13 @@ const reducers = {
     };
   },
 
+  resetStore: (state, {payload: {value}}) => {
+    return {
+      ...state,
+      storedFood: value,
+    };
+  },
+
   setSearchedFoodResults: (state, {payload: {foods}}) => {
     return {
       ...state,
