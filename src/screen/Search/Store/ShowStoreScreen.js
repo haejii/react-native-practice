@@ -26,13 +26,11 @@ export default function ShowStore() {
 
   return (
     <View style={{flex: 2}}>
-      <ScrollView>
-        {MyStore === undefined ? (
-          <Text>저장된 식사가 없습니다. </Text>
-        ) : (
-          <StoreHeader storefood={MyStore} goal={goal} />
-        )}
-      </ScrollView>
+      {MyStore === undefined ? (
+        <Text>저장된 식사가 없습니다. </Text>
+      ) : (
+        <StoreHeader storefood={MyStore} goal={goal} />
+      )}
     </View>
   );
 }
