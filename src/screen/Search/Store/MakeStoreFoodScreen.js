@@ -24,6 +24,7 @@ export default function MakeStoreFood() {
       return;
     }
     dispatch(postStoreFood(basketName, storedFood));
+    setBasketName('');
   };
 
   const calorie = storedFood
