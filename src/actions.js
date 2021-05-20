@@ -354,6 +354,15 @@ export function storeFood(newBasketFood) {
   };
 }
 
+export function resetStore(value) {
+  return {
+    type: 'resetStore',
+    payload: {
+      value,
+    },
+  };
+}
+
 export function postStoreFood(basketName, storedFood) {
   console.log(storeFood);
   return async (dispatch, getState) => {
@@ -375,6 +384,7 @@ export function postStoreFood(basketName, storedFood) {
 
       if (isSuccess) {
         dispatch(setError({name: errors.ADD_STOREFOOD_SUCESS}));
+        dispatch(requestFoodStored());
       } else {
         dispatch(
           setError({
@@ -410,11 +420,13 @@ export function requestFoodStored() {
         },
       });
 
-      const {isSuccess, userInfo, message} = await response.json();
-      console.log('requestUserInfo result', userInfo);
+      const {isSuccess, Mystored, message} = await response.json();
 
       if (isSuccess) {
-        dispatch(setUser(userInfo));
+        console.log('성공');
+        console.log(Mystored);
+        dispatch(resetStore([]));
+        dispatch(setMyStore(Mystored));
       } else {
         dispatch(
           setError({
@@ -433,6 +445,62 @@ export function requestFoodStored() {
         }),
       );
       console.log('유저정보 가져오기 실패!', e);
+    }
+  };
+}
+
+export function setMyStore(Mystore) {
+  return {
+    type: 'setMyStore',
+    payload: {
+      Mystore,
+    },
+  };
+}
+
+export function deleteStoreFoods(storedFoodId) {
+  console.log('2.', storedFoodId);
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      console.log('delte StoreFoods');
+      const response = await fetch(
+        SERVER_PATH + '/food-store?storedFoodId=' + storedFoodId,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+          method: 'DELETE',
+        },
+      );
+
+      const result = await response.json();
+
+      const {isSuccess, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError({name: errors.DELETE_DIALYSIS_MEMOS_SUCCESS}));
+        dispatch(requestFoodStored());
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.DELETE_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.DELETE_DIALYSIS_MEMOS_ERROR,
+          message: err,
+        }),
+      );
+      console.log(err);
     }
   };
 }
