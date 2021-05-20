@@ -1331,3 +1331,10 @@ export function setLastSearchCategory(lastSearchCategory) {
     payload: {lastSearchCategory},
   };
 }
+
+export function changeFoodsByCategory(selectedIndex) {
+  return {
+    type: 'changeFoodsByCategory',
+    payload: {selectedIndex},
+  };
+}

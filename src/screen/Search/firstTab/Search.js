@@ -13,6 +13,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 
 import {
+  changeFoodsByCategory,
   requestFoodCategory,
   requestFoods,
   requestFoodsByCategory,
@@ -36,6 +37,7 @@ export default function Search() {
       return;
     }
     dispatch(requestFoods(food));
+    dispatch(changeFoodsByCategory(null));
   };
 
   const handleChangeFoodField = (name, value) => {
@@ -44,8 +46,9 @@ export default function Search() {
 
   const [food, setFood] = useState('');
 
-  const handlePressSelectCategory = (category) => {
+  const handlePressSelectCategory = (category, selectedIndex) => {
     dispatch(requestFoodsByCategory(category));
+    dispatch(changeFoodsByCategory(selectedIndex));
   };
 
   useEffect(() => {
@@ -92,25 +95,27 @@ export default function Search() {
             카테고리를 선택하면 하위 메뉴를 볼 수 있습니다.
           </Text>
           <ScrollView style={{width: '80%'}}>
-            {foodCategories.map((category, idx) => (
+            {foodCategories.map(({name, selected}, idx) => (
               <TouchableOpacity
                 style={{
-                  backgroundColor: 'hotpink',
+                  backgroundColor: selected ? 'hotpink' : 'white',
+                  borderColor: 'black',
+                  borderWidth: 1,
                   width: '100%',
                   padding: 10,
                   borderRadius: 10,
                   marginBottom: 5,
                 }}
                 key={idx}
-                onPress={() => handlePressSelectCategory(category)}>
+                onPress={() => handlePressSelectCategory(name, idx)}>
                 <Text
                   style={{
-                    color: 'white',
+                    color: selected ? 'white' : 'black',
                     width: '100%',
                     fontSize: 20,
                     fontWeight: 'bold',
                   }}>
-                  {category}
+                  {name}
                 </Text>
               </TouchableOpacity>
             ))}
