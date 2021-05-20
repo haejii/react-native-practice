@@ -20,6 +20,7 @@ import {
   saveFood,
   changeCount,
   addBasket,
+  storeFood,
 } from '../../../actions';
 import {
   FoodInformationModalStyles,
@@ -44,6 +45,7 @@ export default function FoodInformationModal({food, onPress, type}) {
   const count = useSelector((state) => state.foodCount);
 
   const handlePressModal = () => {
+    console.log(food);
     setIsOpen(!isOpen);
     setInputMeal(food.foodAmount);
     setCalorie(((food.calorie * food.foodAmount) / 100).toFixed(3));
@@ -76,7 +78,7 @@ export default function FoodInformationModal({food, onPress, type}) {
       handlePressModal();
       return;
     }
-
+    console.log('1');
     dispatch(changeCount(count + 1));
     dispatch(
       addBasket({
@@ -96,6 +98,22 @@ export default function FoodInformationModal({food, onPress, type}) {
 
   const handlePressSave = () => {
     dispatch(saveFood(food.id));
+    handlePressModal();
+  };
+
+  const handlePressStore = () => {
+    dispatch(
+      storeFood({
+        foodId: food.foodId,
+        foodAmount: inputMeal,
+        calorie,
+        protein,
+        phosphorus,
+        potassium,
+        sodium,
+        foodName: food.foodName,
+      }),
+    );
     handlePressModal();
   };
 
@@ -246,19 +264,20 @@ export default function FoodInformationModal({food, onPress, type}) {
               <View style={FoodInformationModalStyles.modalButtonContainer}>
                 <Button title="추가" onPress={() => handlePressAdd()} />
                 <Button title="닫기" onPress={() => handlePressModal()} />
-                {type === 'stored' ? (
+                <Button title="찜하기" onPress={() => handlePressStore()} />
+                {/* {type === 'stored' ? (
                   <Button title="삭제" onPress={() => handlePressDelete()} />
                 ) : (
                   <TouchableHighlight
                     style={FoodInformationModalStyles.openButton}
                     onPress={() => {
-                      handlePressSave();
+                      handlePressStore();
                     }}>
                     <Text style={FoodInformationModalStyles.openButtonText}>
                       찜하기
                     </Text>
                   </TouchableHighlight>
-                )}
+                )} */}
               </View>
             </View>
           </View>
