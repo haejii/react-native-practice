@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {deleteStoreFoods} from '../../../actions';
+import {deleteStoreFoods, postAddMeal} from '../../../actions';
 import NuturitionBarChart from '../../../moduleComponent/NuturitionBarChart';
 import {
   DietModalStyles,
@@ -98,7 +98,7 @@ export default function StoreModal({mealTime, foods, nutrition, goal}) {
                     <View style={{width: '80%', margin: 10}}>
                       {foods.map((food, i) => (
                         <Text style={{fontSize: 16}} key={i}>
-                          - {food.foodName}
+                          - {food.foodName} ({food.foodAmount}g)
                         </Text>
                       ))}
                     </View>
@@ -201,22 +201,34 @@ export default function StoreModal({mealTime, foods, nutrition, goal}) {
             <Button
               textStyle={{color: 'white'}}
               title="아침"
-              onPress={() => {}}
+              onPress={() => {
+                dispatch(postAddMeal(1, foods));
+                setIsOpen2(false);
+              }}
             />
             <Button
               textStyle={{color: 'white'}}
               title="점심"
-              onPress={() => {}}
+              onPress={() => {
+                dispatch(postAddMeal(2, foods));
+                setIsOpen2(false);
+              }}
             />
             <Button
               textStyle={{color: 'white'}}
               title="저녁"
-              onPress={() => {}}
+              onPress={() => {
+                dispatch(postAddMeal(3, foods));
+                setIsOpen2(false);
+              }}
             />
             <Button
               textStyle={{color: 'white'}}
               title="간식"
-              onPress={() => {}}
+              onPress={() => {
+                dispatch(postAddMeal(4, foods));
+                setIsOpen2(false);
+              }}
             />
             <Button
               textStyle={{color: 'white'}}
