@@ -457,6 +457,24 @@ const reducers = {
       dialysis: {...initialDialysis},
     };
   },
+
+  changeFoodsByCategory: (state, {payload: {selectedIndex}}) => {
+    let changedFoodCategories = state.foodCategories;
+    changedFoodCategories.forEach((category) => {
+      category.selected = false;
+    });
+
+    console.log('selectedIndex', selectedIndex);
+
+    if (selectedIndex !== null) {
+      changedFoodCategories[selectedIndex].selected = true;
+    }
+
+    return {
+      ...state,
+      foodCategories: changedFoodCategories,
+    };
+  },
 };
 
 function defaultReducer(state) {
