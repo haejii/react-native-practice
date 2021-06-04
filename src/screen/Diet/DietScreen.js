@@ -16,10 +16,14 @@ import {
   requestFoodRecord,
   requestRemoveFood,
   requestFoodRecordWithDate,
+  requestDiets,
 } from '../../actions';
 import DietHeader from './DietHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {SERVER_PATH} from '../../service/apis';
+import Recommend from './recomend';
+import {FoodInformationModalStyles, ScreenStyles} from '../../style/styles';
+import FoodInformationModal from '../Search/firstTab/FoodInformationModal';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -105,9 +109,142 @@ function MyDiet({navigation}) {
 }
 
 function RecommendDiet() {
+  const dispatch = useDispatch();
+  const [btn, setBtn] = useState(1);
+  const gender = useSelector((state) => state.user.gender);
+  const kidneyType = useSelector((state) => state.user.kidneyType);
+  const dietMeal = useSelector((state) => state.diet);
+  const [calorie, setCalorie] = useState(0);
+  const [protein, setProtein] = useState(0);
+  const [phosphorus, setPhosphorus] = useState(0);
+  const [potassium, setPotassium] = useState(0);
+  const [sodium, setSodium] = useState(0);
+
+  const convertMealTime = {
+    1: 'breakfast',
+    2: 'lunch',
+    3: 'dinner',
+    4: 'snack',
+  };
+  useEffect(() => {
+    dispatch(requestDiets(kidneyType, gender));
+  }, []);
+
+  const handlePressBtn = (value) => {
+    let calorie = 0;
+    let protein = 0;
+    let phosphorus = 0;
+    let potassium = 0;
+    let sodium = 0;
+    dietMeal[convertMealTime[btn]].map((v) => {
+      calorie += +v.calorie;
+      protein += +v.protein;
+      phosphorus += +v.phosphorus;
+      potassium += +v.potassium;
+      sodium += +v.sodium;
+    });
+    setCalorie(calorie.toFixed(3));
+    setProtein(protein.toFixed(3));
+    setPhosphorus(phosphorus.toFixed(3));
+    setPotassium(potassium.toFixed(3));
+    setSodium(sodium.toFixed(3));
+    setBtn(value);
+  };
   return (
     <View>
-      <Text />
+      <ScrollView>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}>
+          <Text
+            style={{
+              marginTop: 15,
+              fontSize: 20,
+              fontWeight: 'bold',
+              marginBottom: 10,
+            }}>
+            오늘의 추천식단
+          </Text>
+        </View>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <NativeButton
+            style={{
+              width: 150,
+              height: 30,
+              backgroundColor: 'yellow',
+              alignSelf: 'center',
+            }}
+            onPress={() => handlePressBtn(4)}>
+            다른추천식단보기
+          </NativeButton>
+        </View>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
+          }}>
+          <View style={{marginRight: 3}}>
+            <NativeButton
+              style={{
+                margin: 3,
+                width: 50,
+                height: 30,
+                backgroundColor: btn === 1 ? 'skyblue' : 'white',
+              }}
+              onPress={() => handlePressBtn(1)}>
+              아침
+            </NativeButton>
+          </View>
+          <View style={{marginRight: 3}}>
+            <NativeButton
+              style={{
+                margin: 3,
+                width: 50,
+                height: 30,
+                backgroundColor: btn === 2 ? 'skyblue' : 'white',
+              }}
+              onPress={() => handlePressBtn(2)}>
+              점심
+            </NativeButton>
+          </View>
+          <View style={{marginRight: 3}}>
+            <NativeButton
+              style={{
+                margin: 3,
+                width: 50,
+                height: 30,
+                backgroundColor: btn === 3 ? 'skyblue' : 'white',
+              }}
+              onPress={() => handlePressBtn(3)}>
+              저녁
+            </NativeButton>
+          </View>
+
+          <View style={{marginRight: 3}}>
+            <NativeButton
+              style={{
+                margin: 3,
+                width: 50,
+                height: 30,
+                backgroundColor: btn === 4 ? 'skyblue' : 'white',
+              }}
+              onPress={() => handlePressBtn(4)}>
+              간식
+            </NativeButton>
+          </View>
+        </View>
+
+        <Recommend
+          btn={btn}
+          gender={gender}
+          kidneyType={kidneyType}
+          nutrition={{calorie, protein, phosphorus, potassium, sodium}}
+        />
+      </ScrollView>
     </View>
   );
 }
