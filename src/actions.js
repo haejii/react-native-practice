@@ -1338,3 +1338,43 @@ export function changeFoodsByCategory(selectedIndex) {
     payload: {selectedIndex},
   };
 }
+
+export function setDiet(diets) {
+  return {
+    type: 'setDiet',
+    payload: {diets},
+  };
+}
+
+export function requestDiets(kidneyType, gender) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    console.log('requestDiets 들어옴');
+    try {
+      const response = await fetch(
+        SERVER_PATH + '/diet?kidneyType=' + kidneyType + '&gender=' + gender,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+        },
+      );
+      const result = await response.json();
+
+      const {isSuccess, diet, message} = result;
+
+      if (isSuccess) {
+        dispatch(setError());
+        dispatch(setDiet(diet));
+      } else {
+        dispatch(setError({status: true, name: '식단 삭제 실패', message}));
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(setError({status: true, name: '식단 호출 에러', message: e}));
+    }
+  };
+}

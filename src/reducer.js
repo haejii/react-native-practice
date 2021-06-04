@@ -54,6 +54,13 @@ const initialDateMeal = {
   snack: [],
 };
 
+const initialDites = {
+  breakfast: [],
+  lunch: [],
+  dinner: [],
+  snack: [],
+};
+
 const initialNutrition = {
   calorie: 0,
   protein: 0,
@@ -109,6 +116,9 @@ const initialState = {
   },
   dateNutrition: {
     ...initialNutrition,
+  },
+  diet: {
+    ...initialDites,
   },
   storedFood: [],
   changePasswordFields: {
@@ -473,6 +483,18 @@ const reducers = {
     return {
       ...state,
       foodCategories: changedFoodCategories,
+    };
+  },
+
+  setDiet: (state, {payload: {diets}}) => {
+    console.log('diets', diets);
+
+    return {
+      ...state,
+      diet: {
+        ...initialDites,
+        ...diets,
+      },
     };
   },
 };
