@@ -12,6 +12,7 @@ import {convertMealTime} from '../../utils/functions';
 import {DietScreenStyle} from '../../style/styles';
 import NativeButton from 'apsl-react-native-button';
 import RecommendModal from './recommendModal';
+import RecipeModal from './recipeModal';
 
 export default function Recommend({btn, gender, kidneyType, nutrition}) {
   const dietMeal = useSelector((state) => state.diet);
@@ -24,6 +25,12 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
     4: 'snack',
   };
 
+  let calorie = 0;
+  let protein = 0;
+  let phosphorus = 0;
+  let potassium = 0;
+  let sodium = 0;
+
   useEffect(() => {
     console.log(dietMeal[convertMealTime[btn]]);
   }, []);
@@ -31,6 +38,12 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
   return (
     <View>
       {dietMeal[convertMealTime[btn]].map((food, i) => {
+        calorie += +food.calorie;
+        protein += +food.protein;
+        phosphorus += +food.phosphorus;
+        potassium += +food.potassium;
+        sodium += +food.sodium;
+
         return (
           <View
             key={i}
@@ -57,7 +70,7 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
             <TouchableOpacity
               style={{
                 height: 40,
-                width: 250,
+                width: 230,
                 borderWidth: 1,
                 borderTopLeftRadius: 10,
                 borderBottomLeftRadius: 10,
@@ -72,7 +85,7 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
                 {food.foodName}
               </Text>
             </TouchableOpacity>
-
+            <RecipeModal food={food} />
             <RecommendModal food={food} />
           </View>
         );
@@ -97,42 +110,30 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
           margin: 10,
         }}>
         <Text>
-          열량 ({nutrition.calorie} kcal / {goal?.calorie} kcal)
+          열량 ({calorie} kcal / {goal?.calorie} kcal)
         </Text>
-        <NuturitionBarChart
-          nuturition={nutrition.calorie}
-          goal={goal?.calorie}
-        />
+        <NuturitionBarChart nuturition={calorie} goal={goal?.calorie} />
 
         <Text>
-          단백질 ({nutrition.protein} g/ {goal?.protein} g)
+          단백질 ({protein} g/ {goal?.protein} g)
         </Text>
-        <NuturitionBarChart
-          nuturition={nutrition.protein}
-          goal={goal?.protein}
-        />
+        <NuturitionBarChart nuturition={protein} goal={goal?.protein} />
 
         <Text>
-          인 ({nutrition.phosphorus} mg / {goal?.phosphorus} mg)
+          인 ({phosphorus} mg / {goal?.phosphorus} mg)
         </Text>
-        <NuturitionBarChart
-          nuturition={nutrition.phosphorus}
-          goal={goal?.phosphorus}
-        />
+        <NuturitionBarChart nuturition={phosphorus} goal={goal?.phosphorus} />
 
         <Text>
-          칼륨 ({nutrition.potassium} mg / {goal?.potassium} mg)
+          칼륨 ({potassium} mg / {goal?.potassium} mg)
         </Text>
 
-        <NuturitionBarChart
-          nuturition={nutrition.potassium}
-          goal={goal?.potassium}
-        />
+        <NuturitionBarChart nuturition={potassium} goal={goal?.potassium} />
 
         <Text>
-          나트륨 ({nutrition.sodium} mg / {goal?.sodium} mg)
+          나트륨 ({sodium} mg / {goal?.sodium} mg)
         </Text>
-        <NuturitionBarChart nuturition={nutrition.sodium} goal={goal?.sodium} />
+        <NuturitionBarChart nuturition={sodium} goal={goal?.sodium} />
       </View>
 
       <View
