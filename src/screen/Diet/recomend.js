@@ -4,7 +4,12 @@ import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useState} from 'react/cjs/react.development';
-import {requestDiets, setFoodCategories} from '../../actions';
+import {
+  postAddMeal,
+  removeRecommend,
+  requestDiets,
+  setFoodCategories,
+} from '../../actions';
 import NuturitionBarChart from '../../moduleComponent/NuturitionBarChart';
 import {convertMealTimeEnglishToKorean} from '../../utils/convertData';
 import {convertMealTime} from '../../utils/functions';
@@ -15,6 +20,7 @@ import RecommendModal from './recommendModal';
 import RecipeModal from './recipeModal';
 
 export default function Recommend({btn, gender, kidneyType, nutrition}) {
+  const dispatch = useDispatch();
   const dietMeal = useSelector((state) => state.diet);
   const goal = useSelector((state) => state.user.goal);
 
@@ -35,9 +41,17 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
     console.log(dietMeal[convertMealTime[btn]]);
   }, []);
 
+  const handlePressRemove = (value) => {
+    dispatch(removeRecommend(value));
+  };
+
+  const handlePressAddMeal = () => {
+    dispatch(postAddMeal(convertMealTime[btn], dietMeal));
+  };
+
   return (
     <View>
-      {dietMeal[convertMealTime[btn]].map((food, i) => {
+      {dietMeal[convertMealTime[btn]]?.map((food, i) => {
         calorie += +food.calorie;
         protein += +food.protein;
         phosphorus += +food.phosphorus;
@@ -64,7 +78,8 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
                 borderColor: 'red',
                 borderRadius: 35,
               }}
-              textStyle={{color: 'white'}}>
+              textStyle={{color: 'white'}}
+              onPress={() => handlePressRemove(food.foodId)}>
               -
             </NativeButton>
             <TouchableOpacity
@@ -160,6 +175,9 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
               width: 100,
               height: 30,
               backgroundColor: 'white',
+            }}
+            onPress={() => {
+              handlePressAddMeal();
             }}>
             식사로등록
           </NativeButton>

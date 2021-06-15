@@ -130,26 +130,6 @@ function RecommendDiet() {
     dispatch(requestDiets(kidneyType, gender));
   }, []);
 
-  const handlePressBtn = (value) => {
-    let calorie = 0;
-    let protein = 0;
-    let phosphorus = 0;
-    let potassium = 0;
-    let sodium = 0;
-    dietMeal[convertMealTime[btn]].map((v) => {
-      calorie += +v.calorie;
-      protein += +v.protein;
-      phosphorus += +v.phosphorus;
-      potassium += +v.potassium;
-      sodium += +v.sodium;
-    });
-    setCalorie(calorie.toFixed(3));
-    setProtein(protein.toFixed(3));
-    setPhosphorus(phosphorus.toFixed(3));
-    setPotassium(potassium.toFixed(3));
-    setSodium(sodium.toFixed(3));
-    setBtn(value);
-  };
   return (
     <View>
       <ScrollView>
@@ -177,7 +157,7 @@ function RecommendDiet() {
               backgroundColor: 'yellow',
               alignSelf: 'center',
             }}
-            onPress={() => handlePressBtn(4)}>
+            onPress={() => setBtn(4)}>
             다른추천식단보기
           </NativeButton>
         </View>
@@ -195,7 +175,7 @@ function RecommendDiet() {
                 height: 30,
                 backgroundColor: btn === 1 ? 'skyblue' : 'white',
               }}
-              onPress={() => handlePressBtn(1)}>
+              onPress={() => setBtn(1)}>
               아침
             </NativeButton>
           </View>
@@ -207,7 +187,7 @@ function RecommendDiet() {
                 height: 30,
                 backgroundColor: btn === 2 ? 'skyblue' : 'white',
               }}
-              onPress={() => handlePressBtn(2)}>
+              onPress={() => setBtn(2)}>
               점심
             </NativeButton>
           </View>
@@ -219,7 +199,7 @@ function RecommendDiet() {
                 height: 30,
                 backgroundColor: btn === 3 ? 'skyblue' : 'white',
               }}
-              onPress={() => handlePressBtn(3)}>
+              onPress={() => setBtn(3)}>
               저녁
             </NativeButton>
           </View>
@@ -232,17 +212,19 @@ function RecommendDiet() {
                 height: 30,
                 backgroundColor: btn === 4 ? 'skyblue' : 'white',
               }}
-              onPress={() => handlePressBtn(4)}>
+              onPress={() => setBtn(4)}>
               간식
             </NativeButton>
           </View>
         </View>
 
+        {/* <Recommend2 btn={btn} gender={gender} kidneyType={kidneyType} /> */}
+
         <Recommend
           btn={btn}
           gender={gender}
           kidneyType={kidneyType}
-          nutrition={{calorie, protein, phosphorus, potassium, sodium}}
+          //nutrition={{calorie, protein, phosphorus, potassium, sodium}}
         />
       </ScrollView>
     </View>
