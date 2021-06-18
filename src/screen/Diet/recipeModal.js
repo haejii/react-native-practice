@@ -9,7 +9,9 @@ import {
   Button,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {requestFoodRecipe, setError} from '../../actions';
 import NuturitionBarChart from '../../moduleComponent/NuturitionBarChart';
+import {SERVER_PATH} from '../../service/apis';
 import {DietModalStyles, HomeScreenStyles} from '../../style/styles';
 
 export default function RecipeModal({food}) {
@@ -17,13 +19,21 @@ export default function RecipeModal({food}) {
   const [isOpen, setIsOpen] = useState(false);
   const goal = useSelector((state) => state.user.goal);
   const [inputMeal, setInputMeal] = useState('100');
+  //const recipe = useSelector((state) => state.recipe);
+  const [recipe, setRecipe] = useState();
 
+  // dispatch(requestFoodRecipe(food.foodId));
   const handlePressModal = () => {
+    console.log(food?.foodId);
     food?.recipe !== null || food?.tip !== null
-      ? setIsOpen(!isOpen)
+      ? //dispatch(requestFoodRecipe(food?.foodId)),
+        (console.log(recipe), setIsOpen(!isOpen))
       : setIsOpen(false);
   };
 
+  function handleChangeInput(inputValue) {
+    inputValue > 1000 ? setInputMeal('1000') : setInputMeal(inputValue);
+  }
   return (
     <View>
       <TouchableOpacity
@@ -68,6 +78,19 @@ export default function RecipeModal({food}) {
                       color: 'black',
                     }}>
                     {food.tip}
+                  </Text>
+                </View>
+              ) : null}
+
+              {recipe?.calcium ? (
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 'bold',
+                      color: 'black',
+                    }}>
+                    {recipe.calcium}
                   </Text>
                 </View>
               ) : null}
