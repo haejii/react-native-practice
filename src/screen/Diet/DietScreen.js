@@ -7,6 +7,7 @@ import {
   Button,
   Platform,
   ScrollView,
+  Modal,
 } from 'react-native';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -17,12 +18,17 @@ import {
   requestRemoveFood,
   requestFoodRecordWithDate,
   requestDiets,
+  requestAllDiets,
 } from '../../actions';
 import DietHeader from './DietHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {SERVER_PATH} from '../../service/apis';
 import Recommend from './recomend';
-import {FoodInformationModalStyles, ScreenStyles} from '../../style/styles';
+import {
+  DietModalStyles,
+  FoodInformationModalStyles,
+  ScreenStyles,
+} from '../../style/styles';
 import FoodInformationModal from '../Search/firstTab/FoodInformationModal';
 
 const Tab = createMaterialTopTabNavigator();
@@ -114,11 +120,7 @@ function RecommendDiet() {
   const gender = useSelector((state) => state.user.gender);
   const kidneyType = useSelector((state) => state.user.kidneyType);
   const dietMeal = useSelector((state) => state.diet);
-  const [calorie, setCalorie] = useState(0);
-  const [protein, setProtein] = useState(0);
-  const [phosphorus, setPhosphorus] = useState(0);
-  const [potassium, setPotassium] = useState(0);
-  const [sodium, setSodium] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   const convertMealTime = {
     1: 'breakfast',
@@ -126,9 +128,14 @@ function RecommendDiet() {
     3: 'dinner',
     4: 'snack',
   };
-  useEffect(() => {
-    dispatch(requestDiets(kidneyType, gender));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(requestAllDiets(kidneyType, gender));
+  // }, []);
+
+  const handlePressModal = () => {
+    setIsOpen(!isOpen);
+    isOpen === true ? dispatch(requestAllDiets(kidneyType, gender)) : null;
+  };
 
   return (
     <View>
@@ -157,7 +164,7 @@ function RecommendDiet() {
               backgroundColor: 'yellow',
               alignSelf: 'center',
             }}
-            onPress={() => setBtn(4)}>
+            onPress={() => handlePressModal()}>
             다른추천식단보기
           </NativeButton>
         </View>
@@ -227,6 +234,20 @@ function RecommendDiet() {
           //nutrition={{calorie, protein, phosphorus, potassium, sodium}}
         />
       </ScrollView>
+
+      <Modal
+        visible={isOpen}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handlePressModal}>
+        <View style={DietModalStyles.modalViewContainer}>
+          <View style={DietModalStyles.modalView}>
+            <View style={DietModalStyles.modalContent}>
+              <Text>아침: 김밥 점심: 주스</Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
