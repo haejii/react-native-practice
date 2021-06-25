@@ -121,6 +121,7 @@ function RecommendDiet() {
   const kidneyType = useSelector((state) => state.user.kidneyType);
   const dietMeal = useSelector((state) => state.diet);
   const [isOpen, setIsOpen] = useState(false);
+  const Alldiets = useSelector((state) => state.allDite);
 
   const convertMealTime = {
     1: 'breakfast',
@@ -128,9 +129,10 @@ function RecommendDiet() {
     3: 'dinner',
     4: 'snack',
   };
-  // useEffect(() => {
-  //   dispatch(requestAllDiets(kidneyType, gender));
-  // }, []);
+  useEffect(() => {
+    dispatch(requestAllDiets(kidneyType, gender)),
+      dispatch(requestDiets(kidneyType, gender));
+  }, []);
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
@@ -243,7 +245,20 @@ function RecommendDiet() {
         <View style={DietModalStyles.modalViewContainer}>
           <View style={DietModalStyles.modalView}>
             <View style={DietModalStyles.modalContent}>
-              <Text>아침: 김밥 점심: 주스</Text>
+              <ScrollView>
+                {Object.keys(Alldiets).map((key, i) => {
+                  return (
+                    <View style={{margin: 20}} key={key + i}>
+                      <TouchableOpacity style={{backgroundColor: 'skyblue'}}>
+                        <Text>아침: {Alldiets[key]?.['breakfast']} </Text>
+                        <Text>점심: {Alldiets[key]?.['lunch']}</Text>
+                        <Text>저녁: {Alldiets[key]?.['dinner']}</Text>
+                        <Text>간식: {Alldiets[key]?.['snack']}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })}
+              </ScrollView>
             </View>
           </View>
         </View>
