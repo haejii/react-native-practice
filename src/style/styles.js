@@ -10,6 +10,13 @@ const ScreenStyles = StyleSheet.create({
   },
 });
 
+const BarStyle = StyleSheet.create({
+  ViewContainer: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: '#439972',
+  },
+});
 const SignInScreenStyles = StyleSheet.create({
   loginTitle: {
     fontSize: 44,
@@ -163,15 +170,17 @@ const HomeScreenStyles = StyleSheet.create({
     flex: 4,
     width: '100%',
     paddingHorizontal: 20,
+    marginLeft: 35,
     // height: 300,
     // paddingVertical: 30,
     // justifyContent: 'flex-start',
   },
   textTitle: {
+    marginRight: 230,
     marginTop: 20,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
   },
   textDetail: {fontSize: Platform.OS === 'ios' ? 20 : 16},
   textInterval: {marginTop: Platform.OS === 'ios' ? 10 : 5},
@@ -469,4 +478,5 @@ export {
   DietScreenStyle,
   DietModalStyles,
   DialysisScreenStyle,
+  BarStyle,
 };
