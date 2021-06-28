@@ -88,16 +88,14 @@ export default function AuthenticationFlow() {
           />
         ) : (
           <Stack.Screen
-            name="Kidneys"
+            name=" "
             component={Main}
-            options={
-              {
-                // headerLeft: (props) => {
-                //   // console.log(props);
-                //   return <Button title="달력" />;
-                // },
-              }
-            }
+            options={{
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: '#439972',
+              },
+            }}
           />
         )}
       </Stack.Navigator>
