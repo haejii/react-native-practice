@@ -6,6 +6,7 @@ const ScreenStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
 });
 
@@ -189,14 +190,18 @@ const HomeScreenStyles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   mealButton: {
-    width: Platform.OS === 'ios' ? '35%' : '30%',
-    height: '70%',
+    width: Platform.OS === 'ios' ? '40%' : '35%',
+    height: '75%',
     borderRadius: 12,
-    borderWidth: 1,
+    backgroundColor: '#F5F5F5',
+    //borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  mealButtonText: {fontSize: Platform.OS === 'ios' ? 24 : 20},
+  mealButtonText: {fontSize: Platform.OS === 'ios' ? 15 : 12},
+  maealButtonImage: {width: 65, height: 65, marginTop: 5},
+  maealButtonImagMorning: {width: 82, height: 65, marginTop: 5},
+  maealButtonImagSnack: {width: 55, height: 72, marginTop: 5},
   nuturitionInputContainer: {
     flex: 6,
     width: '80%',
