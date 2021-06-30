@@ -13,6 +13,9 @@ import DialysisScreen from './Dialysis/DialysisScreen';
 import {TabView} from 'react-native-tab-view';
 import {useDispatch, useSelector} from 'react-redux';
 import kidneyTypes from '../utils/kidneyType';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faHome, faUserCircle} from '@fortawesome/free-solid-svg-icons';
+import DietScreen2 from './Diet/DietScreen2';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,13 +27,7 @@ export default function Main() {
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === '홈') {
-            return (
-              <Icon
-                name={focused ? 'ios-home' : 'ios-home-outline'}
-                size={size}
-                color={color}
-              />
-            );
+            return <FontAwesomeIcon icon={faHome} size="30" />;
           } else if (route.name === '커뮤니티') {
             return (
               <Icon
@@ -56,15 +53,7 @@ export default function Main() {
               />
             );
           } else if (route.name === '내 정보') {
-            return (
-              <Icon
-                name={
-                  focused ? 'ios-person-circle' : 'ios-person-circle-outline'
-                }
-                size={size}
-                color={color}
-              />
-            );
+            return <FontAwesomeIcon icon={faUserCircle} size="30" />;
           } else if (route.name === '투석 일지') {
             return (
               <Icon
@@ -79,8 +68,11 @@ export default function Main() {
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'teal', // tomato
-        inactiveTintColor: 'gray',
+        activeTintColor: 'black', // tomato
+        inactiveTintColor: 'black',
+        style: {
+          backgroundColor: '#127185',
+        },
       }}>
       <Tab.Screen
         name="홈"
@@ -93,6 +85,7 @@ export default function Main() {
       )}
       <Tab.Screen name="검색" component={SearchScreen} />
       <Tab.Screen name="식단" component={DietScreen} />
+      <Tab.Screen name="식단2" component={DietScreen2} />
       <Tab.Screen name="내 정보" component={MyPageScreen} />
     </Tab.Navigator>
   );
