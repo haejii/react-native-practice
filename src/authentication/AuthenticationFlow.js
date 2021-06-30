@@ -93,7 +93,7 @@ export default function AuthenticationFlow() {
             options={{
               headerShown: false,
               headerStyle: {
-                backgroundColor: '#439972',
+                backgroundColor: '#127185',
               },
             }}
           />
