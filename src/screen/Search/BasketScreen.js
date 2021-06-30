@@ -86,7 +86,7 @@ export default function BasketFood() {
   }, [error, dispatch]);
 
   return (
-    <View>
+    <View style={{backgroundColor: 'white'}}>
       <ScrollView>
         <View>
           <TouchableOpacity
