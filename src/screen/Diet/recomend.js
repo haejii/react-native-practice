@@ -37,12 +37,15 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
   let potassium = 0;
   let sodium = 0;
 
-  useEffect(() => {
-    console.log(dietMeal[convertMealTime[btn]]);
-  }, []);
+  // useEffect(() => {
+  //   console.log(dietMeal[convertMealTime[btn]]);
+  // }, []);
 
-  const handlePressRemove = (value) => {
-    dispatch(removeRecommend(value));
+  const handlePressRemove = (value, value2) => {
+    // console.log(value, value2);
+    // console.log(dietMeal[convertMealTime[btn]][value2]);
+    // console.log(Array.isArray(dietMeal));
+    dispatch(removeRecommend(btn, value2));
   };
 
   const handlePressAddMeal = () => {
@@ -50,7 +53,7 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
   };
 
   return (
-    <View>
+    <View style={{backgroundColor: 'white'}}>
       {dietMeal[convertMealTime[btn]]?.map((food, i) => {
         calorie += +food.calorie;
         protein += +food.protein;
@@ -79,7 +82,7 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
                 borderRadius: 35,
               }}
               textStyle={{color: 'white'}}
-              onPress={() => handlePressRemove(food.foodId)}>
+              onPress={() => handlePressRemove(food.foodId, i)}>
               -
             </NativeButton>
             <TouchableOpacity
