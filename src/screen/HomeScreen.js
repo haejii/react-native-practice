@@ -5,11 +5,12 @@ import {
   View,
   Modal,
   Button,
-  Linking,
   Platform,
+  Image,
 } from 'react-native';
 
 import {
+  BarStyle,
   FoodInformationModalStyles,
   HomeScreenStyles,
   ScreenStyles,
@@ -21,9 +22,14 @@ import {
   changeNuturitionGoal,
   requestUpdateNuturitionGoal,
   requestFoodNutrition,
+  requestDiets,
 } from '../actions';
 import SearchResult from './Search/firstTab/SearchResult';
 import {Route} from 'react-router';
+import breckfast from '../../assets/image/brakfast.png';
+import lunch from '../../assets/image/lunch.png';
+import dinner from '../../assets/image/dinner.png';
+import snack from '../../assets/image/snack.png';
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
@@ -31,6 +37,8 @@ export default function HomeScreen({navigation}) {
   const nuturition = useSelector((state) => state.nuturition);
   const {goal} = useSelector((state) => state.user);
   const meal = useSelector((state) => state.meal);
+  const gender = useSelector((state) => state.user.gender);
+  const kidneyType = useSelector((state) => state.user.kidneyType);
 
   const [comp, setComp] = useState();
 
@@ -98,6 +106,7 @@ export default function HomeScreen({navigation}) {
 
   return (
     <View style={ScreenStyles.container}>
+      <View style={BarStyle.ViewContainer} />
       <View style={{flex: 1, justifyContent: 'center'}}>
         <Text style={HomeScreenStyles.textTitle}>오늘의 목표</Text>
       </View>
@@ -172,6 +181,10 @@ export default function HomeScreen({navigation}) {
                 ? navigation.navigate('검색')
                 : navigation.navigate('식단');
             }}>
+            <Image
+              style={HomeScreenStyles.maealButtonImagMonring}
+              source={breckfast}
+            />
             <Text style={HomeScreenStyles.mealButtonText}>아침</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -181,6 +194,7 @@ export default function HomeScreen({navigation}) {
                 ? navigation.navigate('검색')
                 : navigation.navigate('식단');
             }}>
+            <Image style={HomeScreenStyles.maealButtonImage} source={lunch} />
             <Text style={HomeScreenStyles.mealButtonText}>점심</Text>
           </TouchableOpacity>
         </View>
@@ -192,6 +206,7 @@ export default function HomeScreen({navigation}) {
                 ? navigation.navigate('검색')
                 : navigation.navigate('식단');
             }}>
+            <Image style={HomeScreenStyles.maealButtonImage} source={dinner} />
             <Text style={HomeScreenStyles.mealButtonText}>저녁</Text>
           </TouchableOpacity>
 
@@ -202,6 +217,10 @@ export default function HomeScreen({navigation}) {
                 ? navigation.navigate('검색')
                 : navigation.navigate('식단');
             }}>
+            <Image
+              style={HomeScreenStyles.maealButtonImagSnack}
+              source={snack}
+            />
             <Text style={HomeScreenStyles.mealButtonText}>간식</Text>
           </TouchableOpacity>
         </View>
