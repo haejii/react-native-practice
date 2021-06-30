@@ -1346,11 +1346,21 @@ export function setDiet(diets) {
   };
 }
 
+export function removeRecommend(btn, value2) {
+  return {
+    type: 'removeRecommend',
+    payload: {
+      btn,
+      value2,
+    },
+  };
+}
+
 export function requestDiets(kidneyType, gender) {
   return async (dispatch, getState) => {
     const {userToken} = getState();
 
-    console.log('requestDiets 들어옴');
+    console.log('requestDiets(recommend) 들어옴');
     try {
       const response = await fetch(
         SERVER_PATH + '/diet?kidneyType=' + kidneyType + '&gender=' + gender,
@@ -1362,6 +1372,128 @@ export function requestDiets(kidneyType, gender) {
           },
         },
       );
+      const result = await response.json();
+
+      console.log(result);
+
+      const {isSuccess, diet, recipes, message} = result;
+
+      //console.log(typeof recipes);
+
+      if (isSuccess) {
+        dispatch(setError());
+        dispatch(setDiet(diet));
+      } else {
+        dispatch(setError({status: true, name: '식단 삭제 실패', message}));
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(setError({status: true, name: '식단 호출 에러', message: e}));
+    }
+  };
+}
+
+export function setRecipe(recipe) {
+  return {
+    type: 'setRecipe',
+    payload: {recipe},
+  };
+}
+
+export function requestFoodRecipe(parentFoodId) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    console.log('requestRecipe 들어왔당', parentFoodId);
+    try {
+      const response = await fetch(
+        SERVER_PATH + '/diet-recipe?parentFoodId=' + parentFoodId,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+        },
+      );
+      const result = await response.json();
+
+      const {isSuccess, recipe, message} = result;
+
+      console.log(recipe);
+
+      if (isSuccess) {
+        dispatch(setError());
+        dispatch(setRecipe(recipe));
+      } else {
+        dispatch(setError({status: true, name: '식단 삭제 실패', message}));
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(setError({status: true, name: '식단 호출 에러', message: e}));
+    }
+  };
+}
+
+export function setAllDiet(diet) {
+  return {
+    type: 'setAllDiet',
+    payload: {diet},
+  };
+}
+
+export function requestAllDiets(kidneyType, gender) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    console.log('requestAllDiets 들어옴');
+    try {
+      const response = await fetch(
+        SERVER_PATH +
+          '/diet-all?kidneyType=' +
+          kidneyType +
+          '&gender=' +
+          gender,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+        },
+      );
+      const result = await response.json();
+
+      const {isSuccess, diet, message} = result;
+
+      //console.log(diet);
+
+      if (isSuccess) {
+        dispatch(setError());
+        dispatch(setAllDiet(diet));
+      } else {
+        dispatch(setError({status: true, name: '식단 삭제 실패', message}));
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(setError({status: true, name: '식단 호출 에러', message: e}));
+    }
+  };
+}
+
+export function requestCertainDiet(key) {
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    console.log('requestCertainDiet 들어옴');
+    try {
+      const response = await fetch(SERVER_PATH + '/diet-certain?key=' + key, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+      });
       const result = await response.json();
 
       const {isSuccess, diet, message} = result;
