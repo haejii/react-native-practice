@@ -20,12 +20,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   chartOutline: {
-    marginLeft: 20,
-    width: '70%',
+    //marginLeft: 10,
+    width: '75%',
     height: Platform.OS === 'ios' ? 30 : 25,
     backgroundColor: 'white',
     borderColor: 'black',
-    borderWidth: 2,
+    backgroundColor: '#F5F5F5',
+    // borderWidth: 2,
+    // borderRadius: 10,
   },
   chartContent: (nuturition, goal) => {
     return {
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
   },
   chartText: {
     width: '20%',
-    marginLeft: 10,
-    fontSize: 20,
+    marginLeft: 15,
+    fontSize: 18,
   },
 });
