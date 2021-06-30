@@ -12,9 +12,10 @@ const ScreenStyles = StyleSheet.create({
 
 const BarStyle = StyleSheet.create({
   ViewContainer: {
-    flex: 1,
+    //flex: 1,
+    height: 50,
     width: '100%',
-    backgroundColor: '#439972',
+    backgroundColor: '#127185',
   },
 });
 const SignInScreenStyles = StyleSheet.create({
@@ -30,6 +31,7 @@ const SignInScreenStyles = StyleSheet.create({
     height: 50,
     fontSize: 16,
     marginBottom: '1%',
+    borderWidth: 1,
   },
   loginButtonContainer: {
     marginTop: '4%',
@@ -336,7 +338,8 @@ const SearchResultStyles = StyleSheet.create({
 
 const MyPageScreenStyles = StyleSheet.create({
   BasicInformationText: {
-    backgroundColor: 'skyblue',
+    //
+    // backgroundColor: 'skyblue',
     width: '90%',
     padding: 5,
     fontSize: Platform.OS === 'ios' ? 24 : 20,
@@ -353,7 +356,7 @@ const MyPageScreenStyles = StyleSheet.create({
   ViewContainer: {
     flex: Platform.OS === 'ios' ? 3 : 4,
     left: '5%',
-    marginTop: 30,
+    marginTop: 20,
   },
 
   AndroidTouchBtnContainer: {
@@ -366,6 +369,18 @@ const MyPageScreenStyles = StyleSheet.create({
     width: '50%',
     height: '50%',
     backgroundColor: 'skyblue',
+  },
+
+  iconView: {
+    borderWidth: 2,
+    marginRight: 8,
+    padding: 2,
+    borderRadius: 30,
+  },
+
+  includeView: {
+    flexDirection: 'row',
+    marginTop: 5,
   },
 });
 
