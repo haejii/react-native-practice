@@ -81,6 +81,7 @@ export default function RecommendModal({food}) {
                   style={{
                     width: 95,
                     fontSize: 17,
+                    color: food.customAmount.active ? 'blue' : 'black',
                   }}
                   keyboardType="numeric"
                   //placeholder="100"
