@@ -19,16 +19,16 @@ export default function RecipeModal({food}) {
   const [isOpen, setIsOpen] = useState(false);
   const goal = useSelector((state) => state.user.goal);
   const [inputMeal, setInputMeal] = useState('100');
-  //const recipe = useSelector((state) => state.recipe);
-  const [recipe, setRecipe] = useState();
+  const recipe = useSelector((state) => state.recipe);
 
-  // dispatch(requestFoodRecipe(food.foodId));
   const handlePressModal = () => {
     console.log(food?.foodId);
     food?.recipe !== null || food?.tip !== null
-      ? //dispatch(requestFoodRecipe(food?.foodId)),
-        (console.log(recipe), setIsOpen(!isOpen))
-      : setIsOpen(false);
+      ? // (dispatch(requestFoodRecipe(food?.foodId)),
+        //   console.log(recipe),
+        setIsOpen(!isOpen)
+      : //-)
+        setIsOpen(false);
   };
 
   function handleChangeInput(inputValue) {
@@ -82,19 +82,6 @@ export default function RecipeModal({food}) {
                 </View>
               ) : null}
 
-              {recipe?.calcium ? (
-                <View>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: 'black',
-                    }}>
-                    {recipe.calcium}
-                  </Text>
-                </View>
-              ) : null}
-
               {food?.recipe ? (
                 <View>
                   <Text>레시피 보기</Text>
@@ -112,6 +99,28 @@ export default function RecipeModal({food}) {
                         color: 'black',
                       }}>
                       {food.recipe}
+                    </Text>
+                  </View>
+                </View>
+              ) : null}
+
+              {recipe?.[1] ? (
+                <View>
+                  <Text>레시피 보기</Text>
+                  <View
+                    style={{
+                      width: '90%',
+                      borderWidth: 1,
+                      borderRadius: 15,
+                      padding: 10,
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        color: 'black',
+                      }}>
+                      {recipe[1]}
                     </Text>
                   </View>
                 </View>
