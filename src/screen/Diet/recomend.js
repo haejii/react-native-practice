@@ -7,6 +7,7 @@ import {useEffect, useState} from 'react/cjs/react.development';
 import {
   postAddMeal,
   removeRecommend,
+  removeRecommendBasket,
   requestDiets,
   setFoodCategories,
 } from '../../actions';
@@ -23,6 +24,7 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
   const dispatch = useDispatch();
   const dietMeal = useSelector((state) => state.diet);
   const goal = useSelector((state) => state.user.goal);
+  let basket = [];
 
   const convertMealTime = {
     1: 'breakfast',
@@ -41,15 +43,14 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
   //   console.log(dietMeal[convertMealTime[btn]]);
   // }, []);
 
-  const handlePressRemove = (value, value2) => {
-    // console.log(value, value2);
-    // console.log(dietMeal[convertMealTime[btn]][value2]);
-    // console.log(Array.isArray(dietMeal));
-    dispatch(removeRecommend(btn, value2));
+  const handlePressRemove = (value1, value2) => {
+    console.log('1' + value1, value2);
+    dispatch(removeRecommendBasket(value1, value2));
   };
 
   const handlePressAddMeal = () => {
-    dispatch(postAddMeal(convertMealTime[btn], dietMeal));
+    console.log(dietMeal[convertMealTime[btn]]);
+    //dispatch(postAddMeal(btn, basket));
   };
 
   return (
@@ -60,7 +61,7 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
         phosphorus += +food.phosphorus;
         potassium += +food.potassium;
         sodium += +food.sodium;
-
+        basket = [...basket, food];
         return (
           <View
             key={i}
@@ -82,7 +83,9 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
                 borderRadius: 35,
               }}
               textStyle={{color: 'white'}}
-              onPress={() => handlePressRemove(food.foodId, i)}>
+              onPress={() =>
+                handlePressRemove(food.foodId, convertMealTime[btn])
+              }>
               -
             </NativeButton>
             <TouchableOpacity

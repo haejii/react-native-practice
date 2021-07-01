@@ -1,3 +1,5 @@
+import {convertMealTime} from './utils/functions';
+
 const initialLoginFields = {
   username: '',
   password: '',
@@ -139,6 +141,9 @@ const initialState = {
   },
   dialysisMemos: {},
   foodCategories: [],
+  recommendBasketFood: [],
+  allDite: {},
+  recipe: {},
 };
 
 const reducers = {
@@ -495,6 +500,46 @@ const reducers = {
         ...initialDites,
         ...diets,
       },
+    };
+  },
+
+  removeRecommend: (state, {payload: {btn, value2}}) => {
+    const {diet} = state;
+    btn = convertMealTime(btn);
+    return {
+      ...state,
+      diet: diet.filter(function (diet) {
+        return diet[btn] !== value2;
+      }),
+    };
+  },
+  setRecipe: (state, {payload: {recipe}}) => {
+    console.log('recipe', recipe);
+
+    return {
+      ...state,
+      recipe: recipe,
+    };
+  },
+
+  setAllDiet: (state, {payload: {diet}}) => {
+    return {
+      ...state,
+      allDite: diet,
+    };
+  },
+
+  removeRecommendBasket: (state, {payload: {value1, value2}}) => {
+    console.log('3');
+    const {diet} = state;
+    let mydiet = diet[value2].filter((item) => item.foodId !== value1);
+    diet[value2] = mydiet;
+
+    console.log(diet[value2]);
+
+    return {
+      ...state,
+      diet,
     };
   },
 };

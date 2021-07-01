@@ -1510,3 +1510,14 @@ export function requestCertainDiet(key) {
     }
   };
 }
+
+export function removeRecommendBasket(value1, value2) {
+  console.log('2' + value1 + value2);
+  return {
+    type: 'removeRecommendBasket',
+    payload: {
+      value1,
+      value2,
+    },
+  };
+}
