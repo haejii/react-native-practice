@@ -30,39 +30,21 @@ export default function Main() {
             return <FontAwesomeIcon icon={faHome} size="30" />;
           } else if (route.name === '커뮤니티') {
             return (
-              <Icon
-                name={focused ? 'ios-reader' : 'ios-reader-outline'}
-                size={size}
-                color={color}
-              />
+              <FontAwesomeIcon icon={faHome} size="30" />
             );
           } else if (route.name === '검색') {
             return (
-              <Icon
-                name={focused ? 'ios-search' : 'ios-search-outline'}
-                size={size}
-                color={color}
-              />
+              <FontAwesomeIcon icon={faHome} size="30" />
             );
           } else if (route.name === '식단') {
             return (
-              <Icon
-                name={focused ? 'ios-book' : 'ios-book-outline'}
-                size={size}
-                color={color}
-              />
+              <FontAwesomeIcon icon={faHome} size="30" />
             );
           } else if (route.name === '내 정보') {
             return <FontAwesomeIcon icon={faUserCircle} size="30" />;
           } else if (route.name === '투석 일지') {
             return (
-              <Icon
-                name={
-                  focused ? 'ios-person-circle' : 'ios-person-circle-outline'
-                }
-                size={size}
-                color={color}
-              />
+              <FontAwesomeIcon icon={faHome} size="30" />
             );
           }
         },
@@ -84,8 +66,7 @@ export default function Main() {
         <Tab.Screen name="투석 일지" component={DialysisScreen} />
       )}
       <Tab.Screen name="검색" component={SearchScreen} />
-      <Tab.Screen name="식단" component={DietScreen} />
-      <Tab.Screen name="식단2" component={DietScreen2} />
+      <Tab.Screen name="식단" component={DietScreen2} />
       <Tab.Screen name="내 정보" component={MyPageScreen} />
     </Tab.Navigator>
   );
