@@ -48,10 +48,11 @@ export default function Machinedialysis2({navigation}) {
   let day = `${month + 1}월 ${today}일`;
 
   // Change TextInput
-  function handleChangDialysis(name, value) {
-    dispatch(changeDialysis(name, value));
-  }
 
+  function handleChangDialysis(name, value) {
+    dispatch(changeDialysis(name, typeof value === 'number' ? +value : value));
+    console.log(dialysis);
+  }
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || exchangeTime;
     setShow(Platform.OS === 'ios');
@@ -258,45 +259,163 @@ export default function Machinedialysis2({navigation}) {
 
           {btn === 1 ? (
             <>
-              <View
-                style={{
-                  marginBottom: 15,
-                  alignContent: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text style={{fontFamily: 'NotoSansKR-Medium', fontSize: 15}}>
-                  {' '}
-                  오늘이 몇 번째인지 선택하세요(7월 첫째주)
-                </Text>
+              <View style={{marginBottom: 20}}>
+                <View
+                  style={{
+                    marginBottom: 15,
+                    alignContent: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={{fontFamily: 'NotoSansKR-Medium', fontSize: 15}}>
+                    {' '}
+                    오늘이 몇 번째인지 선택하세요 ({day})
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    alignItems: 'center',
+                    width: '100%',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <NativeButton
+                    style={{
+                      width: 150,
+                      marginRight: 15,
+                      backgroundColor:
+                        dialysis.degrees === 1 ? 'skyblue' : 'white',
+                    }}
+                    onPress={() => handleChangDialysis('degrees', 1)}>
+                    1차
+                  </NativeButton>
+                  <NativeButton
+                    style={{
+                      width: 150,
+                      backgroundColor:
+                        dialysis.degrees === 2 ? 'skyblue' : 'white',
+                    }}
+                    onPress={() => handleChangDialysis('degrees', 2)}>
+                    2차
+                  </NativeButton>
+                </View>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    width: '100%',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <NativeButton
+                    style={{
+                      width: 150,
+                      marginRight: 15,
+                      backgroundColor:
+                        dialysis.degrees === 3 ? 'skyblue' : 'white',
+                    }}
+                    onPress={() => handleChangDialysis('degrees', 3)}>
+                    3차
+                  </NativeButton>
+                  <NativeButton
+                    style={{
+                      width: 150,
+                      backgroundColor:
+                        dialysis.degrees === 4 ? 'skyblue' : 'white',
+                    }}
+                    onPress={() => handleChangDialysis('degrees', 4)}>
+                    4차
+                  </NativeButton>
+                </View>
               </View>
-              <View
-                style={{
-                  alignItems: 'center',
-                  width: '100%',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <NativeButton style={{width: 150, marginRight: 15}}>
-                  1차
-                </NativeButton>
-                <NativeButton style={{width: 150}}>2차</NativeButton>
+              <View>
+                <View
+                  style={{
+                    marginBottom: 15,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={{fontFamily: 'NotoSansKR-Medium', fontSize: 15}}>
+                    {' '}
+                    주입액 농도를 선택하세요.{' '}
+                  </Text>
+                </View>
+
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <NativeButton
+                    style={{
+                      width: 150,
+                      marginRight: 15,
+                      backgroundColor:
+                        dialysis.injectionConcentration === 1.5
+                          ? 'skyblue'
+                          : 'white',
+                    }}
+                    onPress={() =>
+                      handleChangDialysis('injectionConcentration', 1.5)
+                    }>
+                    1.5%
+                  </NativeButton>
+                  <NativeButton
+                    style={{
+                      width: 150,
+                      backgroundColor:
+                        dialysis.injectionConcentration === 2.5
+                          ? 'skyblue'
+                          : 'white',
+                    }}
+                    onPress={() =>
+                      handleChangDialysis('injectionConcentration', 2.5)
+                    }>
+                    2.5(2.3)%
+                  </NativeButton>
+                </View>
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <NativeButton
+                    style={{
+                      width: 150,
+                      marginRight: 15,
+                      backgroundColor:
+                        dialysis.injectionConcentration === 4.5
+                          ? 'skyblue'
+                          : 'white',
+                    }}
+                    onPress={() =>
+                      handleChangDialysis('injectionConcentration', 4.5)
+                    }>
+                    4.25%
+                  </NativeButton>
+                  <NativeButton
+                    style={{
+                      width: 150,
+                      backgroundColor:
+                        dialysis.injectionConcentration === 7.5
+                          ? 'skyblue'
+                          : 'white',
+                    }}
+                    onPress={() =>
+                      handleChangDialysis('injectionConcentration', 7.5)
+                    }>
+                    7.5%
+                  </NativeButton>
+                </View>
               </View>
-              <View
-                style={{
-                  alignItems: 'center',
-                  width: '100%',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <NativeButton style={{width: 150, marginRight: 15}}>
-                  3차
-                </NativeButton>
-                <NativeButton style={{width: 150}}>4차</NativeButton>
-              </View>
+
               {Object.keys(b).map((key, i) => {
                 return (
                   <View key={i + 1} style={DialysisScreenStyle.basicView}>
