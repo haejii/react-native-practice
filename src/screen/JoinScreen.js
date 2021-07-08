@@ -256,21 +256,24 @@ export default function JoinScreen({
           {!userInfo ? (
             <>
               <View style={JoinScreenStyles.ViewContainer}>
-                <Text>아이디 </Text>
+                <Text style={JoinScreenStyles.JoinFieldMainText}>이메일 </Text>
+                <View style={{flexDirection: 'row'}} >
                 <TextInput
                   autoCapitalize="none"
-                  style={JoinScreenStyles.JoinField}
-                  placeholder="Email"
+                  style={JoinScreenStyles.JoinFieldWithBtn}
+                  placeholder="이메일을 입력해주세요."
                   value={email}
                   onChangeText={(value) => handleChangJoinField('email', value)}
                 />
                 <NativeButton
                   style={JoinScreenStyles.checkIdBtn}
+                  textStyle={JoinScreenStyles.GenderButtonText}
                   onPress={() => {
                     handelPressEmailCheck();
                   }}>
-                  이메일 중복확인
+                  중복확인
                 </NativeButton>
+                </View>
               </View>
 
               <View style={JoinScreenStyles.ViewContainer}>
@@ -280,7 +283,7 @@ export default function JoinScreen({
                   autoCapitalize="none"
                   secureTextEntry={true}
                   style={JoinScreenStyles.JoinField}
-                  placeholder="password"
+                  placeholder="4~10자리 영문 숫자, 특수문자 조합"
                   value={password}
                   onChangeText={(value) =>
                     handleChangJoinField('password', value)
@@ -295,7 +298,7 @@ export default function JoinScreen({
                   autoCapitalize="none"
                   secureTextEntry={true}
                   style={JoinScreenStyles.JoinField}
-                  placeholder="password"
+                  placeholder="4~10자리 영문 숫자, 특수문자 조합"
                   value={password2}
                   onChangeText={(value) =>
                     handleChangJoinField('password2', value)
@@ -304,23 +307,28 @@ export default function JoinScreen({
               </View>
 
               <View style={JoinScreenStyles.ViewContainer}>
-                <Text>닉네임 </Text>
+         
+                <View style={JoinScreenStyles.ViewContainer}>
+                <Text style={JoinScreenStyles.JoinFieldMainText}>닉네임 </Text>
+                <View style={{flexDirection: 'row'}} >
                 <TextInput
                   autoCapitalize="none"
-                  style={JoinScreenStyles.JoinField}
-                  placeholder="nickname"
-                  value={nickname}
-                  onChangeText={(value) =>
-                    handleChangJoinField('nickname', value)
-                  }
+                  style={JoinScreenStyles.JoinFieldWithBtn}
+                  placeholder="닉네임을 입력해주세요."
+                  value={email}
+                  onChangeText={(value) =>  handleChangJoinField('nickname', value)}
                 />
                 <NativeButton
                   style={JoinScreenStyles.checkIdBtn}
+                  textStyle={JoinScreenStyles.GenderButtonText}
                   onPress={() => {
-                    handelPressNickNameCheck();
+                    handelPressEmailCheck();
                   }}>
-                  닉네임 중복확인
+                  중복확인
                 </NativeButton>
+                </View>
+              </View>
+
               </View>
             </>
           ) : null}
@@ -331,7 +339,7 @@ export default function JoinScreen({
               autoCapitalize="none"
               keyboardType="number-pad"
               style={JoinScreenStyles.JoinField}
-              placeholder="height"
+              placeholder="키를 입력해주세요."
               value={String(height)}
               onChangeText={(value) =>
                 handleChangJoinField('height', value.replace(/[^0-9]/g, ''))
@@ -344,7 +352,7 @@ export default function JoinScreen({
             <TextInput
               style={JoinScreenStyles.JoinField}
               keyboardType="number-pad"
-              placeholder="weight"
+              placeholder="몸무게를 입력해주세요"
               value={String(weight)}
               onChangeText={(value) =>
                 handleChangJoinField('weight', value.replace(/[^0-9]/g, ''))
@@ -380,24 +388,15 @@ export default function JoinScreen({
             <View style={JoinScreenStyles.ViewContainer}>
               <Text>생년월일 </Text>
               <View style={JoinScreenStyles.birthButtonContainer}>
-                <Text style={{fontSize: 24, fontWeight: '600'}}>
+                {/* <Text style={{fontSize: 24, fontWeight: '600'}}>
                   {date.getFullYear() +
                     '-' +
                     getTwoDigits(+date.getMonth() + 1) +
                     '-' +
                     getTwoDigits(date.getDate())}
-                </Text>
-                <NativeButton
-                  style={JoinScreenStyles.birthBtn}
-                  onPress={() => {
-                    handlePressSetDate();
-                  }}>
-                  확인
-                </NativeButton>
-              </View>
-            </View>
-
-            <DatePicker
+                </Text> */}
+                   <View style={JoinScreenStyles.birthButtonContainer}>
+                   <DatePicker
               style={{width: Platform.OS === 'ios' ? 400 : 200}}
               date={date}
               mode="date"
@@ -409,7 +408,18 @@ export default function JoinScreen({
                 setDate(date);
               }}
             />
+                <NativeButton
+                  style={JoinScreenStyles.birthBtn}
+                  onPress={() => {
+                    handlePressSetDate();
+                  }}>
+                  확인
+                </NativeButton>
+     
           </View>
+            </View>
+</View>
+        
 
           <View style={JoinScreenStyles.ViewContainer}>
             <Text>건강상태 </Text>
@@ -426,6 +436,7 @@ export default function JoinScreen({
             />
           </View>
 
+            
           <View style={JoinScreenStyles.ViewContainer}>
             <Text>활동상태 </Text>
             <RNPickerSelect
@@ -441,7 +452,9 @@ export default function JoinScreen({
             />
           </View>
         </View>
+              </View>
 
+             
         <NativeButton
           // onPress={()=>navigation.navigate('SignIn')}
           onPress={() => {
