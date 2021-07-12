@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Text, TextInput, View} from 'react-native';
+import {Alert, ScrollView, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import NativeButton from 'apsl-react-native-button';
 
@@ -113,58 +113,81 @@ export default function SignInScreen({navigation}) {
 
   return (
     <View style={ScreenStyles.container}>
-      <View style={{flex: 2, justifyContent: 'center'}}>
+      <View
+        style={{
+          flex: 2,
+          justifyContent: 'center',
+          backgroundColor: 'pink',
+          margin: 40,
+        }}>
         <Text style={SignInScreenStyles.loginTitle}>신장 환자를 위한 앱</Text>
       </View>
-      <View style={{flex: 3, alignItems: 'center', width: '100%'}}>
+      <View style={{flex: 2, marginLeft: 40, width: '100%'}}>
+        <Text>이메일</Text>
         <TextInput
           style={SignInScreenStyles.loginField}
-          placeholder="Email"
+          placeholder="이메일을 입력해주세요. "
           autoCapitalize="none"
           value={username}
           onChangeText={(value) => handleChangeLoginField('username', value)}
         />
+        <Text>비밀번호</Text>
         <TextInput
           style={SignInScreenStyles.loginField}
-          placeholder="Password"
+          placeholder="비밀번호를 입력해주세요. "
           value={password}
           onChangeText={(value) => handleChangeLoginField('password', value)}
           secureTextEntry
         />
-        <View style={SignInScreenStyles.loginButtonContainer}>
-          <NativeButton
-            isLoading={isLoading}
-            style={SignInScreenStyles.loginButton}
-            textStyle={SignInScreenStyles.loginButtonText}
-            activeOpacity={0.5}
-            onPress={() => {
-              // handlePressSignInWithEmail();
-              handlePressLogin();
-            }}>
-            로그인
-          </NativeButton>
-
-          <NativeButton
-            isLoading={isLoading}
-            style={SignInScreenStyles.loginButton}
-            textStyle={SignInScreenStyles.loginButtonText}
-            activeOpacity={0.5}
-            onPress={() => navigation.navigate('Join')}>
-            회원가입
-          </NativeButton>
-
-          {/* <JoinModal/> */}
-        </View>
-
+      </View>
+      <View style={SignInScreenStyles.loginButtonContainer}>
         <NativeButton
           isLoading={isLoading}
-          onPress={handlePressSignInWithKakao}
+          style={SignInScreenStyles.loginButton}
+          textStyle={SignInScreenStyles.loginButtonText}
           activeOpacity={0.5}
-          style={SignInScreenStyles.btnKakaoLogin}
-          textStyle={SignInScreenStyles.txtKakaoLogin}>
-          카카오 로그인
+          onPress={() => {
+            // handlePressSignInWithEmail();
+            handlePressLogin();
+          }}>
+          로그인
         </NativeButton>
       </View>
+      <View style={{flexDirection: 'row'}}>
+        <NativeButton
+          isLoading={isLoading}
+          style={SignInScreenStyles.JoinButton}
+          textStyle={SignInScreenStyles.JoinButtonText}
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate('Join')}>
+          아이디 찾기
+        </NativeButton>
+        <NativeButton
+          isLoading={isLoading}
+          style={SignInScreenStyles.JoinButton}
+          textStyle={SignInScreenStyles.JoinButtonText}
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate('Join')}>
+          비밀번호 찾기
+        </NativeButton>
+        <NativeButton
+          isLoading={isLoading}
+          style={SignInScreenStyles.JoinButton}
+          textStyle={SignInScreenStyles.JoinButtonText}
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate('Join')}>
+          회원가입
+        </NativeButton>
+      </View>
+
+      <NativeButton
+        isLoading={isLoading}
+        onPress={handlePressSignInWithKakao}
+        activeOpacity={0.5}
+        style={SignInScreenStyles.btnKakaoLogin}
+        textStyle={SignInScreenStyles.txtKakaoLogin}>
+        카카오 로그인
+      </NativeButton>
     </View>
   );
 }

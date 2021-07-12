@@ -40,8 +40,8 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
   let sodium = 0;
 
   // useEffect(() => {
-  //   console.log(dietMeal[convertMealTime[btn]]);
-  // }, []);
+  //  (dietMeal)
+  // }, dietMeal);
 
   const handlePressRemove = (value1, value2) => {
     console.log('1' + value1, value2);
@@ -131,28 +131,28 @@ export default function Recommend({btn, gender, kidneyType, nutrition}) {
           margin: 10,
         }}>
         <Text>
-          열량 ({calorie} kcal / {goal?.calorie} kcal)
+          열량 ({calorie.toFixed(3)} kcal / {goal?.calorie} kcal)
         </Text>
         <NuturitionBarChart nuturition={calorie} goal={goal?.calorie} />
 
         <Text>
-          단백질 ({protein} g/ {goal?.protein} g)
+          단백질 ({protein.toFixed(3)} g/ {goal?.protein} g)
         </Text>
         <NuturitionBarChart nuturition={protein} goal={goal?.protein} />
 
         <Text>
-          인 ({phosphorus} mg / {goal?.phosphorus} mg)
+          인 ({phosphorus.toFixed(3)} mg / {goal?.phosphorus} mg)
         </Text>
         <NuturitionBarChart nuturition={phosphorus} goal={goal?.phosphorus} />
 
         <Text>
-          칼륨 ({potassium} mg / {goal?.potassium} mg)
+          칼륨 ({potassium.toFixed(3)} mg / {goal?.potassium} mg)
         </Text>
 
         <NuturitionBarChart nuturition={potassium} goal={goal?.potassium} />
 
         <Text>
-          나트륨 ({sodium} mg / {goal?.sodium} mg)
+          나트륨 ({sodium.toFixed(3)} mg / {goal?.sodium} mg)
         </Text>
         <NuturitionBarChart nuturition={sodium} goal={goal?.sodium} />
       </View>

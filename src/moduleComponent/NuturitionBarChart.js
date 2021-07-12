@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   chartOutline: {
-    //marginLeft: 10,
+    marginLeft: 10,
     width: '75%',
     height: Platform.OS === 'ios' ? 30 : 25,
     backgroundColor: 'white',

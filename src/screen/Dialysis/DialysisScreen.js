@@ -13,10 +13,10 @@ export default function DialysisScreen() {
   const kidneyType = useSelector((state) => state.user.kidneyType);
 
   if (kidneyTypes[kidneyType] === '복막투석') {
-    // return <Peritonealdialysis />;
-    return <PeritonealdialysisMain2/>
+    //   return <Peritonealdialysis />;
+    return <PeritonealdialysisMain2 />;
   }
 
-  // return <Hemodialysis />;
+  //return <Hemodialysis />;
   return <Hemodialysis2 />;
 }

@@ -72,7 +72,7 @@ const initialNutrition = {
 };
 
 const initialDialysis = {
-  degrees: '',
+  degree: '',
   exchangeTime: '',
   injectionConcentration: '',
   injectionAmount: '',
