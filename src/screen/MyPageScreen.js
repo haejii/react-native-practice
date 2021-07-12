@@ -138,7 +138,7 @@ export default function MyPageScreen() {
             <Text style={{fontSize: 20, fontWeight: '800'}}>
               {user?.nickname || user?.email}
             </Text>
-            <Text style={{top: 10, fontSize: 20, fontWeight: '800', borderWidth: 1, padding: 5, width: 95, borderRadius: 10}}>
+            <Text style={{top: 10, fontSize: 20, fontWeight: '800'}}>
               {
                 pickerItems.kidneyTypes.items.find((item) => {
                   return item.value === user?.kidneyType;
@@ -307,7 +307,7 @@ export default function MyPageScreen() {
               flexDirection: 'row',
               marginTop: 20,
             }}>
-            <View>
+            <View style={MyPageScreenStyles.iconView}>
               <FontAwesomeIcon icon={faChevronRight} size={20} />
             </View>
             <View style={{margin: 1}}>
