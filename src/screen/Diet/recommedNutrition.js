@@ -34,7 +34,7 @@ export default function RecommedNutrition({nutrition, goal}) {
 
       <View
         style={{
-          margin: 10
+          margin: 10,
         }}>
         <Text>
           열량 ({nutrition.calorie} kcal / {goal?.calorie} kcal)
