@@ -16,7 +16,7 @@ export default function SearchScreen() {
       tabBarOptions={{
         activeTintColor: 'black',
         labelStyle: {fontSize: 20, fontWeight: 'bold'},
-        style: {backgroundColor: '#127185', height: 60},
+        style: {backgroundColor: 'white', height: 60},
       }}>
       <Tab.Screen
         name="Search"
