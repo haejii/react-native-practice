@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {Image} from 'react-native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -16,6 +17,16 @@ import kidneyTypes from '../utils/kidneyType';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHome, faUserCircle} from '@fortawesome/free-solid-svg-icons';
 import DietScreen2 from './Diet/DietScreen2';
+import home from '../../assets/image/home.png';
+import home_at from '../../assets/image/home_at.png';
+import memo from '../../assets/image/memo.png';
+import memo_at from '../../assets/image/memo_at.png';
+import my from '../../assets/image/my.png';
+import my_at from '../../assets/image/my_at.png';
+import recipe from '../../assets/image/recipe.png';
+import recipe_at from '../../assets/image/recipe_at.png';
+import search from '../../assets/image/search.png';
+import search_at from '../../assets/image/search_at.png';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,33 +38,45 @@ export default function Main() {
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === '홈') {
-            return <FontAwesomeIcon icon={faHome} size="30" />;
-          } else if (route.name === '커뮤니티') {
-            return (
-              <FontAwesomeIcon icon={faHome} size="30" />
+            return focused ? (
+              <Image style={{height: 25, width: 25}} source={home_at} />
+            ) : (
+              <Image style={{height: 25, width: 25}} source={home} />
             );
+          } else if (route.name === '커뮤니티') {
+            return <FontAwesomeIcon icon={faHome} size="30" />;
           } else if (route.name === '검색') {
-            return (
-              <FontAwesomeIcon icon={faHome} size="30" />
+            return focused ? (
+              <Image style={{height: 25, width: 25}} source={search_at} />
+            ) : (
+              <Image style={{height: 25, width: 25}} source={search} />
             );
           } else if (route.name === '식단') {
-            return (
-              <FontAwesomeIcon icon={faHome} size="30" />
+            return focused ? (
+              <Image style={{height: 25, width: 25}} source={recipe_at} />
+            ) : (
+              <Image style={{height: 25, width: 25}} source={recipe} />
             );
           } else if (route.name === '내 정보') {
-            return <FontAwesomeIcon icon={faUserCircle} size="30" />;
+            return focused ? (
+              <Image style={{height: 25, width: 25}} source={my_at} />
+            ) : (
+              <Image style={{height: 25, width: 25}} source={my} />
+            );
           } else if (route.name === '투석 일지') {
-            return (
-              <FontAwesomeIcon icon={faHome} size="30" />
+            return focused ? (
+              <Image style={{height: 25, width: 25}} source={memo_at} />
+            ) : (
+              <Image style={{height: 25, width: 25}} source={memo} />
             );
           }
         },
       })}
       tabBarOptions={{
-        activeTintColor: 'black', // tomato
-        inactiveTintColor: 'black',
+        activeTintColor: '#eabab0', // tomato
+        inactiveTintColor: '#757575',
         style: {
-          backgroundColor: '#127185',
+          backgroundColor: 'white',
         },
       }}>
       <Tab.Screen
