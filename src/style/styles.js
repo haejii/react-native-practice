@@ -13,41 +13,55 @@ const ScreenStyles = StyleSheet.create({
 const BarStyle = StyleSheet.create({
   ViewContainer: {
     //flex: 1,
-    height: 50,
+    height: 20,
     width: '100%',
-    backgroundColor: '#127185',
   },
 });
 const SignInScreenStyles = StyleSheet.create({
   loginTitle: {
     fontSize: 44,
-    fontWeight: '900',
+    //fontWeight: '900',
+    fontFamily: 'NotoSansKR-Medium',
   },
   loginField: {
-    width: '80%',
+    width: '90%',
     backgroundColor: 'white',
     // height: '5%',
     paddingHorizontal: 10,
     height: 50,
     fontSize: 16,
-    marginBottom: '1%',
-    borderWidth: 1,
+    marginBottom: '5%',
+    //borderWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: '#cdcdcd',
   },
   loginButtonContainer: {
-    marginTop: '4%',
+    marginTop: 1,
     flexDirection: 'row',
-    width: '60%',
+    width: '80%',
     justifyContent: 'space-evenly',
   },
   loginButton: {
     borderWidth: 0,
-    height: 48,
-    width: 100,
-    backgroundColor: 'teal',
+    height: 40,
+    width: 380,
+    backgroundColor: '#cdcdcd',
     borderRadius: 6,
+  },
+  JoinButton: {
+    borderWidth: 0,
+    marginRight: 20,
+    height: 20,
+    width: 120,
+    borderRightWidth: 1,
+    borderRadius: 0,
+    borderColor: '#757575',
   },
   loginButtonText: {
     color: 'white',
+  },
+  JoinButtonText: {
+    color: '#757575',
   },
   btnKakaoLogin: {
     marginTop: 10,
@@ -77,12 +91,31 @@ const JoinScreenStyles = StyleSheet.create({
     height: 50,
     fontSize: 16,
     marginBottom: '1%',
+    borderBottomWidth: 1,
+    borderColor: '#cdcdcd',
   },
 
+  JoinFieldWithBtn: {
+    width: '70%',
+    backgroundColor: 'white',
+    marginTop: '2%',
+    paddingHorizontal: 10,
+    height: 50,
+    fontSize: 16,
+    marginBottom: '1%',
+    borderBottomWidth: 1,
+    borderColor: '#cdcdcd',
+  },
+
+  JoinFieldMainText: {
+    fontSize: 15,
+    fontFamily: 'NotoSansKR-Medium',
+    color: '#2c2c2c',
+  },
   GenderButtonContainer: {
-    marginTop: '4%',
+    margin: 10,
     flexDirection: 'row',
-    width: '80%',
+    width: '90%',
     justifyContent: 'space-evenly',
   },
 
@@ -103,50 +136,52 @@ const JoinScreenStyles = StyleSheet.create({
   },
   buttonContent: (gender) => {
     return {
-      borderWidth: 1,
-      height: 48,
-      width: 150,
-      marginLeft: '14%',
-      //borderRadius: 'green',
-      backgroundColor: gender === 'M' ? 'skyblue' : 'white',
+      borderWidth: 0,
+      height: 38,
+      width: 190,
+      backgroundColor: gender === 'M' ? 'skyblue' : '#cdcdcd',
     };
   },
 
   buttonContent2: (gender) => {
     return {
-      borderWidth: 1,
-      height: 48,
-      width: 150,
-      marginLeft: '14%',
-      backgroundColor: gender === 'F' ? 'skyblue' : 'white',
+      borderWidth: 0,
+      height: 38,
+      width: 190,
+      marginLeft: '7%',
+      backgroundColor: gender === 'F' ? 'skyblue' : '#cdcdcd',
     };
   },
 
   GenderButtonText: {
-    color: 'black',
+    color: 'white',
   },
 
   ViewContainer: {
     width: '100%',
     marginRight: '-6%',
-    marginTop: '3%',
+    marginTop: '1%',
   },
   checkIdBtn: {
-    width: 150,
+    width: 80,
     height: 30,
     marginTop: '2%',
     marginLeft: '3%',
-    backgroundColor: 'yellow',
+    marginRight: 10,
+    backgroundColor: '#cdcdcd',
     borderRadius: 4,
+    borderWidth: 0,
   },
 
   birthBtn: {
-    width: 100,
+    width: 80,
     height: 30,
     alignItems: 'center',
     marginLeft: '3%',
-    backgroundColor: 'skyblue',
+    marginRight: '7%',
+    backgroundColor: '#cdcdcd',
     borderRadius: 4,
+    borderWidth: 0,
   },
 });
 
@@ -447,20 +482,23 @@ const DietModalStyles = StyleSheet.create({
 
 const DialysisScreenStyle = StyleSheet.create({
   basicTextInput: {
-    width: '20%',
+    width: '70%',
     backgroundColor: 'white',
     height: 40,
     paddingHorizontal: 10,
     fontSize: 16,
     marginBottom: '1%',
     marginRight: '5%',
-    borderBottomWidth: 1,
-    borderColor: 'blue',
+    //borderBottomWidth: 1,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
   },
   basicView: {
     alignItems: 'center',
     width: '100%',
-    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 40,
   },
   buttonContent: (edema) => {
     return {
