@@ -1,4 +1,6 @@
 rootProject.name = 'kakaologin'
+include ':@gregfrench_react-native-wheel-picker'
+project(':@gregfrench_react-native-wheel-picker').projectDir = new File(rootProject.projectDir, '../node_modules/@gregfrench/react-native-wheel-picker/android')
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'
 
