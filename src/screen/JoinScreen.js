@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Platform,
+  Button,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
@@ -19,6 +20,7 @@ import {getTwoDigits} from '../utils/functions';
 import {SERVER_PATH} from '../service/apis';
 import errors from '../utils/errors';
 import RNRestart from 'react-native-restart';
+import Picker from '@gregfrench/react-native-wheel-picker';
 
 export default function JoinScreen({
   navigation,
@@ -37,6 +39,20 @@ export default function JoinScreen({
   const kidneyType = useSelector((state) => state.JoinFields.kidneyType);
   const activityId = useSelector((state) => state.JoinFields.activityId);
   const password2 = useSelector((state) => state.JoinFields.password2);
+  const [show, setShow] = useState(false);
+  const [show2, setShow2] = useState(false);
+
+  const kidneyTypes = [
+    {label: '투석전단계<신증후군>', value: 1},
+    {label: '투석전단계<만성신부전>', value: 2},
+    {label: '신장이식<신장이식후~8주>', value: 3},
+    {label: '신장이식<신장이식8주후>', value: 4},
+    {label: '혈액투석', value: 5},
+    {label: '복막투석', value: 6},
+    {label: '해당없음', value: 7},
+  ];
+
+  var PickerItem = Picker.Item;
 
   const [date, setDate] = useState(new Date('1980-01-01'));
 
@@ -246,89 +262,111 @@ export default function JoinScreen({
       {/* <Text>{JSON.stringify(accessToken)}</Text> */}
 
       <View style={ScreenStyles.container}>
-        <View style={{flex: 1, alignItems: 'center', top: 10}}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-            {userInfo ? '카카오톡 회원가입' : '회원가입'}
-          </Text>
-        </View>
+        {userInfo && (
+          <View style={{flex: 1, alignItems: 'center', top: 10}}>
+            <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+              {userInfo ? '카카오톡 회원가입' : '회원가입'}
+            </Text>
+          </View>
+        )}
 
         <View style={{flex: 3, alignItems: 'center', width: '100%'}}>
           {!userInfo ? (
             <>
               <View style={JoinScreenStyles.ViewContainer}>
                 <Text style={JoinScreenStyles.JoinFieldMainText}>이메일 </Text>
-                <View style={{flexDirection: 'row'}} >
-                <TextInput
-                  autoCapitalize="none"
-                  style={JoinScreenStyles.JoinFieldWithBtn}
-                  placeholder="이메일을 입력해주세요."
-                  value={email}
-                  onChangeText={(value) => handleChangJoinField('email', value)}
-                />
-                <NativeButton
-                  style={JoinScreenStyles.checkIdBtn}
-                  textStyle={JoinScreenStyles.GenderButtonText}
-                  onPress={() => {
-                    handelPressEmailCheck();
-                  }}>
-                  중복확인
-                </NativeButton>
+                <View style={{flexDirection: 'row'}}>
+                  <TextInput
+                    autoCapitalize="none"
+                    style={JoinScreenStyles.JoinFieldWithBtn}
+                    placeholder="이메일을 입력해주세요."
+                    value={email}
+                    onChangeText={(value) =>
+                      handleChangJoinField('email', value)
+                    }
+                  />
+                  <NativeButton
+                    style={JoinScreenStyles.checkIdBtn}
+                    textStyle={JoinScreenStyles.GenderButtonText}
+                    onPress={() => {
+                      handelPressEmailCheck();
+                    }}>
+                    중복확인
+                  </NativeButton>
                 </View>
               </View>
 
               <View style={JoinScreenStyles.ViewContainer}>
                 <Text>비밀번호 </Text>
-
-                <TextInput
-                  autoCapitalize="none"
-                  secureTextEntry={true}
-                  style={JoinScreenStyles.JoinField}
-                  placeholder="4~10자리 영문 숫자, 특수문자 조합"
-                  value={password}
-                  onChangeText={(value) =>
-                    handleChangJoinField('password', value)
-                  }
-                />
+                <View style={{flexDirection: 'row'}}>
+                  <TextInput
+                    autoCapitalize="none"
+                    secureTextEntry={show === false ? true : false}
+                    style={JoinScreenStyles.JoinFieldWithBtn}
+                    placeholder="4~10자리 영문 숫자, 특수문자 조합"
+                    value={password}
+                    onChangeText={(value) =>
+                      handleChangJoinField('password', value)
+                    }
+                  />
+                  <NativeButton
+                    style={JoinScreenStyles.checkIdBtn}
+                    textStyle={JoinScreenStyles.GenderButtonText}
+                    onPress={() => {
+                      setShow(!show);
+                    }}>
+                    show
+                  </NativeButton>
+                </View>
               </View>
 
               <View style={JoinScreenStyles.ViewContainer}>
                 <Text>비밀번호 확인</Text>
-
-                <TextInput
-                  autoCapitalize="none"
-                  secureTextEntry={true}
-                  style={JoinScreenStyles.JoinField}
-                  placeholder="4~10자리 영문 숫자, 특수문자 조합"
-                  value={password2}
-                  onChangeText={(value) =>
-                    handleChangJoinField('password2', value)
-                  }
-                />
-              </View>
-
-              <View style={JoinScreenStyles.ViewContainer}>
-         
-                <View style={JoinScreenStyles.ViewContainer}>
-                <Text style={JoinScreenStyles.JoinFieldMainText}>닉네임 </Text>
-                <View style={{flexDirection: 'row'}} >
-                <TextInput
-                  autoCapitalize="none"
-                  style={JoinScreenStyles.JoinFieldWithBtn}
-                  placeholder="닉네임을 입력해주세요."
-                  value={email}
-                  onChangeText={(value) =>  handleChangJoinField('nickname', value)}
-                />
-                <NativeButton
-                  style={JoinScreenStyles.checkIdBtn}
-                  textStyle={JoinScreenStyles.GenderButtonText}
-                  onPress={() => {
-                    handelPressEmailCheck();
-                  }}>
-                  중복확인
-                </NativeButton>
+                <View style={{flexDirection: 'row'}}>
+                  <TextInput
+                    autoCapitalize="none"
+                    secureTextEntry={show2 === false ? true : false}
+                    style={JoinScreenStyles.JoinFieldWithBtn}
+                    placeholder="4~10자리 영문 숫자, 특수문자 조합"
+                    value={password2}
+                    onChangeText={(value) =>
+                      handleChangJoinField('password2', value)
+                    }
+                  />
+                  <NativeButton
+                    style={JoinScreenStyles.checkIdBtn}
+                    textStyle={JoinScreenStyles.GenderButtonText}
+                    onPress={() => {
+                      setShow2(!show2);
+                    }}>
+                    show
+                  </NativeButton>
                 </View>
               </View>
 
+              <View style={JoinScreenStyles.ViewContainer}>
+                <View style={JoinScreenStyles.ViewContainer}>
+                  <Text style={JoinScreenStyles.JoinFieldMainText}>닉네임</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <TextInput
+                      autoCapitalize="none"
+                      style={JoinScreenStyles.JoinFieldWithBtn}
+                      placeholder="닉네임을 입력해주세요."
+                      value={nickname}
+                      onChangeText={(value) =>
+                        handleChangJoinField('nickname', value)
+                      }
+                    />
+                    <NativeButton
+                      style={JoinScreenStyles.checkIdBtn}
+                      textStyle={JoinScreenStyles.GenderButtonText}
+                      onPress={() => {
+                        handelPressNickNameCheck();
+                      }}>
+                      중복확인
+                    </NativeButton>
+                  </View>
+                </View>
               </View>
             </>
           ) : null}
@@ -395,66 +433,76 @@ export default function JoinScreen({
                     '-' +
                     getTwoDigits(date.getDate())}
                 </Text> */}
-                   <View style={JoinScreenStyles.birthButtonContainer}>
-                   <DatePicker
-              style={{width: Platform.OS === 'ios' ? 400 : 200}}
-              date={date}
-              mode="date"
-              placeholder="select date"
-              format="YY-MM-DD"
-              minDate="2016-05-01"
-              maxDate="2016-06-01"
-              onDateChange={(date) => {
-                setDate(date);
-              }}
-            />
-                <NativeButton
-                  style={JoinScreenStyles.birthBtn}
-                  onPress={() => {
-                    handlePressSetDate();
-                  }}>
-                  확인
-                </NativeButton>
-     
-          </View>
+                <View style={JoinScreenStyles.birthButtonContainer}>
+                  <DatePicker
+                    style={{width: Platform.OS === 'ios' ? 400 : 200}}
+                    date={date}
+                    mode="date"
+                    placeholder="select date"
+                    format="YY-MM-DD"
+                    minDate="2016-05-01"
+                    maxDate="2016-06-01"
+                    onDateChange={(date) => {
+                      setDate(date);
+                    }}
+                  />
+                  <NativeButton
+                    style={JoinScreenStyles.birthBtn}
+                    onPress={() => {
+                      handlePressSetDate();
+                    }}>
+                    확인
+                  </NativeButton>
+                </View>
+              </View>
             </View>
-</View>
-        
 
-          <View style={JoinScreenStyles.ViewContainer}>
-            <Text>건강상태 </Text>
-            <RNPickerSelect
-              onValueChange={(value) => {
-                handleChangJoinField('kidneyType', value);
-              }}
-              placeholder={pickerItems.kidneyTypes.placeholder({
-                value: null,
-              })}
-              value={kidneyType}
-              items={pickerItems.kidneyTypes.items}
-              style={pickerSelectStyles}
-            />
-          </View>
+            <View style={JoinScreenStyles.PickerContainer}>
+              <Text>건강상태 </Text>
+              <Picker
+                style={{width: 250, height: 180}}
+                lineColor="#008000"
+                lineGradientColorFrom="#008000"
+                lineGradientColorTo="#008000"
+                selectedValue={kidneyType}
+                itemStyle={{color: '#757575', fontSize: 20}}
+                onValueChange={(value) => {
+                  handleChangJoinField('kidneyType', value);
+                }}>
+                {kidneyTypes.map((i, index) => (
+                  <PickerItem label={i.label} value={i.value} key={index} />
+                ))}
+              </Picker>
+              {/* <RNPickerSelect
+                onValueChange={(value) => {
+                  handleChangJoinField('kidneyType', value);
+                }}
+                placeholder={pickerItems.kidneyTypes.placeholder({
+                  value: null,
+                })}
+                value={kidneyType}
+                items={pickerItems.kidneyTypes.items}
+                style={pickerSelectStyles}
+              /> */}
+            </View>
 
-            
-          <View style={JoinScreenStyles.ViewContainer}>
-            <Text>활동상태 </Text>
-            <RNPickerSelect
-              onValueChange={(value) => {
-                handleChangJoinField('activityId', value);
-              }}
-              placeholder={pickerItems.activityTypes.placeholder({
-                value: null,
-              })}
-              value={activityId}
-              items={pickerItems.activityTypes.items}
-              style={pickerSelectStyles}
-            />
+            <View style={JoinScreenStyles.ViewContainer}>
+              <Text>활동상태 </Text>
+              <RNPickerSelect
+                onValueChange={(value) => {
+                  handleChangJoinField('activityId', value);
+                }}
+                placeholder={pickerItems.activityTypes.placeholder({
+                  value: null,
+                })}
+                value={activityId}
+                items={pickerItems.activityTypes.items}
+                style={pickerSelectStyles}
+              />
+            </View>
           </View>
         </View>
-              </View>
 
-             
         <NativeButton
           // onPress={()=>navigation.navigate('SignIn')}
           onPress={() => {
