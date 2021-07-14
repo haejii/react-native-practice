@@ -65,7 +65,7 @@ export default function AuthenticationFlow() {
               }}
             />
             <Stack.Screen
-              name="Join"
+              name="회원가입"
               component={JoinScreen}
               initialParams={{}}
             />
@@ -82,7 +82,7 @@ export default function AuthenticationFlow() {
             !user.kidneyType ||
             !user.activityId) ? (
           <Stack.Screen
-            name="Join"
+            name="회원가입"
             component={JoinScreen}
             initialParams={{userInfo: user, accessToken: userToken}}
           />
