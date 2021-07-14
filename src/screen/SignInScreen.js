@@ -153,13 +153,13 @@ export default function SignInScreen({navigation}) {
           로그인
         </NativeButton>
       </View>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', flex: 1}}>
         <NativeButton
           isLoading={isLoading}
           style={SignInScreenStyles.JoinButton}
           textStyle={SignInScreenStyles.JoinButtonText}
           activeOpacity={0.5}
-          onPress={() => navigation.navigate('Join')}>
+          onPress={() => navigation.navigate('회원가입')}>
           아이디 찾기
         </NativeButton>
         <NativeButton
@@ -167,7 +167,7 @@ export default function SignInScreen({navigation}) {
           style={SignInScreenStyles.JoinButton}
           textStyle={SignInScreenStyles.JoinButtonText}
           activeOpacity={0.5}
-          onPress={() => navigation.navigate('Join')}>
+          onPress={() => navigation.navigate('회원가입')}>
           비밀번호 찾기
         </NativeButton>
         <NativeButton
@@ -175,7 +175,7 @@ export default function SignInScreen({navigation}) {
           style={SignInScreenStyles.JoinButton}
           textStyle={SignInScreenStyles.JoinButtonText}
           activeOpacity={0.5}
-          onPress={() => navigation.navigate('Join')}>
+          onPress={() => navigation.navigate('회원가입')}>
           회원가입
         </NativeButton>
       </View>
