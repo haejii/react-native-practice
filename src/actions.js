@@ -1521,3 +1521,55 @@ export function removeRecommendBasket(value1, value2) {
     },
   };
 }
+
+export function getPeritoneuMemo(firstDate, lastDate) {
+  console.log('getPerito들어옴');
+  console.log(firstDate, lastDate);
+  const url = '/peritoneum-memo?firstday=' + firstDate + '&lastday=' + lastDate;
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(SERVER_PATH + url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': userToken,
+        },
+      });
+      const result = await response.json();
+      const {isSuccess, hemodialysisMemos, message} = result;
+
+      let item = hemodialysisMemos;
+
+      if (isSuccess) {
+        dispatch(setError());
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.FETCH_DIALYSIS_MEMOS_FAILED,
+            message,
+          }),
+        );
+      }
+
+      dispatch(setItem(item));
+    } catch (err) {
+      dispatch(
+        setError({
+          status: true,
+          name: errors.FETCH_DIALYSIS_MEMOS_ERROR,
+          message: '네트워크 에러가 발생했습니다. 잠시 후 다시 시도해주세요!',
+        }),
+      );
+      console.log(errors.FETCH_DIALYSIS_MEMOS_ERROR, err);
+    }
+  };
+}
+
+export function setItem(item) {
+  return {
+    type: 'setItem',
+    payload: {item},
+  };
+}
