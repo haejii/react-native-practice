@@ -144,6 +144,7 @@ const initialState = {
   recommendBasketFood: [],
   allDite: {},
   recipe: {},
+  items: {},
 };
 
 const reducers = {
@@ -540,6 +541,13 @@ const reducers = {
     return {
       ...state,
       diet,
+    };
+  },
+  setItem: (state, {payload: {item}}) => {
+    console.log('1. setItem', item);
+    return {
+      ...state,
+      items: item,
     };
   },
 };

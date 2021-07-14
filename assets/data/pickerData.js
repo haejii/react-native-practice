@@ -4,7 +4,7 @@ const pickerItems = {
       {label: '투석전단계<신증후군>', value: 1},
       {label: '투석전단계<만성신부전>', value: 2},
       {label: '신장이식<신장이식후~8주>', value: 3},
-      {label: '신장이식<신작이식8주후>', value: 4},
+      {label: '신장이식<신장이식8주후>', value: 4},
       {label: '혈액투석', value: 5},
       {label: '복막투석', value: 6},
       {label: '해당없음', value: 7},
