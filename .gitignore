@@ -63,8 +63,3 @@ GoogleService-Info.plist
 .env
 
 src/service/apis.js
-
-assets/image
-assets/fonts
-
-android/app/src/main/assets
