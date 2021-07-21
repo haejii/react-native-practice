@@ -85,12 +85,16 @@ function MyDiet({navigation}) {
     showMode('date');
   };
 
+  const handlePressAnotherRecipe = () => {
+    dispatch(requestFoodRecordWithDate(formattedToday));
+  };
+
   useEffect(() => {
     dispatch(requestFoodRecordWithDate(formattedToday));
   }, []);
 
   return (
-    <View>
+    <View style={{backgroundColor: 'white'}}>
       <View>
         <TouchableOpacity style={{margin: 10}} onPress={() => showDatepicker()}>
           <FontAwesomeIcon icon={faTransgender} size={20} />
@@ -107,8 +111,8 @@ function MyDiet({navigation}) {
         )}
       </View>
 
-      <View>
-        <Text>{today}</Text>
+      <View style={{marginLeft: 20}}>
+        <Text style={{fontSize: 20, fontWeight: 'bold'}}>{today}</Text>
       </View>
 
       <ScrollView>
@@ -140,9 +144,13 @@ function RecommendDiet() {
     4: 'snack',
   };
   useEffect(() => {
-    dispatch(requestAllDiets(kidneyType, gender)),
-      dispatch(requestDiets(kidneyType, gender));
+    // dispatch(requestAllDiets(kidneyType, gender)),
+    dispatch(requestDiets(kidneyType, gender));
   }, []);
+
+  const handlePressAnotherRecipe = () => {
+    dispatch(requestDiets(kidneyType, gender));
+  };
 
   const handlePressModal = () => {
     setIsOpen(!isOpen);
@@ -180,7 +188,7 @@ function RecommendDiet() {
               backgroundColor: 'yellow',
               alignSelf: 'center',
             }}
-            onPress={() => handlePressModal()}>
+            onPress={() => handlePressAnotherRecipe()}>
             다른추천식단보기
           </NativeButton>
         </View>
@@ -315,6 +323,63 @@ function RecommendDiet() {
   );
 }
 
+function Recipe({navigation}) {
+  const dispatch = useDispatch();
+
+  return (
+    <View style={{backgroundColor: 'white', height: '100%'}}>
+      <View
+        style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
+        <Text style={{fontFamily: 'NotoSansKR-Medium', fontSize: 20}}>
+          소고기배추볶음
+        </Text>
+      </View>
+
+      <View style={{marginLeft: 10, marginTop: 10}}>
+        <Text style={{fontFamily: 'NotoSansKR-Medium', fontSize: 15}}>
+          준비해주세요!
+        </Text>
+        <View
+          style={{
+            borderWidth: 1,
+            borderRadius: 5,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingTop: 20,
+            paddingBottom: 20,
+            marginRight: 10,
+            marginTop: 5,
+            marginBottom: 20,
+          }}>
+          <Text>소고기 50g, 배추 50g, 대파5g, 양파5g</Text>
+        </View>
+
+        <Text style={{fontFamily: 'NotoSansKR-Medium', fontSize: 15}}>
+          조리순서
+        </Text>
+        <Text>
+          {`
+          1. 소고기는 핏물을 빼고 2cm 폭으로 썬다.
+
+          2. 소고기와 양념을 넣고 버무려 15분간 둔다.
+          
+          3. 배추잎은 1cm 폭으로 썰어 줄기와 잎부분을 분리해놓는다. 
+             대파는 어슷 썬다. 
+          
+          4. 줄기부분을 고기양념에 10분간 절인 후 손으로 살짝 짠다.
+          
+          5. 팬을 달구어 식용유를 두르고 대파를 넣어 센불에서 10초,
+             소고기와 배추줄기를 넣고 3분간 볶는다.
+          
+          6. 배추의 잎부부을 넣고 센불에서 30초~1분간 볶는다. 
+             참기름을 넣어 마무리한다
+          `}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 export default function DietScreen2() {
   return (
     <Tab.Navigator
@@ -322,7 +387,7 @@ export default function DietScreen2() {
       tabBarOptions={{
         activeTintColor: 'black',
         labelStyle: {fontSize: 20, fontWeight: 'bold'},
-        style: {backgroundColor: '#127185', height: 50},
+        style: {backgroundColor: 'white', height: 50},
       }}>
       <Tab.Screen
         name="MyDiet"
@@ -333,6 +398,11 @@ export default function DietScreen2() {
         name="RecommendDiet"
         component={RecommendDiet}
         options={{tabBarLabel: '추천식단'}}
+      />
+      <Tab.Screen
+        name="Recipe"
+        component={Recipe}
+        options={{tabBarLabel: '레시피'}}
       />
     </Tab.Navigator>
   );
