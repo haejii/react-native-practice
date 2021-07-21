@@ -36,6 +36,7 @@ const SignInScreenStyles = StyleSheet.create({
     borderColor: '#cdcdcd',
   },
   loginButtonContainer: {
+    flex: 1,
     marginTop: 1,
     flexDirection: 'row',
     width: '80%',
@@ -162,6 +163,9 @@ const JoinScreenStyles = StyleSheet.create({
     marginRight: '-6%',
     marginTop: '1%',
   },
+  PickerContainer: {
+    width: '100%',
+  },
   checkIdBtn: {
     width: 80,
     height: 30,
@@ -257,7 +261,7 @@ const HomeScreenStyles = StyleSheet.create({
   nuturitionInput: {
     width: '100%',
     backgroundColor: 'lightgrey',
-    height: Platform.OS === 'ios' ? '15%' : 50,
+    height: Platform.OS === 'ios' ? '15%' : 40,
     paddingHorizontal: 10,
     fontSize: 16,
     marginBottom: Platform.OS === 'ios' ? '4%' : '2%',
