@@ -9,10 +9,10 @@ import SplashScreen from '../screen/SplashScreen';
 import SignInScreen from '../screen/SignInScreen';
 import Main from '../screen/MainContainer';
 import {Button} from 'react-native';
-import JoinScreen from '../screen/JoinScreen';
-import JoinCompleteScreen from '../screen/JoinCompleteScreen';
+import JoinScreen from '../screen/Join/JoinScreen';
+import JoinCompleteScreen from '../screen/Join/JoinCompleteScreen';
 import errors from '../utils/errors';
-
+import TestScreen from '../screen/Join/TestScreen';
 const Stack = createStackNavigator();
 
 export default function AuthenticationFlow() {
@@ -66,7 +66,7 @@ export default function AuthenticationFlow() {
             />
             <Stack.Screen
               name="회원가입"
-              component={JoinScreen}
+              component={TestScreen}
               initialParams={{}}
             />
             <Stack.Screen
@@ -83,7 +83,7 @@ export default function AuthenticationFlow() {
             !user.activityId) ? (
           <Stack.Screen
             name="회원가입"
-            component={JoinScreen}
+            component={TestScreen}
             initialParams={{userInfo: user, accessToken: userToken}}
           />
         ) : (

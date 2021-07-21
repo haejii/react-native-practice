@@ -4,6 +4,7 @@ import GeneralDialysis from './GeneralDialysisScreen';
 import Machinedialysis from './MachinedialysisScreen';
 import GeneralDialysis2 from './GeneralDialysisScreen2';
 import Machinedialysis2 from './MachinedialysisScreen2';
+import UpdatePeritoneal from './UpdatePeritoneal';
 import Test from './Test';
 
 const Tab = createMaterialTopTabNavigator();

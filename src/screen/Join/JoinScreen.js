@@ -10,15 +10,15 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useDispatch, useSelector} from 'react-redux';
-import {changeJoinField, logout, setKakaoUser} from '../actions';
-import {JoinScreenStyles, ScreenStyles} from '../style/styles';
+import {changeJoinField, logout, setKakaoUser} from '../../actions';
+import {JoinScreenStyles, ScreenStyles} from '../../style/styles';
 import NativeButton from 'apsl-react-native-button';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-date-picker';
-import {pickerItems} from '../../assets/data/pickerData';
-import {getTwoDigits} from '../utils/functions';
-import {SERVER_PATH} from '../service/apis';
-import errors from '../utils/errors';
+import {pickerItems} from '../../../assets/data/pickerData';
+import {getTwoDigits} from '../../utils/functions';
+import {SERVER_PATH} from '../../service/apis';
+import errors from '../../utils/errors';
 import RNRestart from 'react-native-restart';
 import Picker from '@gregfrench/react-native-wheel-picker';
 
@@ -83,11 +83,41 @@ export default function JoinScreen({
     );
   }
 
+  // function handelPressEmailCheck() {
+  //   if (!email) {
+  //     return Alert.alert('이메일 오류', '이메일을 입력하세요.');
+  //   }
+  //   fetch(SERVER_PATH + '/Emailcheck', {
+  //     headers: {'Content-Type': 'application/json'},
+  //     method: 'POST',
+  //     mode: 'cors',
+  //     credentials: 'include',
+  //     body: JSON.stringify({
+  //       email,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((response) => {
+  //       if (response.isSuccess === false) {
+  //         return Alert.alert('중복', '중복된 이메일입니다.');
+  //       } else {
+  //         return Alert.alert('사용가능', '사용가능 이메일 입니다.');
+  //       }
+  //     })
+  //     .catch((fetchErr) => {
+  //       return Alert.alert(
+  //         '이메일 중복 확인 에러',
+  //         '이메일 중복 확인 중 에러가 발생했습니다. \n 잠시 후 다시 시도해주세요',
+  //       );
+  //     });
+  // }
+
   function handelPressEmailCheck() {
     if (!email) {
-      return Alert.alert('이메일 오류', '이메일을 입력하세요.');
+      return Alert.alert('이메일 오류', '이메일을 입력하세요. ');
     }
-    fetch(SERVER_PATH + '/Emailcheck', {
+
+    fetch(SERVER_PATH + '/EmailValidation', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       mode: 'cors',

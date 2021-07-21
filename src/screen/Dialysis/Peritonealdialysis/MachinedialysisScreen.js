@@ -99,9 +99,12 @@ export default function Machinedialysis({
       return Alert.alert('기입확인', '기입하지 않은 부분 존재');
     } else {
       dialysis.exchangeTime = exchangeTime;
-      dialysis.degrees = 0;
+      dialysis.degree = 0;
       dialysis.bloodPressure = 0;
       dialysis.bloodSugar = 0;
+      dialysis.injectionConcentration = 0;
+      console.log('date : ', date);
+      console.log('exchageTime : ', dialysis.exchangeTime);
       dispatch(addGeneralDialysis(dialysis, date, dialysisType, photo));
     }
   };
