@@ -53,15 +53,23 @@ export default function Machinedialysis2({navigation}) {
     if (dialysis.exchangeTime === null) {
       return Alert.alert('기입확인', '기입하지 않은 부분 존재');
     } else {
-      dialysis.exchangeTime = exchangeTime;
-      dialysis.degree = 0;
-      dialysis.bloodPressure = 0;
-      dialysis.bloodSugar = 0;
-      dialysis.injectionConcentration = 0;
-      const formattedDate = getFormattedDate(date);
-      console.log('exchnge : ', dialysis.exchangeTime);
-      console.log('formattdate : ', formattedDate);
-      dispatch(addGeneralDialysis(dialysis, formattedDate, 1, photo));
+      if (btn === 1) {
+        dialysis.exchangeTime = exchangeTime;
+        const formattedDate = getFormattedDate(date);
+        console.log('exchnge : ', dialysis.exchangeTime);
+        console.log('formattdate : ', formattedDate);
+        dispatch(addGeneralDialysis(dialysis, formattedDate, 1, photo));
+      } else {
+        dialysis.exchangeTime = exchangeTime;
+        dialysis.degree = 0;
+        dialysis.bloodPressure = 0;
+        dialysis.bloodSugar = 0;
+        dialysis.injectionConcentration = 0;
+        const formattedDate = getFormattedDate(date);
+        console.log('exchnge : ', dialysis.exchangeTime);
+        console.log('formattdate : ', formattedDate);
+        dispatch(addGeneralDialysis(dialysis, formattedDate, 2, photo));
+      }
     }
   };
 
