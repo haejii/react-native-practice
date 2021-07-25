@@ -17,7 +17,7 @@ export default function StoreScreen() {
   const storedFood = useSelector((state) => state.storedFood);
 
   return (
-    <View style={{flex: 1, margin: 10, backgroundColor: 'white'}}>
+    <View style={{flex: 1, margin: 10}}>
       <ShowStore />
       <MakeStoreFood />
     </View>
