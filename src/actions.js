@@ -766,6 +766,54 @@ export function requestFoodNutrition() {
   };
 }
 
+// 특정 날짜 nutrition 가져오기
+
+export function requestNutritionWithDate(date) {
+  console.log('특정 날짜 들어옴');
+  return async (dispatch, getState) => {
+    const {userToken} = getState();
+
+    try {
+      const response = await fetch(
+        SERVER_PATH + '/food-recordWithDate?date=' + date,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': userToken,
+          },
+        },
+      );
+      const result = await response.json();
+
+      const {isSuccess, nutrition, message} = result;
+
+      if (isSuccess) {
+        console.log(nutrition);
+        dispatch(setError());
+        dispatch(setNutrition(nutrition));
+        console.log('set nutrition 성공');
+      } else {
+        dispatch(
+          setError({
+            status: true,
+            name: errors.NUTRITION_NOT_FOUND,
+            message,
+          }),
+        );
+        dispatch(setNutrition(nutrition));
+        console.log('requestFoodNutrition 실패');
+        console.log(result);
+        console.log(nutrition);
+      }
+    } catch (e) {
+      console.log(e);
+      dispatch(
+        setError({status: true, name: '영양소 정보 불러오기 에러', message: e}),
+      );
+    }
+  };
+}
+
 export function requestRemoveFood(foodIntakeRecordTypeId, foodId, date) {
   return async (dispatch, getState) => {
     const {userToken, lastSearchQuery, lastSearchCategory} = getState();

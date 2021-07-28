@@ -345,6 +345,7 @@ const SearchResultStyles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 5,
   },
 });
 
