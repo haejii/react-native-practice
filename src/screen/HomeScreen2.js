@@ -25,6 +25,7 @@ import {
   requestFoodNutrition,
   requestDiets,
   requestFoodRecordWithDate,
+  requestNutritionWithDate,
 } from '../actions';
 import SearchResult from './Search/firstTab/SearchResult';
 import {Route} from 'react-router';
@@ -74,6 +75,7 @@ export default function HomeScreen2({navigation}) {
     }-${currentDate.getDate()}`;
 
     dispatch(requestFoodRecordWithDate(formattedSelectedDate));
+    dispatch(requestNutritionWithDate(formattedSelectedDate));
 
     setShow(!show);
   };
