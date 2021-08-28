@@ -45,11 +45,13 @@ export default function DietModal({mealTime, foods, nutrition, goal, date}) {
             borderTopRightRadius: 10,
             borderBottomRightRadius: 10,
             borderColor: 'white',
-            backgroundColor: 'pink',
+            backgroundColor: '#ec7079',
             paddingHorizontal: 10,
             paddingVertical: 10,
           }}>
-          <Text>자세히보기</Text>
+          <Text style={{fontSize: 10, fontWeight: 'bold', color: 'white'}}>
+            영양소 보기
+          </Text>
         </View>
       </TouchableOpacity>
 

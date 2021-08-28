@@ -254,20 +254,24 @@ const HomeScreenStyles = StyleSheet.create({
   maealButtonImagSnack: {width: 55, height: 72, marginTop: 5},
   nuturitionInputContainer: {
     flex: 6,
-    width: '80%',
+    width: '90%',
     justifyContent: 'center',
   },
-  nuturitionInputSubject: {fontSize: 27},
+  nuturitionInputSubject: {fontSize: 15, color: '#555555', fontWeight: '600'},
   nuturitionInput: {
     width: '100%',
-    backgroundColor: 'lightgrey',
-    height: Platform.OS === 'ios' ? '15%' : 40,
+    backgroundColor: 'white',
+    height: Platform.OS === 'ios' ? '15%' : '9%',
     paddingHorizontal: 10,
     fontSize: 16,
     marginBottom: Platform.OS === 'ios' ? '4%' : '2%',
     marginRight: '5%',
   },
-  nuturitionTitle: {fontSize: 16, marginBottom: Platform.OS === 'ios' ? 10 : 0},
+  nuturitionTitle: {
+    fontSize: 12,
+    marginTop: Platform.OS === 'ios' ? 10 : 10,
+    marginBottom: 5,
+  },
 });
 
 const KakaoLoginStyles = StyleSheet.create({
@@ -317,11 +321,10 @@ const FoodInformationModalStyles = StyleSheet.create({
   },
   modalView: {
     flex: 0,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    borderWidth: 1,
-    width: '90%',
-    height: Platform.OS === 'ios' ? '70%' : '80%',
+    backgroundColor: '#c4c4c4',
+    borderRadius: 10,
+    width: '95%',
+    height: Platform.OS === 'ios' ? '70%' : '90%',
     justifyContent: 'center',
     alignItems: 'center',
 
@@ -347,7 +350,8 @@ const FoodInformationModalStyles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     justifyContent: 'space-around',
-    margin: Platform.OS === 'ios' ? 0 : 15,
+    //  margin: Platform.OS === 'ios' ? 0 : 15,
+    marginTop: 20,
   },
 
   openButton: {
@@ -372,6 +376,7 @@ const SearchResultStyles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 5,
   },
 });
 
@@ -448,7 +453,7 @@ const DietModalStyles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     borderWidth: 1,
-    width: '90%',
+    width: '80%',
     height: Platform.OS === 'ios' ? '60%' : '80%',
     justifyContent: 'center',
     alignItems: 'center',

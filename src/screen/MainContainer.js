@@ -27,6 +27,7 @@ import recipe from '../../assets/image/recipe.png';
 import recipe_at from '../../assets/image/recipe_at.png';
 import search from '../../assets/image/search.png';
 import search_at from '../../assets/image/search_at.png';
+import HomeScreen2 from './HomeScreen2';
 
 const Tab = createBottomTabNavigator();
 
@@ -81,7 +82,7 @@ export default function Main() {
       }}>
       <Tab.Screen
         name="홈"
-        component={HomeScreen}
+        component={HomeScreen2}
         options={{headerShown: false}}
       />
       {(kidneyTypes[kidneyType] === '복막투석' ||
@@ -89,7 +90,7 @@ export default function Main() {
         <Tab.Screen name="투석 일지" component={DialysisScreen} />
       )}
       <Tab.Screen name="검색" component={SearchScreen} />
-      <Tab.Screen name="식단" component={DietScreen2} />
+      <Tab.Screen name="식단" component={DietScreen} />
       <Tab.Screen name="내 정보" component={MyPageScreen} />
     </Tab.Navigator>
   );

@@ -8,6 +8,7 @@ import {
   Platform,
   ScrollView,
   Modal,
+  StyleSheet,
 } from 'react-native';
 
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -30,6 +31,7 @@ import {
   ScreenStyles,
 } from '../../style/styles';
 import FoodInformationModal from '../Search/firstTab/FoodInformationModal';
+import NuturitionBarChart from '../../moduleComponent/NuturitionBarChart';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -79,40 +81,129 @@ function MyDiet({navigation}) {
   }, []);
 
   return (
-    <View>
-      <View>
+    <ScrollView>
+      <View style={styles.topView}>
         <View>
           <Button
             style={{color: 'yellow'}}
             onPress={() => showDatepicker()}
             title={today}
           />
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              display={Platform.OS === 'ios' ? 'inline' : 'default'}
+              onChange={onChange}
+            />
+          )}
         </View>
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            display={Platform.OS === 'ios' ? 'inline' : 'default'}
-            onChange={onChange}
-          />
-        )}
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={styles.topText}>오늘의 목표</Text>
+        </View>
       </View>
 
-      <NativeButton
-        style={{
-          margin: 10,
-        }}
-        onPress={() => navigation.navigate('검색')}>
-        추가하기
-      </NativeButton>
+      <View style={styles.secondView}>
+        <View style={styles.graphView}>
+          <View style={styles.graphTextView}>
+            <Text style={styles.graphText}>열량 [0.00Kcal / 1747 Kcal]</Text>
+          </View>
+          <NuturitionBarChart nuturition="50" goal="100" />
+        </View>
 
-      <ScrollView>
+        <View style={styles.graphView}>
+          <View style={styles.graphTextView}>
+            <Text style={styles.graphText}>단백질 [0.00g / 67g]</Text>
+          </View>
+          <NuturitionBarChart nuturition="90" goal="100" />
+        </View>
+
+        <View style={styles.graphView}>
+          <View style={styles.graphTextView}>
+            <Text style={styles.graphText}>인 [0.00mg / 537mg]</Text>
+          </View>
+          <NuturitionBarChart nuturition="50" goal="100" />
+        </View>
+
+        <View style={styles.graphView}>
+          <View style={styles.graphTextView}>
+            <Text style={styles.graphText}>칼륨 [0.00mg / 2000mg]</Text>
+          </View>
+          <NuturitionBarChart nuturition="70" goal="100" />
+        </View>
+
+        <View style={styles.graphView}>
+          <View style={styles.graphTextView}>
+            <Text style={styles.graphText}>나트륨 [0.00mg / 2300mg]</Text>
+          </View>
+          <NuturitionBarChart nuturition="0" goal="100" />
+        </View>
+      </View>
+
+      <View style={{marginLeft: 15, marginTop: 15, width: '92%'}}>
         <DietHeader meal={dateMeal} goal={goal} date={formattedToday} />
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  topView: {
+    height: 45,
+
+    borderBottomWidth: 1,
+    borderColor: '#e9eaec',
+    flexDirection: 'row',
+  },
+  topText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#333333',
+    letterSpacing: 0,
+    textAlign: 'center',
+  },
+  secondView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  graphView: {
+    backgroundColor: '#eaebef',
+    width: '92%',
+    height: 60,
+    margin: 5,
+    borderRadius: 10,
+  },
+  graphTextView: {
+    marginLeft: 12,
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  graphText: {
+    fontSize: 13,
+  },
+  dietHeader: {
+    backgroundColor: '#eaebef',
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  dietHeaderView: {
+    flexDirection: 'row',
+  },
+  dietHeaderImage: {
+    width: 40,
+    height: 30,
+    marginRight: 15,
+  },
+  dietHeaderTextView: {
+    marginTop: 5,
+  },
+  dietHeaderSubTextView: {
+    marginTop: 5,
+    marginLeft: 20,
+  },
+});
 
 function RecommendDiet() {
   const dispatch = useDispatch();

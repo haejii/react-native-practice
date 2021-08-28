@@ -1,10 +1,10 @@
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import Search from './firstTab/Search';
+import Search from './firstTab/Search2';
 import StoreScreen from './Store/StoreScreen';
 import BasketScreen from './BasketScreen';
-
+import MyRecipe from './MyRecipe/MyRecipeScreen';
 const Tab = createMaterialTopTabNavigator();
 
 export default function SearchScreen() {
@@ -32,6 +32,11 @@ export default function SearchScreen() {
         name="StoredFood"
         component={StoreScreen}
         options={{tabBarLabel: '찜'}}
+      />
+      <Tab.Screen
+        name="MyRecipe"
+        component={MyRecipe}
+        options={{tabBarLabel: '나만의 레시피'}}
       />
     </Tab.Navigator>
   );
