@@ -110,7 +110,7 @@ export default function ShowPeritoneal({navigation}) {
         <View>
           <ScrollView>
             {Object.keys(items).map((key, i) => {
-              let date = new Date(items[key]?.['recordDate']);
+              let date = new Date(items[key]?.['exchangeTime']);
 
               let dates = `${date.getFullYear()}년 ${
                 date.getMonth() + 1
@@ -134,9 +134,10 @@ export default function ShowPeritoneal({navigation}) {
                       }>
                       <View
                         style={{
-                          borderRadius: 10,
+                         //borderRadius: 10,
                           borderWidth: 1,
-                          borderColor: '#757575',
+                         //borderColor: '#757575',
+                          backgroundColor: '#'
                           width: '97%',
                           height: 180,
                         }}>
@@ -192,7 +193,9 @@ export default function ShowPeritoneal({navigation}) {
                     </Text>
                     <TouchableOpacity
                       onPress={() => {
-                        setType(2);
+                        navigation.navigate('Update', {
+                          names: [items[key]],
+                        });
                       }}>
                       <View
                         style={{
@@ -208,23 +211,31 @@ export default function ShowPeritoneal({navigation}) {
                               {time}
                             </Text>
                             <View style={{marginTop: 5}}>
-                              <Text style={{fontSize: 15}}>일반 복막투석</Text>
+                              {items[key]?.['dialysisTypeId'] === 1 ? (
+                                <Text style={{fontSize: 15}}>일반복막투석</Text>
+                              ) : (
+                                <Text style={{fontSize: 15}}>기계투석</Text>
+                              )}
                             </View>
                           </View>
 
-                          <View
-                            style={{
-                              backgroundColor: '#eabab0',
-                              height: 30,
-                              marginLeft: 150,
-                              marginTop: 10,
-                              width: 100,
-                              borderRadius: 5,
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                            }}>
-                            <Text style={{fontSize: 18}}>1차</Text>
-                          </View>
+                          {items[key]?.['dialysisTypeId'] === 1 && (
+                            <View
+                              style={{
+                                backgroundColor: '#eabab0',
+                                height: 30,
+                                marginLeft: 150,
+                                marginTop: 10,
+                                width: 100,
+                                borderRadius: 5,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}>
+                              <Text style={{fontSize: 18}}>
+                                {items[key]?.['degree']}차
+                              </Text>
+                            </View>
+                          )}
                         </View>
 
                         <View style={{marginLeft: 10}}>

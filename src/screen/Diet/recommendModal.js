@@ -60,41 +60,22 @@ export default function RecommendModal({food}) {
                   alignItems: 'center',
                 }}>
                 <Text style={DietModalStyles.foodTitle}>{food.foodName}</Text>
+                <Text style={DietModalStyles.foodTitle}>
+                  ({String(food.customAmount)}g)
+                </Text>
               </View>
 
               <View
                 style={{
-                  width: 100,
-                  backgroundColor: 'white',
-                  borderWidth: 2,
-                  borderColor: 'black',
-                  borderRadius: 5,
-                  height: 50,
+                  backgroundColor: 'skyblue',
+                  width: '100%',
+                  height: 30,
                   alignItems: 'center',
-                  paddingHorizontal: 10,
-                  fontSize: 16,
-                  marginBottom: '1%',
-                  marginRight: '5%',
-                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginBottom: 30,
                 }}>
-                <TextInput
-                  style={{
-                    width: 95,
-                    fontSize: 17,
-                    color: food.customAmount.active ? 'blue' : 'black',
-                  }}
-                  keyboardType="numeric"
-                  //placeholder="100"
-                  placeholderTextColor="black"
-                  value={String(food.customAmount)}
-                  onChangeText={(value) => {
-                    handleChangeInput(value.replace(/[^0-9]/g, ''));
-                  }}
-                />
-
-                <Text style={{fontSize: 24}}>g</Text>
+                <Text>상세 영양소 보기</Text>
               </View>
-
               <Text
                 style={{
                   ...HomeScreenStyles.textDetail,

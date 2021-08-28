@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
   TextInput,
+  Image,
 } from 'react-native';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import NuturitionBarChart from '../../../moduleComponent/NuturitionBarChart';
@@ -26,6 +27,10 @@ import {
   FoodInformationModalStyles,
   HomeScreenStyles,
 } from '../../../style/styles';
+import breckfast from '../../../../assets/image/brakfast.png';
+import lunch from '../../../../assets/image/lunch.png';
+import dinner from '../../../../assets/image/dinner.png';
+import snack from '../../../../assets/image/snack.png';
 
 export default function FoodInformationModal({food, onPress, type}) {
   const dispatch = useDispatch();
@@ -41,8 +46,13 @@ export default function FoodInformationModal({food, onPress, type}) {
   const [phosphorus, setPhosphorus] = useState(food.phosphorus);
   const [potassium, setPotasium] = useState(food.potassium);
   const [sodium, setSodium] = useState(food.sodium);
+  const [isOpen2, setIsOpen2] = useState(false);
 
   const count = useSelector((state) => state.foodCount);
+
+  const handlePressModal2 = () => {
+    setIsOpen2(!isOpen2);
+  };
 
   const handlePressModal = () => {
     console.log(food);
@@ -78,21 +88,22 @@ export default function FoodInformationModal({food, onPress, type}) {
       handlePressModal();
       return;
     }
-    console.log('1');
-    dispatch(changeCount(count + 1));
-    dispatch(
-      addBasket({
-        foodId: food.foodId,
-        foodAmount: inputMeal,
-        calorie,
-        protein,
-        phosphorus,
-        potassium,
-        sodium,
-        foodName: food.foodName,
-      }),
-    );
-    console.log(food.foodId, ': ', food.foodName);
+    // console.log('1');
+    // dispatch(changeCount(count + 1));
+
+    // dispatch(
+    //   addBasket({
+    //     foodId: food.foodId,
+    //     foodAmount: inputMeal,
+    //     calorie,
+    //     protein,
+    //     phosphorus,
+    //     potassium,
+    //     sodium,
+    //     foodName: food.foodName,
+    //   }),
+    // );
+    // console.log(food.foodId, ': ', food.foodName);
     handlePressModal();
   }
 
@@ -147,6 +158,60 @@ export default function FoodInformationModal({food, onPress, type}) {
                 : '')}
           </Text>
         </Text>
+
+        <Modal
+          visible={isOpen2}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={handlePressModal2}>
+          <View style={FoodInformationModalStyles.modalViewContainer}>
+            <View
+              style={{
+                flex: 0,
+                backgroundColor: 'white',
+                borderRadius: 20,
+                borderWidth: 1,
+                width: '50%',
+                height: Platform.OS === 'ios' ? '29%' : '30%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View style={HomeScreenStyles.mealButtonContainer}>
+                <TouchableOpacity style={HomeScreenStyles.mealButton}>
+                  <Image
+                    style={HomeScreenStyles.maealButtonImagMonring}
+                    source={breckfast}
+                  />
+                  <Text style={HomeScreenStyles.mealButtonText}>아침</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={HomeScreenStyles.mealButton}>
+                  <Image
+                    style={HomeScreenStyles.maealButtonImage}
+                    source={lunch}
+                  />
+                  <Text style={HomeScreenStyles.mealButtonText}>점심</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={HomeScreenStyles.mealButtonContainer}>
+                <TouchableOpacity style={HomeScreenStyles.mealButton}>
+                  <Image
+                    style={HomeScreenStyles.maealButtonImage}
+                    source={dinner}
+                  />
+                  <Text style={HomeScreenStyles.mealButtonText}>저녁</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={HomeScreenStyles.mealButton}>
+                  <Image
+                    style={HomeScreenStyles.maealButtonImagSnack}
+                    source={snack}
+                  />
+                  <Text style={HomeScreenStyles.mealButtonText}>간식</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
 
         <Modal
           visible={isOpen}
@@ -262,7 +327,7 @@ export default function FoodInformationModal({food, onPress, type}) {
               ) : null}
 
               <View style={FoodInformationModalStyles.modalButtonContainer}>
-                <Button title="추가" onPress={() => handlePressAdd()} />
+                <Button title="추가" onPress={() => handlePressModal2()} />
                 <Button title="닫기" onPress={() => handlePressModal()} />
                 <Button title="찜하기" onPress={() => handlePressStore()} />
                 {/* {type === 'stored' ? (
