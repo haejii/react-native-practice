@@ -26,7 +26,6 @@ import {useEffect} from 'react/cjs/react.development';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SplashScreen from '../../SplashScreen';
 import errors from '../../../utils/errors';
-import {getFormattedDate} from '../../../utils/functions';
 
 export default function Machinedialysis2({navigation}) {
   const dispatch = useDispatch();
@@ -36,10 +35,9 @@ export default function Machinedialysis2({navigation}) {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [photo, setPhoto] = useState(null);
-  const [exchangeTime, setExchangeTime] = useState(new Date('2021-07-12'));
-  const [date, setDate] = useState(new Date());
-  const [month, setMonth] = useState(date.getMonth());
-  const [today, setToday] = useState(date.getDate());
+  const [exchangeTime, setExchangeTime] = useState(new Date());
+  const [month, setMonth] = useState(exchangeTime.getMonth() + 1);
+  const [today, setToday] = useState(exchangeTime.getDate());
   const [hour, setHour] = useState(exchangeTime.getHours());
   const [min, setMin] = useState(exchangeTime.getMinutes());
 
@@ -48,6 +46,7 @@ export default function Machinedialysis2({navigation}) {
   const dialysis = useSelector((state) => state.dialysis);
   let time = `${hour}시 ${min}분`;
   let day = `${month + 1}월 ${today}일`;
+
 
   const AddBtn = () => {
     if (dialysis.exchangeTime === null) {
@@ -110,9 +109,8 @@ export default function Machinedialysis2({navigation}) {
     console.log(dialysis);
   }
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+    const currentDate = selectedDate || exchangeTime;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
     setExchangeTime(currentDate);
     setHour(currentDate.getHours());
     setMin(currentDate.getMinutes());
@@ -219,12 +217,12 @@ export default function Machinedialysis2({navigation}) {
     {
       content: String(dialysis.bloodPressure),
       explain: '혈압을 측정하셨나요?',
-      name: 'bloodPressure',
+      name: 'weight',
     },
     {
       content: String(dialysis.bloodSugar),
       explain: '혈당을 측정하셨나요?',
-      name: 'bloodSugar',
+      name: 'weight',
     },
   ];
 
@@ -344,18 +342,18 @@ export default function Machinedialysis2({navigation}) {
                       width: 150,
                       marginRight: 15,
                       backgroundColor:
-                        dialysis.degree === 1 ? 'skyblue' : 'white',
+                        dialysis.degrees === 1 ? 'skyblue' : 'white',
                     }}
-                    onPress={() => handleChangDialysis('degree', 1)}>
+                    onPress={() => handleChangDialysis('degrees', 1)}>
                     1차
                   </NativeButton>
                   <NativeButton
                     style={{
                       width: 150,
                       backgroundColor:
-                        dialysis.degree === 2 ? 'skyblue' : 'white',
+                        dialysis.degrees === 2 ? 'skyblue' : 'white',
                     }}
-                    onPress={() => handleChangDialysis('degree', 2)}>
+                    onPress={() => handleChangDialysis('degrees', 2)}>
                     2차
                   </NativeButton>
                 </View>
@@ -372,18 +370,18 @@ export default function Machinedialysis2({navigation}) {
                       width: 150,
                       marginRight: 15,
                       backgroundColor:
-                        dialysis.degree === 3 ? 'skyblue' : 'white',
+                        dialysis.degrees === 3 ? 'skyblue' : 'white',
                     }}
-                    onPress={() => handleChangDialysis('degree', 3)}>
+                    onPress={() => handleChangDialysis('degrees', 3)}>
                     3차
                   </NativeButton>
                   <NativeButton
                     style={{
                       width: 150,
                       backgroundColor:
-                        dialysis.degree === 4 ? 'skyblue' : 'white',
+                        dialysis.degrees === 4 ? 'skyblue' : 'white',
                     }}
-                    onPress={() => handleChangDialysis('degree', 4)}>
+                    onPress={() => handleChangDialysis('degrees', 4)}>
                     4차
                   </NativeButton>
                 </View>
@@ -493,35 +491,6 @@ export default function Machinedialysis2({navigation}) {
                   </View>
                 );
               })}
-
-              <View style={DialysisScreenStyle.basicView}>
-                <Text style={{fontFamily: 'NotoSansKR-Medium', fontSize: 15}}>
-                  부종이 있나요?{' '}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <NativeButton
-                    style={DialysisScreenStyle.buttonContent(dialysis.edema)}
-                    onPress={() => {
-                      handleChangDialysis('edema', '1');
-                      console.log(dialysis.edema);
-                    }}>
-                    O
-                  </NativeButton>
-                  <NativeButton
-                    style={DialysisScreenStyle.buttonContent2(dialysis.edema)}
-                    onPress={() => {
-                      handleChangDialysis('edema', '2');
-                      //console.log(edema);
-                    }}>
-                    X
-                  </NativeButton>
-                </View>
-              </View>
             </>
           ) : (
             <>
@@ -611,8 +580,8 @@ export default function Machinedialysis2({navigation}) {
               margin: 10,
             }}
             onPress={() => {
-              dispatch(clearDialysis());
-              AddBtn();
+              // dispatch(clearDialysis());
+              // AddBtn();
             }}>
             저장하기
           </NativeButton>

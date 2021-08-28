@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Image} from 'react-native';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
@@ -17,6 +16,7 @@ import kidneyTypes from '../utils/kidneyType';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faHome, faUserCircle} from '@fortawesome/free-solid-svg-icons';
 import DietScreen2 from './Diet/DietScreen2';
+
 import home from '../../assets/image/home.png';
 import home_at from '../../assets/image/home_at.png';
 import memo from '../../assets/image/memo.png';
@@ -39,45 +39,33 @@ export default function Main() {
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === '홈') {
-            return focused ? (
-              <Image style={{height: 25, width: 25}} source={home_at} />
-            ) : (
-              <Image style={{height: 25, width: 25}} source={home} />
-            );
-          } else if (route.name === '커뮤니티') {
             return <FontAwesomeIcon icon={faHome} size="30" />;
+          } else if (route.name === '커뮤니티') {
+            return (
+              <FontAwesomeIcon icon={faHome} size="30" />
+            );
           } else if (route.name === '검색') {
-            return focused ? (
-              <Image style={{height: 25, width: 25}} source={search_at} />
-            ) : (
-              <Image style={{height: 25, width: 25}} source={search} />
+            return (
+              <FontAwesomeIcon icon={faHome} size="30" />
             );
           } else if (route.name === '식단') {
-            return focused ? (
-              <Image style={{height: 25, width: 25}} source={recipe_at} />
-            ) : (
-              <Image style={{height: 25, width: 25}} source={recipe} />
+            return (
+              <FontAwesomeIcon icon={faHome} size="30" />
             );
           } else if (route.name === '내 정보') {
-            return focused ? (
-              <Image style={{height: 25, width: 25}} source={my_at} />
-            ) : (
-              <Image style={{height: 25, width: 25}} source={my} />
-            );
+            return <FontAwesomeIcon icon={faUserCircle} size="30" />;
           } else if (route.name === '투석 일지') {
-            return focused ? (
-              <Image style={{height: 25, width: 25}} source={memo_at} />
-            ) : (
-              <Image style={{height: 25, width: 25}} source={memo} />
+            return (
+              <FontAwesomeIcon icon={faHome} size="30" />
             );
           }
         },
       })}
       tabBarOptions={{
-        activeTintColor: '#eabab0', // tomato
-        inactiveTintColor: '#757575',
+        activeTintColor: 'black', // tomato
+        inactiveTintColor: 'black',
         style: {
-          backgroundColor: 'white',
+          backgroundColor: '#127185',
         },
       }}>
       <Tab.Screen
